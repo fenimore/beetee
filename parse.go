@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"strconv"
+	"github.com/jackpal/bencode-go"
+	"os"
 )
 
 //        self.announce = announce
@@ -23,6 +23,10 @@ type Torrent struct {
 	CreateBy     string
 	Encoding     string
 	Info         TorrentInfo
+}
+
+func (t *Torrent) String() string {
+	return t.Announce
 }
 
 type TorrentInfo struct {
@@ -45,40 +49,16 @@ type TorrentMultiple struct {
 	//     length md5 and path
 }
 
-// Parsing!!!!!!!!!!!
-
+// Have bencoding do this for me
 //Strings
 // Example: 4: spam represents the string "spam"
 // Parses the byte slice, returns the string found
 // and returns the remaining bytes to parse
-func parseString(b []byte) (string, []byte, error) {
-	var s string
-	var numAsString string
-	// Get the number of bytes that are the strings
-	for _, val := range b {
-		if string(val) != ":" {
-			numAsString += string(val)
-			continue
-		}
-		break
-	}
-	amt, err := strconv.Atoi(numAsString)
-	if err != nil {
-		return "", b, err
-	}
-	// TODO: get string Length
-	fmt.Println(amt)
-
-	return s, b, nil
-}
-
 //Integers
 //    Example: i3e represents the integer "3"
-
 //Lists
 //Example: l4:spam4:eggse represents the list of two strings: [ "spam", "eggs" ]
 //     Example: le represents an empty list: []
-
 //Dictionaries
 //Example: d3:cow3:moo4:spam4:eggse represents the dictionary { "cow" => "moo", "spam" => "eggs" }
 //Example: d4:spaml1:a1:bee represents the dictionary { "spam" => [ "a", "b" ] }
@@ -87,9 +67,17 @@ func parseString(b []byte) (string, []byte, error) {
 
 func main() {
 
-	b, err := ioutil.ReadFile("tom.torrent")
+	//b, err := ioutil.ReadFile("tom.torrent")
+	reader, err := os.Open("tom.torrent")
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(string(b))
+	//fmt.Println(string(b))
+	data := Torrent{}
+
+	err = bencode.Unmarshal(reader, &data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(data.Comment)
 }
