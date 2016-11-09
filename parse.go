@@ -86,6 +86,7 @@ func parseString(b []byte) (string, []byte, error) {
 //Example: de represents an empty dictionary {}
 
 func main() {
+
 	b, err := ioutil.ReadFile("tom.torrent")
 	if err != nil {
 		fmt.Println(err)
