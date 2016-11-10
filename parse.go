@@ -7,14 +7,9 @@ import (
 	"reflect"
 )
 
-//        self.announce = announce
-// self.announce_list = announce_list
-// self.comment = comment
-// self.created_by = created_by
-// self.created_at = created_at
-// self.url_list = url_list
-// self.raw_info = info
-// self._parse_info(info)
+// NOTE:
+// (pieces/20)*piece length == length
+
 type Torrent struct {
 	//info ??
 	Announce     string   `bencode:"announce"`
@@ -23,6 +18,7 @@ type Torrent struct {
 	CreationDate int64    `bencode:"creation date"`
 	Comment      string
 	Encoding     string
+	UrlList      []string    `bencode:"url-list"`
 	Info         TorrentInfo `bencode:"info"`
 }
 
@@ -31,11 +27,12 @@ func (t *Torrent) String() string {
 }
 
 type TorrentInfo struct {
-	PieceLength int64  `bencode:"piece length"`
-	Private     int64  `bencode:"private"`
-	Name        string `bencode:"name"`
 	Length      int64  `bencode:"length"`
+	Name        string `bencode:"name"`
+	PieceLength int64  `bencode:"piece length"`
 	Pieces      string `bencode:"pieces"`
+	Private     int64  `bencode:"private"`
+
 	//Files       string `bencode:"file"`
 	// Concatenation of all 20 byte SHA1
 }
@@ -55,7 +52,7 @@ type TorrentMultiple struct {
 func main() {
 
 	//b, err := ioutil.ReadFile("tom.torrent")
-	reader, err := os.Open("tom.torrent")
+	reader, err := os.Open("archlinux.torrent")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -69,5 +66,5 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(reflect.TypeOf(data.Info))
-	fmt.Println(data.AnounceList)
+	fmt.Println(data.UrlList)
 }
