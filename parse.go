@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jackpal/bencode-go"
 	"os"
+	"reflect"
 )
 
 //        self.announce = announce
@@ -20,9 +21,9 @@ type Torrent struct {
 	AnounceList  []string
 	CreationDate int
 	Comment      string
-	CreateBy     string
+	CreatedBy    string
 	Encoding     string
-	Info         TorrentInfo
+	Info         map[string]interface{} //TorrentInfo
 }
 
 func (t *Torrent) String() string {
@@ -49,22 +50,6 @@ type TorrentMultiple struct {
 	//     length md5 and path
 }
 
-// Have bencoding do this for me
-//Strings
-// Example: 4: spam represents the string "spam"
-// Parses the byte slice, returns the string found
-// and returns the remaining bytes to parse
-//Integers
-//    Example: i3e represents the integer "3"
-//Lists
-//Example: l4:spam4:eggse represents the list of two strings: [ "spam", "eggs" ]
-//     Example: le represents an empty list: []
-//Dictionaries
-//Example: d3:cow3:moo4:spam4:eggse represents the dictionary { "cow" => "moo", "spam" => "eggs" }
-//Example: d4:spaml1:a1:bee represents the dictionary { "spam" => [ "a", "b" ] }
-//Example: d9:publisher3:bob17:publisher-webpage15:www.example.com18:publisher.location4:homee represents { "publisher" => "bob", "publisher-webpage" => "www.example.com", "publisher.location" => "home" }
-//Example: de represents an empty dictionary {}
-
 func main() {
 
 	//b, err := ioutil.ReadFile("tom.torrent")
@@ -75,9 +60,12 @@ func main() {
 	//fmt.Println(string(b))
 	data := Torrent{}
 
+	//data, err := bencode.Decode(reader)
 	err = bencode.Unmarshal(reader, &data)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(data.Comment)
+	fmt.Println(reflect.TypeOf(data))
+	fmt.Println(data.CreatedBy)
+
 }
