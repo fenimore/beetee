@@ -76,33 +76,42 @@ func ParseTorrent(file string) (TorrentMeta, error) {
 	data.InfoHash = sha1.Sum(data.InfoBytes)
 	data.InfoHex = fmt.Sprintf("%x", data.InfoHash)
 	//data.InfoUrlEncoded = strings.ToUpper(data.InfoHex)
-	data.InfoUrlEncoded = data.InfoHex
-	var url string
-	counter := 0
-	for _, c := range data.InfoUrlEncoded {
-		url += string(c)
-		if counter == 1 {
-			url += "%"
-		}
-		if counter == 1 {
-			counter = 0
-			continue
-		}
-		counter++
-	}
-	//fmt.Println(url)
-	data.InfoUrlEncoded = url
-	//fmt.Println(base64.URLEncoding.EncodeToString([]byte(string(data.InfoHash[:]))))
+	data.InfoUrlEncoded = UrlEncode(data.InfoHash)
 	return data, nil
 }
 
 func UrlEncode(hash [20]byte) string {
+	//fmt.Println('a', 'z', 'A', 'Z', "\n", '.', '-', '_', '~', '0', '9')
 	var enc string
+
 	for _, b := range hash {
+		fmt.Println(b, string(b))
+		switch {
+		case b >= 97 && b <= 122: // lower case
+			enc += string(b)
+			continue
+		case b >= 65 && b <= 90: // upper case
+			enc += string(b)
+			continue
+		case b >= 48 && b <= 57: // numbers
+			enc += string(b)
+			continue
+		case b == 46 || b == 45:
+			enc += string(b)
+			continue
+		case b == 95:
+			enc += string(b)
+			continue
+		case b == 126:
+			enc += string(b)
+			continue
+		default:
+			fmt.Println("       WOOT")
+			enc += "%" + fmt.Sprintf("%x", []byte{b})
+		}
 
 	}
-
-	return ""
+	return enc
 }
 
 // func main() {
