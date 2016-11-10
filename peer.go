@@ -24,15 +24,7 @@ func main() {
 
 	// TODO: NOT really working
 	fmt.Println(resp.Complete, resp.Incomplete)
-	fmt.Println(len(resp.Peers))
-	fmt.Println(len(resp.Peers) / 6)
-	fmt.Println(resp.Peers[4])
-
-	//p := resp.Peers[4:]
-	//ip := net.IPv4(p[0], p[1], p[2], p[3])
-	//port := (uint16(p[4]) << 8) | uint16(p[5])
-	//fmt.Println(port)
-	//fmt.Println(ip.String())
+	fmt.Println(len(resp.PeerList))
 	fmt.Println(resp.PeerList)
 	/*TODO: Connect to Peer*/
 
