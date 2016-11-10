@@ -2,8 +2,10 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
-	"github.com/zeebo/bencode"
+	//"github.com/zeebo/bencode"
+	"github.com/anacrolix/torrent/bencode"
 	"os"
 )
 
@@ -18,9 +20,11 @@ type TorrentMeta struct {
 	CreatedBy    string   `bencode:"created by"`
 	CreationDate int64    `bencode:"creation date"`
 	Comment      string
-	Encoding     string
-	UrlList      []string `bencode:"url-list"`
-	Info         []byte   `bencode:"info"`
+	Encoding     string        `bencode:"encoding"`
+	UrlList      []string      `bencode:"url-list"`
+	InfoBytes    bencode.Bytes `bencode:"info"`
+	Info         TorrentInfo
+	InfoHash     []byte
 	//map[string]interface{} `bencode:"info"`
 	//Info         TorrentInfo
 	// TODO: Save info as bytes
@@ -33,28 +37,16 @@ func (t *TorrentMeta) String() string {
 }
 
 type TorrentInfo struct {
-	Length      int64  `bencode:"length"`
-	Name        string `bencode:"name"`
-	PieceLength int64  `bencode:"piece length"`
-	Pieces      string `bencode:"pieces"`
-	Private     int64  `bencode:"private"`
+	Length      int64         `bencode:"length"`
+	Name        string        `bencode:"name"`
+	PieceLength int64         `bencode:"piece length"`
+	Pieces      bencode.Bytes `bencode:"pieces"`
+	Private     int64         `bencode:"private"`
 	// md5sum for single files
 	// files for multiple files
 	// path for multiple files
 	//Files       string `bencode:"file"`
 	// Concatenation of all 20 byte SHA1
-}
-
-type TorrentSingle struct {
-	Name   string
-	Length int
-	Md5    string // a hex string
-}
-
-type TorrentMultiple struct {
-	// Name
-	// Files
-	//     length md5 and path
 }
 
 func ParseTorrent(file string) (TorrentMeta, error) {
@@ -69,10 +61,14 @@ func ParseTorrent(file string) (TorrentMeta, error) {
 	if err != nil {
 		return data, err
 	}
+	reader := bytes.NewReader(data.InfoBytes)
+	dec = bencode.NewDecoder(reader)
+	dec.Decode(&data.Info)
 	return data, nil
 }
 
 func main() {
 	d, _ := ParseTorrent("tom.torrent")
-	fmt.Println(d.Info)
+	fmt.Println((len(d.Info.Pieces) / 20) * int(d.Info.PieceLength))
+	fmt.Println(int(d.Info.Length))
 }
