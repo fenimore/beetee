@@ -2,6 +2,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/zeebo/bencode"
 	"os"
 )
@@ -18,9 +19,10 @@ type TorrentMeta struct {
 	CreationDate int64    `bencode:"creation date"`
 	Comment      string
 	Encoding     string
-	UrlList      []string               `bencode:"url-list"`
-	Info         map[string]interface{} `bencode:"info"`
-	//Info         TorrentInfo            `bencode:"info"`
+	UrlList      []string `bencode:"url-list"`
+	Info         []byte   `bencode:"info"`
+	//map[string]interface{} `bencode:"info"`
+	//Info         TorrentInfo
 	// TODO: Save info as bytes
 	// and then hash them
 
@@ -55,8 +57,8 @@ type TorrentMultiple struct {
 	//     length md5 and path
 }
 
-func ParseTorrent(file string) (Torrent, error) {
-	var data Torrent
+func ParseTorrent(file string) (TorrentMeta, error) {
+	var data TorrentMeta
 	f, err := os.Open(file)
 	if err != nil {
 		return data, err
@@ -68,4 +70,9 @@ func ParseTorrent(file string) (Torrent, error) {
 		return data, err
 	}
 	return data, nil
+}
+
+func main() {
+	d, _ := ParseTorrent("tom.torrent")
+	fmt.Println(d.Info)
 }
