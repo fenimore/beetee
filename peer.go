@@ -22,32 +22,28 @@ func main() {
 		fmt.Println(err)
 	}
 
-	//fmt.Println(string(resp.Peers))
-	//fmt.Println(resp.Peers)
-	//fmt.Println(reflect.TypeOf(resp.Peers))
-	//fmt.Println(resp.Peers[:6])
 	// TODO: NOT really working
-	fmt.Println(resp.Peers[:2])
-	p := resp.Peers[3:7]
-	ip := net.IPv4(p[0], p[1], p[2], p[3])
+	fmt.Println(resp.Complete, resp.Incomplete)
+	fmt.Println(len(resp.Peers))
+	fmt.Println(len(resp.Peers) / 6)
+	fmt.Println(resp.Peers[4])
+
+	prefix := resp.Peers[:3] // first three (could be more
+	for _, x := range prefix {
+		fmt.Print(string(x))
+	}
+	fmt.Println()
+
+	p := resp.Peers[:9]
+	ip := net.IPv4(p[3], p[4], p[5], p[6])
 	fmt.Println(ip.String())
-	p = resp.Peers[6:12]
+	peerPort := uint16(p[7]) << 8
+	peerPort = peerPort | uint16(p[8])
+	fmt.Println(peerPort)
+	p = resp.Peers[7:]
 	ip = net.IPv4(p[0], p[1], p[2], p[3])
 	fmt.Println(ip.String())
 
-	//fmt.Println(resp.Complete, resp.Incomplete)
-
 	/*TODO: Connect to Peer*/
 
-}
-
-// Convert uint to net.IP
-func inet_ntoa(ipnr int64) net.IP {
-	var bytes [4]byte
-	bytes[0] = byte(ipnr & 0xFF)
-	bytes[1] = byte((ipnr >> 8) & 0xFF)
-	bytes[2] = byte((ipnr >> 16) & 0xFF)
-	bytes[3] = byte((ipnr >> 24) & 0xFF)
-
-	return net.IPv4(bytes[3], bytes[2], bytes[1], bytes[0])
 }
