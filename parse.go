@@ -28,7 +28,7 @@ type TorrentMeta struct {
 	Info         TorrentInfo
 	InfoHash     [20]byte
 	InfoHashEnc  string
-	//map[string]interface{} `bencode:"info"`
+	//map[string]interface{} `bencodem:"info"`
 	//Info         TorrentInfo
 	// TODO: Save info as bytes
 	// and then hash them

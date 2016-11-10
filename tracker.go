@@ -7,9 +7,9 @@ import "github.com/anacrolix/torrent/bencode"
 
 import "net/http"
 
-//import "io/ioutil"
+//import "strings"
 
-var meta TorrentMeta
+//import "io/ioutil"
 
 type TrackerRequest struct {
 	InfoHash,
@@ -49,14 +49,14 @@ type Peer struct {
 }
 
 // GetTrackerResponse TODO: pass in TrackerRequest instead
-func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) {
-	var response TrackerResponse
+func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]interface{}, error) {
+	var response = TrackerResponse{} //make(map[string]interface{})
 
 	// TODO: Use scrape conventions
-	// import "strings"
 	//url := strings.Replace(m.Announce, "announce", "scrape", 1)
 
 	request := m.Announce + "?info_hash=" + m.InfoHashEnc + "&peer_id=" + GenPeerId() +
+		//request := url + "?info_hash=" + m.InfoHashEnc + "&peer_id=" + GenPeerId() +
 		"&event=started"
 
 	// TODO: conStruct
@@ -80,15 +80,6 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) {
 
 	return response, err
 
-}
-
-func main() {
-	meta, _ = ParseTorrent("tom.torrent")
-	resp, err := GetTrackerResponse(meta)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(resp)
 }
 
 func GenPeerId() string {
