@@ -31,3 +31,22 @@ info_hash=%94z%b0%12%bd%1b%f1%1fO%1d%29%f8%fa%1e%abs%a8_%e7%93
 returns a dict
 WTF
 d8:intervali900e5:peers2:ip12:73.97.189.844:porti0e2:ip14:216.71.194.2434:porti0e2:ip11:69.12.16.424:porti0e2:ip13:138.75.207.754:porti0e2:ip15:205.144.215.1354:porti0e2:ip15:109.248.228.2164:porti0e2:ip12:62.141.38.494:porti0e2:ip13:103.221.55.144:porti0e2:ip12:173.50.19.254:porti0e2:ip12:36.84.227.954:porti0e2:ip13:77.180.131.694:porti0e2:ip15:213.141.148.1964:porti0e2:ip12:41.74.133.164:porti0e2:ip14:88.192.198.2414:porti0e2:ip14:118.189.203.504:porti0e2:ip14:50.244.224.1054:porti0e2:ip14:78.145.131.1444:porti0e2:ip13:177.18.127.124:porti0e2:ip14:83.162.188.1004:porti0e2:ip9:5.79.78.44:porti0e2:ip13:109.231.60.684:porti0e2:ip14:201.90.250.1304:porti0e2:ip14:31.211.102.1294:porti0e2:ip15:109.232.227.1384:porti0e2:ip13:89.78.153.1794:porti0e2:ip13:69.145.63.1724:porti0e2:ip14:104.238.135.774:porti0e2:ip12:78.56.210.574:porti0e2:ip14:176.104.49.1634:porti0e2:ip12:79.56.143.194:porti0e2:ip12:24.121.4.1504:porti0e2:ip14:178.48.166.1324:porti0e2:ip13:170.150.112.24:porti0e2:ip12:82.183.38.584:porti0e2:ip14:109.190.123.744:porti0e2:ip12:212.10.32.214:porti0e2:ip13:89.249.74.2184:porti0e2:ip13:95.140.92.1464:porti0e2:ip14:84.213.226.1164:porti0e2:ip14:128.68.212.1104:porti0e2:ip13:95.27.142.2444:porti0e2:ip14:83.254.142.1974:porti0e2:ip13:79.159.59.2294:porti0e2:ip11:155.4.24.194:porti0e2:ip12:2.11.206.1474:porti0e2:ip11:95.65.63.734:porti0e2:ip15:217.244.173.2484:porti0e2:ip13:36.85.216.2274:porti0e2:ip13:36.85.216.2274:porti0e2:ip13:179.43.176.984:porti0eee
+
+
+* Ubuntu
+
+http://torrent.ubuntu.com:6969/announce?
+info_hash=%9f%91e%d9%a2%81%a9%b8%e7%82%cdQv%bb%cc%82V%fd%18q
+&peer_id=-TR2920-80uykglx66io
+&port=51413
+&uploaded=0&downloaded=0
+&left=1513308160
+&numwant=80&key=60502143
+&compact=1
+&supportcrypto=1&event=started
+
+http://torrent.ubuntu.com:6969/announce?
+info_hash=%9f%91e%d9%a2%81%a9%b8%e7%82%cdQv%bb%cc%82V%fd%18q
+&peer_id=-TR3440-91a24W577461
+&uploaded=0&download=0
+&left=1513308160&port=51413&key=60502143&numwant=80&compact=1&supportcrypto=1&event=started

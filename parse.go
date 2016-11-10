@@ -15,10 +15,8 @@ import (
 // (pieces/20)*piece length == length
 
 type TorrentMeta struct {
-	//info ??
-	Announce string `bencode:"announce"`
-	// Not tested announce-list yet
-	AnounceList  []string      `bencode:"announce-list"`
+	Announce     string        `bencode:"announce"`
+	AnnounceList [][]string    `bencode:"announce-list"`
 	CreatedBy    string        `bencode:"created by"`
 	CreationDate int64         `bencode:"creation date"`
 	Comment      string        `bencode:"comment"`
@@ -62,6 +60,7 @@ func ParseTorrent(file string) (TorrentMeta, error) {
 	// Parse the File
 	dec := bencode.NewDecoder(f)
 	err = dec.Decode(&data)
+
 	if err != nil {
 		return data, err
 	}
@@ -70,7 +69,6 @@ func ParseTorrent(file string) (TorrentMeta, error) {
 	reader := bytes.NewReader(data.InfoBytes)
 	dec = bencode.NewDecoder(reader)
 	dec.Decode(&data.Info)
-
 	// Compute the info_hash
 	data.InfoHash = sha1.Sum(data.InfoBytes)
 	data.InfoHashEnc = UrlEncode(data.InfoHash)
