@@ -8,6 +8,7 @@ import (
 	"crypto/sha1"
 	"github.com/anacrolix/torrent/bencode"
 	"os"
+	//"strings"
 )
 
 // NOTE:
@@ -17,16 +18,17 @@ type TorrentMeta struct {
 	//info ??
 	Announce string `bencode:"announce"`
 	// Not tested announce-list yet
-	AnounceList  []string `bencode:"announce-list"`
-	CreatedBy    string   `bencode:"created by"`
-	CreationDate int64    `bencode:"creation date"`
-	Comment      string
-	Encoding     string        `bencode:"encoding"`
-	UrlList      []string      `bencode:"url-list"`
-	InfoBytes    bencode.Bytes `bencode:"info"`
-	Info         TorrentInfo
-	InfoHash     [20]byte
-	InfoHex      string
+	AnounceList    []string `bencode:"announce-list"`
+	CreatedBy      string   `bencode:"created by"`
+	CreationDate   int64    `bencode:"creation date"`
+	Comment        string
+	Encoding       string        `bencode:"encoding"`
+	UrlList        []string      `bencode:"url-list"`
+	InfoBytes      bencode.Bytes `bencode:"info"`
+	Info           TorrentInfo
+	InfoHash       [20]byte
+	InfoHex        string
+	InfoUrlEncoded string
 	//map[string]interface{} `bencode:"info"`
 	//Info         TorrentInfo
 	// TODO: Save info as bytes
@@ -64,15 +66,43 @@ func ParseTorrent(file string) (TorrentMeta, error) {
 	if err != nil {
 		return data, err
 	}
+
 	// Parse the Info Dictionary
 	reader := bytes.NewReader(data.InfoBytes)
 	dec = bencode.NewDecoder(reader)
 	dec.Decode(&data.Info)
+
 	// Compute the info_hash
-	//hasher := sha1.New()
 	data.InfoHash = sha1.Sum(data.InfoBytes)
 	data.InfoHex = fmt.Sprintf("%x", data.InfoHash)
+	//data.InfoUrlEncoded = strings.ToUpper(data.InfoHex)
+	data.InfoUrlEncoded = data.InfoHex
+	var url string
+	counter := 0
+	for _, c := range data.InfoUrlEncoded {
+		url += string(c)
+		if counter == 1 {
+			url += "%"
+		}
+		if counter == 1 {
+			counter = 0
+			continue
+		}
+		counter++
+	}
+	//fmt.Println(url)
+	data.InfoUrlEncoded = url
+	//fmt.Println(base64.URLEncoding.EncodeToString([]byte(string(data.InfoHash[:]))))
 	return data, nil
+}
+
+func UrlEncode(hash [20]byte) string {
+	var enc string
+	for _, b := range hash {
+
+	}
+
+	return ""
 }
 
 // func main() {

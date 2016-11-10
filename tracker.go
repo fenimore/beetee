@@ -3,15 +3,17 @@ package main
 import "fmt"
 
 //import "net/http"
-//import "crypto/sha1"
 
 func main() {
+	//d, _ := ParseTorrent("tom.torrent")
 	d, _ := ParseTorrent("tom.torrent")
-	fmt.Println(d.Info)
 	//	fmt.Println(d.Info)
 	//infoHash := sha1.Sum(d.InfoHash))
-	//fmt.Println(infoHash)
-	//request := d.Announce + "?info_hash=" + infoHash
+	//fmt.Println(d.InfoHash)
+	//fmt.Println(d.InfoHex)
+	//fmt.Println(d.InfoUrlEncoded)
+	request := d.Announce + "?info_hash=" + d.InfoUrlEncoded
+	fmt.Println(request)
 	//resp, err := http.Get(d.Announce)
 	//fmt.Println(resp, err)
 }
