@@ -33,7 +33,7 @@ func main() {
 	//port := (uint16(p[4]) << 8) | uint16(p[5])
 	//fmt.Println(port)
 	//fmt.Println(ip.String())
-
+	fmt.Println(resp.PeerList)
 	/*TODO: Connect to Peer*/
 
 }

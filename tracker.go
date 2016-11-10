@@ -57,7 +57,7 @@ type TrackerResponseDict struct {
 type Peer struct {
 	PeerId string `bencode:"peer id"`
 	Ip     string `bencode:"ip"`
-	Port   int64  `bencode:"port"`
+	Port   uint16 `bencode:"port"`
 }
 
 // GetTrackerResponse TODO: pass in TrackerRequest instead
@@ -101,15 +101,12 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]
 	}
 
 	p := response.Peers[start:]
-	cnt := 0
 	for i := 0; i < len(p); i = i + 6 {
 		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
 		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
-		fmt.Println(port)
-		fmt.Println(ip.String())
-		cnt++
+		peer := Peer{Ip: ip.String(), Port: port}
+		response.PeerList = append(response.PeerList, peer)
 	}
-	fmt.Println("Count", cnt)
 	//reader := bytes.NewReader(response.Peers)
 	//dec = bencode.NewDecoder(reader)
 	//dec.Decode(&response.PeerDict)
@@ -120,6 +117,7 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]
 }
 
 func GenPeerId() string {
+	// TODO: Make random
 	b := [20]byte{'-', 'T', 'R', '3', '4', '4', '0', '-',
 		'9', '1', 'a', '2', '4', 'W', '5', '7', '7', '4', '6', '1'}
 	return UrlEncode(b)
