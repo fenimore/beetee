@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/jackpal/bencode-go"
+	"github.com/zeebo/bencode"
 	"os"
 	"reflect"
 )
@@ -17,13 +17,13 @@ import (
 // self._parse_info(info)
 type Torrent struct {
 	//info ??
-	Announce     string
-	AnounceList  []string
-	CreationDate int
+	Announce     string   `bencode:"announce"`
+	AnounceList  []string `bencode:"announce-list"`
+	CreatedBy    string   `bencode:"created by"`
+	CreationDate int64    `bencode:"creation date"`
 	Comment      string
-	CreatedBy    string
 	Encoding     string
-	Info         map[string]interface{} //TorrentInfo
+	Info         TorrentInfo `bencode:"info"`
 }
 
 func (t *Torrent) String() string {
@@ -31,11 +31,13 @@ func (t *Torrent) String() string {
 }
 
 type TorrentInfo struct {
-	PieceLength   int
-	Pieces        string // Concatenation of all 20 byte SHA1
-	Private       int    // 0 by default
-	TorrentSingle        // This means TorrentInfo gets these fields?
-	TorrentMultiple
+	PieceLength int64  `bencode:"piece length"`
+	Private     int64  `bencode:"private"`
+	Name        string `bencode:"name"`
+	Length      int64  `bencode:"length"`
+	Pieces      string `bencode:"pieces"`
+	//Files       string `bencode:"file"`
+	// Concatenation of all 20 byte SHA1
 }
 
 type TorrentSingle struct {
@@ -58,14 +60,14 @@ func main() {
 		fmt.Println(err)
 	}
 	//fmt.Println(string(b))
-	data := Torrent{}
+	var data Torrent
 
 	//data, err := bencode.Decode(reader)
-	err = bencode.Unmarshal(reader, &data)
+	dec := bencode.NewDecoder(reader)
+	err = dec.Decode(&data)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(reflect.TypeOf(data))
-	fmt.Println(data.CreatedBy)
-
+	fmt.Println(reflect.TypeOf(data.Info))
+	fmt.Println(data.AnounceList)
 }
