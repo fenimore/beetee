@@ -3,6 +3,7 @@ package main
 import "fmt"
 import "github.com/anacrolix/torrent/bencode"
 import "strconv"
+import "net"
 
 //import "bytes"
 
@@ -33,6 +34,7 @@ type TrackerResponse struct {
 	Complete      int32         `bencode:"complete"`
 	Incomplete    int32         `bencode:"incomplete"`
 	Peers         bencode.Bytes `bencode:"peers"`
+	PeerList      []Peer
 }
 
 // type TrackerResponse struct {
@@ -89,6 +91,25 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]
 	if err != nil {
 		return response, err
 	}
+
+	var start int
+	for idx, val := range response.Peers {
+		if val == ':' {
+			start = idx + 1
+			break
+		}
+	}
+
+	p := response.Peers[start:]
+	cnt := 0
+	for i := 0; i < len(p); i = i + 6 {
+		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
+		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
+		fmt.Println(port)
+		fmt.Println(ip.String())
+		cnt++
+	}
+	fmt.Println("Count", cnt)
 	//reader := bytes.NewReader(response.Peers)
 	//dec = bencode.NewDecoder(reader)
 	//dec.Decode(&response.PeerDict)

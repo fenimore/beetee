@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"net"
+	//"net"
 )
 
 var meta TorrentMeta
@@ -11,7 +11,7 @@ var blocks map[[20]byte]bool
 
 func main() {
 	/* Parse Torrent*/
-	meta, err := ParseTorrent("tom.torrent")
+	meta, err := ParseTorrent("ubuntu.torrent")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -28,21 +28,11 @@ func main() {
 	fmt.Println(len(resp.Peers) / 6)
 	fmt.Println(resp.Peers[4])
 
-	prefix := resp.Peers[:3] // first three (could be more
-	for _, x := range prefix {
-		fmt.Print(string(x))
-	}
-	fmt.Println()
-
-	p := resp.Peers[:9]
-	ip := net.IPv4(p[3], p[4], p[5], p[6])
-	fmt.Println(ip.String())
-	peerPort := uint16(p[7]) << 8
-	peerPort = peerPort | uint16(p[8])
-	fmt.Println(peerPort)
-	p = resp.Peers[7:]
-	ip = net.IPv4(p[0], p[1], p[2], p[3])
-	fmt.Println(ip.String())
+	//p := resp.Peers[4:]
+	//ip := net.IPv4(p[0], p[1], p[2], p[3])
+	//port := (uint16(p[4]) << 8) | uint16(p[5])
+	//fmt.Println(port)
+	//fmt.Println(ip.String())
 
 	/*TODO: Connect to Peer*/
 
