@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	//"github.com/zeebo/bencode"
+	"crypto/sha1"
 	"github.com/anacrolix/torrent/bencode"
 	"os"
 )
@@ -24,7 +25,8 @@ type TorrentMeta struct {
 	UrlList      []string      `bencode:"url-list"`
 	InfoBytes    bencode.Bytes `bencode:"info"`
 	Info         TorrentInfo
-	InfoHash     []byte
+	InfoHash     [20]byte
+	InfoHex      string
 	//map[string]interface{} `bencode:"info"`
 	//Info         TorrentInfo
 	// TODO: Save info as bytes
@@ -56,19 +58,24 @@ func ParseTorrent(file string) (TorrentMeta, error) {
 		return data, err
 	}
 	defer f.Close()
+	// Parse the File
 	dec := bencode.NewDecoder(f)
 	err = dec.Decode(&data)
 	if err != nil {
 		return data, err
 	}
+	// Parse the Info Dictionary
 	reader := bytes.NewReader(data.InfoBytes)
 	dec = bencode.NewDecoder(reader)
 	dec.Decode(&data.Info)
+	// Compute the info_hash
+	//hasher := sha1.New()
+	data.InfoHash = sha1.Sum(data.InfoBytes)
+	data.InfoHex = fmt.Sprintf("%x", data.InfoHash)
 	return data, nil
 }
 
-func main() {
-	d, _ := ParseTorrent("tom.torrent")
-	fmt.Println((len(d.Info.Pieces) / 20) * int(d.Info.PieceLength))
-	fmt.Println(int(d.Info.Length))
-}
+// func main() {
+//	data, _ := ParseTorrent("tom.torrent")
+//	fmt.Println(data.Info.Pieces[20:40])
+// }
