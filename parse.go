@@ -18,17 +18,16 @@ type TorrentMeta struct {
 	//info ??
 	Announce string `bencode:"announce"`
 	// Not tested announce-list yet
-	AnounceList    []string `bencode:"announce-list"`
-	CreatedBy      string   `bencode:"created by"`
-	CreationDate   int64    `bencode:"creation date"`
-	Comment        string
-	Encoding       string        `bencode:"encoding"`
-	UrlList        []string      `bencode:"url-list"`
-	InfoBytes      bencode.Bytes `bencode:"info"`
-	Info           TorrentInfo
-	InfoHash       [20]byte
-	InfoHex        string
-	InfoUrlEncoded string
+	AnounceList  []string      `bencode:"announce-list"`
+	CreatedBy    string        `bencode:"created by"`
+	CreationDate int64         `bencode:"creation date"`
+	Comment      string        `bencode:"comment"`
+	Encoding     string        `bencode:"encoding"`
+	UrlList      []string      `bencode:"url-list"`
+	InfoBytes    bencode.Bytes `bencode:"info"`
+	Info         TorrentInfo
+	InfoHash     [20]byte
+	InfoHashEnc  string
 	//map[string]interface{} `bencode:"info"`
 	//Info         TorrentInfo
 	// TODO: Save info as bytes
@@ -74,18 +73,13 @@ func ParseTorrent(file string) (TorrentMeta, error) {
 
 	// Compute the info_hash
 	data.InfoHash = sha1.Sum(data.InfoBytes)
-	data.InfoHex = fmt.Sprintf("%x", data.InfoHash)
-	//data.InfoUrlEncoded = strings.ToUpper(data.InfoHex)
-	data.InfoUrlEncoded = UrlEncode(data.InfoHash)
+	data.InfoHashEnc = UrlEncode(data.InfoHash)
 	return data, nil
 }
 
 func UrlEncode(hash [20]byte) string {
-	//fmt.Println('a', 'z', 'A', 'Z', "\n", '.', '-', '_', '~', '0', '9')
 	var enc string
-
 	for _, b := range hash {
-		fmt.Println(b, string(b))
 		switch {
 		case b >= 97 && b <= 122: // lower case
 			enc += string(b)
@@ -106,15 +100,8 @@ func UrlEncode(hash [20]byte) string {
 			enc += string(b)
 			continue
 		default:
-			fmt.Println("       WOOT")
 			enc += "%" + fmt.Sprintf("%x", []byte{b})
 		}
-
 	}
 	return enc
 }
-
-// func main() {
-//	data, _ := ParseTorrent("tom.torrent")
-//	fmt.Println(data.Info.Pieces[20:40])
-// }
