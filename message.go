@@ -2,7 +2,9 @@ package main
 
 import "net"
 import "bufio"
+import "errors"
 import "io"
+import "bytes"
 
 // 19 bytes
 
@@ -76,10 +78,18 @@ func (h *HandShake) ShakeHands() (string, error) {
 	}
 
 	// The response handshake
-	var shake [68]byte
+	shake := make([]byte, 68)
 	n, err = io.ReadFull(h.conn, shake)
 	if err != nil {
 		return "", err
 	}
-	return string(shake), nil
+	// TODO: Check for Length
+	if !bytes.Equal(shake[1:20], h.pstr) {
+		return "", errors.New("Protocol does not match")
+	}
+	if !bytes.Equal(shake[28:48], h.infoHash) {
+		return "", errors.New("InfoHash Does not match")
+	}
+
+	return string(shake[48:68]), nil
 }
