@@ -1,17 +1,23 @@
 package main
 
 import (
+	//"bufio"
 	"fmt"
-	//"net"
+	"net"
 )
 
 var meta TorrentMeta
 
+var peerId string
+
 var blocks map[[20]byte]bool
 
 func main() {
+
+	peerId = GenPeerId()
+
 	/* Parse Torrent*/
-	meta, err := ParseTorrent("ubuntu.torrent")
+	meta, err := ParseTorrent("tom.torrent")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -22,10 +28,21 @@ func main() {
 		fmt.Println(err)
 	}
 
-	// TODO: NOT really working
-	fmt.Println(resp.Complete, resp.Incomplete)
-	fmt.Println(len(resp.PeerList))
-	fmt.Println(resp.PeerList)
-	/*TODO: Connect to Peer*/
+	//fmt.Println(resp.Complete, resp.Incomplete)
+	//fmt.Println(len(resp.PeerList))
+	//fmt.Println(resp.PeerList)
 
+	/*TODO: Connect to Peer*/
+	target := fmt.Sprintf("%s:%d", resp.PeerList[1].Ip, resp.PeerList[1].Port)
+	fmt.Println("Connecting to ", target)
+	conn, err := net.Dial("tcp", target)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Fprintf(conn, "GET / HTTP/1.0\r\n\r\n")
+	// status, err := bufio.NewReader(conn).Read()
+	// if err != nil {
+	//	fmt.Println(err)
+	// }
+	// fmt.Println(string(status))
 }
