@@ -5,43 +5,36 @@ import (
 	"net"
 )
 
-var meta TorrentMeta
+type Peer struct {
+	meta *TorrentMeta // Whence it came
 
-var peerId [20]byte
+	PeerId string `bencode:"peer id"` // Bencoding not being used
+	Ip     string `bencode:"ip"`
+	Port   uint16 `bencode:"port"`
+	// After connection
+	Shaken bool
+	Conn   net.Conn
+	Id     string
+}
 
-var blocks map[[20]byte]bool
+func ConnectToPeer(peer *Peer) (*Peer, error) {
+	addr := fmt.Sprintf("%s:%d", peer.Ip, peer.Port)
+	logger.Println("Connecting to Peer: ", addr)
 
-func main() {
-	peerId = GenPeerId()
-
-	/* Parse Torrent*/
-	meta, err := ParseTorrent("tom.torrent")
+	conn, err := net.Dial("tcp", addr)
 	if err != nil {
-		fmt.Println(err)
+		debugger.Println(err)
 	}
 
-	/*Parse Tracker Response*/
-	resp, err := GetTrackerResponse(meta)
+	hs := NewHandShake(peer.meta, conn)
+	pId, err := hs.ShakeHands()
 	if err != nil {
-		fmt.Println(err)
+		debugger.Println(err)
 	}
+	peer.Id = pId
+	peer.Shaken = true
+	logger.Println("Connected to Peer: ", pId)
 
-	//fmt.Println(resp.Complete, resp.Incomplete)
-	//fmt.Println(len(resp.PeerList))
-	//fmt.Println(resp.PeerList)
+	return peer, nil
 
-	// /*TODO: Connect to Peer*/
-	peer := fmt.Sprintf("%s:%d", resp.PeerList[1].Ip, resp.PeerList[1].Port)
-	fmt.Println("Connecting to ", peer)
-	conn, err := net.Dial("tcp", peer)
-	if err != nil {
-		fmt.Println(err)
-	}
-	//fmt.Println(string(WriteHandShake(meta)))	conn.Write(WriteHandShake(meta))
-	hs := NewHandShake(meta, conn)
-	s, e := hs.ShakeHands()
-	if e != nil {
-		fmt.Println(e)
-	}
-	fmt.Println(s)
 }

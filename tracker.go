@@ -34,7 +34,7 @@ type TrackerResponse struct {
 	Complete      int32         `bencode:"complete"`
 	Incomplete    int32         `bencode:"incomplete"`
 	Peers         bencode.Bytes `bencode:"peers"`
-	PeerList      []Peer
+	PeerList      []*Peer
 }
 
 // type TrackerResponse struct {
@@ -52,12 +52,6 @@ type TrackerResponse struct {
 type TrackerResponseDict struct {
 	Failure  string `bencode:"failure reason"`
 	Interval int64  `bencode:"interval"`
-}
-
-type Peer struct {
-	PeerId string `bencode:"peer id"`
-	Ip     string `bencode:"ip"`
-	Port   uint16 `bencode:"port"`
 }
 
 // GetTrackerResponse TODO: pass in TrackerRequest instead
@@ -79,6 +73,7 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]
 	fmt.Println("GET:", request)
 	resp, err := http.Get(request)
 	if err != nil {
+		debugger.Println("Request Didn't Go through")
 		return response, err
 	}
 	defer resp.Body.Close() // Body is a ReadCloser
@@ -89,6 +84,7 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]
 	err = dec.Decode(&response)
 	//fmt.Println(string(resp.Body))
 	if err != nil {
+		debugger.Println("Unable to Decode Response")
 		return response, err
 	}
 
@@ -105,15 +101,11 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]
 		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
 		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
 		peer := Peer{Ip: ip.String(), Port: port}
-		response.PeerList = append(response.PeerList, peer)
+		peer.meta = &m
+		response.PeerList = append(response.PeerList, &peer)
 	}
-	//reader := bytes.NewReader(response.Peers)
-	//dec = bencode.NewDecoder(reader)
-	//dec.Decode(&response.PeerDict)
-	//fmt.Println(response.PeerDict)
 
 	return response, err
-
 }
 
 func GenPeerId() [20]byte {

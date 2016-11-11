@@ -33,7 +33,7 @@ type HandShake struct {
 
 ///<pstrlen><pstr><reserved><info_hash><peer_id>
 // 68 bytes long.
-func NewHandShake(meta TorrentMeta, c net.Conn) *HandShake {
+func NewHandShake(meta *TorrentMeta, c net.Conn) *HandShake {
 	handshake := new(HandShake)
 	handshake.pstr = []byte{'B', 'i', 't', 'T', 'o', 'r', 'r', 'e', 'n', 't', ' ', 'p', 'r', 'o', 't', 'o', 'c', 'o', 'l'}
 	handshake.pstrlen = (uint8)(len(handshake.pstr))
