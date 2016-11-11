@@ -67,7 +67,7 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]
 	// TODO: Use scrape conventions
 	//url := strings.Replace(m.Announce, "announce", "scrape", 1)
 	//request := url + "?info_hash=" + m.InfoHashEnc + "&peer_id=" + GenPeerId() +
-	request := m.Announce + "?info_hash=" + m.InfoHashEnc + "&peer_id=" + peerId +
+	request := m.Announce + "?info_hash=" + m.InfoHashEnc + "&peer_id=" + UrlEncode(peerId) +
 		"&uploaded=0" +
 		"&downloaded=0" +
 		"&left=" + strconv.Itoa(int(m.Info.Length)) +
@@ -116,9 +116,9 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]
 
 }
 
-func GenPeerId() string {
+func GenPeerId() [20]byte {
 	// TODO: Make random
 	b := [20]byte{'-', 'T', 'R', '3', '4', '4', '0', '-',
 		'9', '1', 'a', '2', '4', 'W', '5', '7', '7', '4', '6', '1'}
-	return UrlEncode(b)
+	return b
 }
