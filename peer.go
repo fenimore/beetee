@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
+	"io"
 	"net"
 )
 
@@ -15,6 +17,10 @@ type Peer struct {
 	Shaken bool
 	Conn   net.Conn
 	Id     string
+	// Peer Values
+	Interesed bool
+	Choked    bool
+	Bitfield  []bool
 }
 
 func ConnectToPeer(peer *Peer) (*Peer, error) {
@@ -36,5 +42,27 @@ func ConnectToPeer(peer *Peer) (*Peer, error) {
 	logger.Println("Connected to Peer: ", pId)
 
 	return peer, nil
+
+}
+
+func (p *Peer) ListenToPeer() {
+	logger.Printf("Peer %s : starting Listen\n", p.PeerId)
+	// handshake is already authed
+	for {
+		length := make([]byte, 4)
+		n, err := io.ReadFull(p.Conn, length)
+		if err != nil {
+			debugger.Println("Error Reading, Stopping")
+			// TODO: Stop connection
+		}
+		payload := make([]byte, binary.BigEndian.Uint32(length))
+		n, err = io.ReadFull(p.Conn, payload)
+		if err != nil {
+			debugger.Println("Error Reading Payload")
+			// TODO: Stop connection
+		}
+		logger.Printf("For %s length I got %d len", length, n)
+		logger.Println(string(payload))
+	}
 
 }

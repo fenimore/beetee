@@ -102,6 +102,7 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]
 		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
 		peer := Peer{Ip: ip.String(), Port: port}
 		peer.meta = &m
+		peer.Chocked = true
 		response.PeerList = append(response.PeerList, &peer)
 	}
 

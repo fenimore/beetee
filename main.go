@@ -27,16 +27,23 @@ func main() {
 		//fmt.Println(err)
 	}
 
-	/*Parse Tracker Response*/
-	resp, err := GetTrackerResponse(meta)
-	if err != nil {
-		debugger.Println(err)
-	}
+	logger.Println("Length: ", meta.Info.Length)
+	logger.Println("Piece Length: ", meta.Info.PieceLength)
+	logger.Println("Piece Len: ", len(meta.Info.Pieces))
+	logger.Println("Pieces: ", meta.Info.Pieces)
 
-	// /*TODO: Connect to Peer*/
-	peer, err := ConnectToPeer(resp.PeerList[1])
-	if err != nil {
-		debugger.Println(err)
-	}
-	logger.Println(peer.Id)
+	// /*Parse Tracker Response*/
+	// resp, err := GetTrackerResponse(meta)
+	// if err != nil {
+	//	debugger.Println(err)
+	// }
+
+	// /*Connect to Peer*/
+	// peer, err := ConnectToPeer(resp.PeerList[1])
+	// if err != nil {
+	//	debugger.Println(err)
+	// }
+	// //logger.Println(peer.Id)
+
+	/* TODO: Request Blocks */
 }
