@@ -71,25 +71,25 @@ func (p *Peer) decodeMessage(payload []byte) {
 	// first byte is msg type
 	msg := payload[1:]
 	switch payload[0] {
-	case Choke:
+	case ChokeMsg:
 		logger.Println("Choked", msg)
-	case Unchoke:
+	case UnchokeMsg:
 		logger.Println("UnChocke", msg)
-	case Interested:
+	case InterestedMsg:
 		logger.Println("Interested", msg)
-	case NotInterested:
+	case NotInterestedMsg:
 		logger.Println("NotInterested", msg)
-	case Have:
+	case HaveMsg:
 		logger.Println("Have", msg)
-	case BitField:
+	case BitFieldMsg:
 		logger.Println("Bitfield", msg)
-	case Request:
+	case RequestMsg:
 		logger.Println("Request", msg)
-	case Piece:
+	case BlockMsg:
 		logger.Println("Piece", msg)
-	case Cancel:
+	case CancelMsg:
 		logger.Println("Payload", msg)
-	case Port:
+	case PortMsg:
 		logger.Println("Port", msg)
 	}
 

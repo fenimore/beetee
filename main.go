@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/binary"
 	"log"
 	"os"
 	"sync"
@@ -33,8 +34,9 @@ func main() {
 	debugger.Println("Length: ", meta.Info.Length)
 	debugger.Println("Piece Length: ", meta.Info.PieceLength)
 	debugger.Println("Piece Len: ", len(meta.Info.Pieces))
-	//logger.Println("Pieces: ", meta.Info.Pieces)
-
+	debugger.Println(binary.BigEndian.Uint32([]byte{'0', '0', '0', '6'}))
+	//logger.Println("Pieces:\n\n", string(meta.Info.Pieces))
+	return
 	/*Parse Tracker Response*/
 	resp, err := GetTrackerResponse(meta)
 	if err != nil {

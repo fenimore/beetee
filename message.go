@@ -9,16 +9,16 @@ import "bytes"
 // 19 bytes
 
 const (
-	Choke = iota
-	Unchoke
-	Interested
-	NotInterested
-	Have
-	BitField
-	Request
-	Piece
-	Cancel
-	Port
+	ChokeMsg = iota
+	UnchokeMsg
+	InterestedMsg
+	NotInterestedMsg
+	HaveMsg
+	BitFieldMsg
+	RequestMsg
+	BlockMsg // rather than PieceMsg
+	CancelMsg
+	PortMsg
 )
 
 type HandShake struct {
