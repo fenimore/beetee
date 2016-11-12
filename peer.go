@@ -23,25 +23,27 @@ type Peer struct {
 	Bitfield  []bool
 }
 
-func ConnectToPeer(peer *Peer) (*Peer, error) {
-	addr := fmt.Sprintf("%s:%d", peer.Ip, peer.Port)
+func (p *Peer) ConnectToPeer() error {
+	addr := fmt.Sprintf("%s:%d", p.Ip, p.Port)
 	logger.Println("Connecting to Peer: ", addr)
 
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
 		debugger.Println(err)
+		return err
 	}
 
-	hs := NewHandShake(peer.meta, conn)
+	hs := NewHandShake(p.meta, conn)
 	pId, err := hs.ShakeHands()
 	if err != nil {
 		debugger.Println(err)
+		return err
 	}
-	peer.Id = pId
-	peer.Shaken = true
+	p.Id = pId
+	p.Shaken = true
 	logger.Println("Connected to Peer: ", pId)
 
-	return peer, nil
+	return nil
 
 }
 
