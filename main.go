@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"sync"
 )
 
 var (
@@ -12,6 +13,8 @@ var (
 
 	debugger *log.Logger
 	logger   *log.Logger
+
+	wg sync.WaitGroup
 )
 
 func main() {
@@ -27,23 +30,28 @@ func main() {
 		//fmt.Println(err)
 	}
 
-	logger.Println("Length: ", meta.Info.Length)
-	logger.Println("Piece Length: ", meta.Info.PieceLength)
-	logger.Println("Piece Len: ", len(meta.Info.Pieces))
-	logger.Println("Pieces: ", meta.Info.Pieces)
+	debugger.Println("Length: ", meta.Info.Length)
+	debugger.Println("Piece Length: ", meta.Info.PieceLength)
+	debugger.Println("Piece Len: ", len(meta.Info.Pieces))
+	//logger.Println("Pieces: ", meta.Info.Pieces)
 
-	// /*Parse Tracker Response*/
-	// resp, err := GetTrackerResponse(meta)
-	// if err != nil {
-	//	debugger.Println(err)
-	// }
+	/*Parse Tracker Response*/
+	resp, err := GetTrackerResponse(meta)
+	if err != nil {
+		debugger.Println(err)
+	}
 
-	// /*Connect to Peer*/
-	// peer, err := ConnectToPeer(resp.PeerList[1])
-	// if err != nil {
-	//	debugger.Println(err)
-	// }
-	// //logger.Println(peer.Id)
+	/*Connect to Peer*/
+	peer := resp.PeerList[1]
+	err = peer.ConnectToPeer()
+	if err != nil {
+		debugger.Println(err)
+	}
+
+	logger.Println(peer.Id)
+	go peer.ListenToPeer()
+	wg.Add(1)
 
 	/* TODO: Request Blocks */
+	wg.Wait()
 }

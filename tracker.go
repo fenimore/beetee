@@ -1,6 +1,5 @@
 package main
 
-import "fmt"
 import "github.com/anacrolix/torrent/bencode"
 import "strconv"
 import "net"
@@ -70,7 +69,7 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]
 		"&event=started"
 
 	// TODO: conStruct
-	fmt.Println("GET:", request)
+	logger.Println("TRACKER REQUEST:", request)
 	resp, err := http.Get(request)
 	if err != nil {
 		debugger.Println("Request Didn't Go through")

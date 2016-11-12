@@ -29,18 +29,17 @@ func (p *Peer) ConnectToPeer() error {
 
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
-		debugger.Println(err)
 		return err
 	}
 
 	hs := NewHandShake(p.meta, conn)
 	pId, err := hs.ShakeHands()
 	if err != nil {
-		debugger.Println(err)
 		return err
 	}
 	p.Id = pId
 	p.Shaken = true
+	p.Conn = conn
 	logger.Println("Connected to Peer: ", pId)
 
 	return nil
@@ -48,23 +47,50 @@ func (p *Peer) ConnectToPeer() error {
 }
 
 func (p *Peer) ListenToPeer() {
-	logger.Printf("Peer %s : starting Listen\n", p.PeerId)
+	logger.Printf("Peer %s : starting Listen\n", string(p.PeerId))
 	// handshake is already authed
 	for {
 		length := make([]byte, 4)
-		n, err := io.ReadFull(p.Conn, length)
+		_, err := io.ReadFull(p.Conn, length)
 		if err != nil {
 			debugger.Println("Error Reading, Stopping")
 			// TODO: Stop connection
 		}
 		payload := make([]byte, binary.BigEndian.Uint32(length))
-		n, err = io.ReadFull(p.Conn, payload)
+		_, err = io.ReadFull(p.Conn, payload)
 		if err != nil {
 			debugger.Println("Error Reading Payload")
 			// TODO: Stop connection
 		}
-		logger.Printf("For %s length I got %d len", length, n)
-		logger.Println(string(payload))
+		go p.decodeMessage(payload)
+	}
+
+}
+
+func (p *Peer) decodeMessage(payload []byte) {
+	// first byte is msg type
+	msg := payload[1:]
+	switch payload[0] {
+	case Choke:
+		logger.Println("Choked", msg)
+	case Unchoke:
+		logger.Println("UnChocke", msg)
+	case Interested:
+		logger.Println("Interested", msg)
+	case NotInterested:
+		logger.Println("NotInterested", msg)
+	case Have:
+		logger.Println("Have", msg)
+	case BitField:
+		logger.Println("Bitfield", msg)
+	case Request:
+		logger.Println("Request", msg)
+	case Piece:
+		logger.Println("Piece", msg)
+	case Cancel:
+		logger.Println("Payload", msg)
+	case Port:
+		logger.Println("Port", msg)
 	}
 
 }
