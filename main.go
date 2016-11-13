@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/binary"
 	"log"
 	"os"
 	"sync"
@@ -20,8 +19,11 @@ var (
 )
 
 func main() {
+
 	debugger = log.New(os.Stdout, "DEBUG: ", log.Ltime|log.Lshortfile)
 	logger = log.New(os.Stdout, "LOG: ", log.Ltime|log.Lshortfile)
+	//	logger.Println([]byte{(uint8)(0),
+	//		(uint8)(0), (uint8)(0), (uint8)(1)})
 
 	peerId = GenPeerId()
 
@@ -35,7 +37,7 @@ func main() {
 	debugger.Println("Length: ", meta.Info.Length)
 	debugger.Println("Piece Length: ", meta.Info.PieceLength)
 	debugger.Println("Piece Len: ", len(meta.Info.Pieces))
-	debugger.Println(binary.BigEndian.Uint32([]byte{'0', '0', '0', '6'}))
+
 	//logger.Println("Pieces:\n\n", string(meta.Info.Pieces))
 	//return
 	/*Parse Tracker Response*/

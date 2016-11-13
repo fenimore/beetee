@@ -133,8 +133,10 @@ func (p *Peer) sendStatusMessage(msg int) error {
 		_, err = writer.Write([]byte{'0', '0', '0', '0'})
 
 	} else {
-		_, err = writer.Write([]byte{(uint8)(0),
-			(uint8)(0), (uint8)(0), (uint8)(1)})
+		//_, err = writer.Write([]byte{(uint8)(0),
+		//	(uint8)(0), (uint8)(0), (uint8)(1)})
+		_, err = writer.Write([]byte{byte(0),
+			(uint8)(0), byte(0), byte(1)})
 	}
 	if err != nil {
 		return err
@@ -148,7 +150,8 @@ func (p *Peer) sendStatusMessage(msg int) error {
 	case UnchokeMsg:
 		err = writer.WriteByte((uint8)(1))
 	case InterestedMsg:
-		err = writer.WriteByte((uint8)(2))
+		err = writer.WriteByte(byte(2))
+		//r = writer.WriteByte((uint8)(2))
 	case NotInterestedMsg:
 		err = writer.WriteByte((uint8)(3))
 	}
