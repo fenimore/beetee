@@ -93,3 +93,69 @@ func (h *HandShake) ShakeHands() (string, error) {
 
 	return string(shake[48:68]), nil
 }
+
+func (p *Peer) decodeMessage(payload []byte) {
+	// first byte is msg type
+	if len(payload) < 1 {
+		return
+	}
+	msg := payload[1:]
+	switch payload[0] {
+	case ChokeMsg:
+		logger.Println("Choked", msg)
+	case UnchokeMsg:
+		logger.Println("UnChoke", msg)
+	case InterestedMsg:
+		logger.Println("Interested", msg)
+	case NotInterestedMsg:
+		logger.Println("NotInterested", msg)
+	case HaveMsg:
+		logger.Println("Have", msg)
+	case BitFieldMsg:
+		logger.Println("Bitfield", msg)
+	case RequestMsg:
+		logger.Println("Request", msg)
+	case BlockMsg:
+		logger.Println("Piece", msg)
+	case CancelMsg:
+		logger.Println("Payload", msg)
+	case PortMsg:
+		logger.Println("Port", msg)
+	}
+
+}
+
+func (p *Peer) sendStatusMessage(msg int) error {
+	logger.Println("Sending Status Message: ", msg)
+	var err error
+	writer := bufio.NewWriter(p.Conn)
+	if msg == -1 { // keep alive, do nothing TODO: add ot iota
+		_, err = writer.Write([]byte{'0', '0', '0', '0'})
+
+	} else {
+		_, err = writer.Write([]byte{(uint8)(0),
+			(uint8)(0), (uint8)(0), (uint8)(1)})
+	}
+	if err != nil {
+		return err
+	}
+
+	// Format
+	//<len=0001><id=0>
+	switch msg {
+	case ChokeMsg:
+		err = writer.WriteByte((uint8)(0))
+	case UnchokeMsg:
+		err = writer.WriteByte((uint8)(1))
+	case InterestedMsg:
+		err = writer.WriteByte((uint8)(2))
+	case NotInterestedMsg:
+		err = writer.WriteByte((uint8)(3))
+	}
+	if err != nil {
+		return err
+	}
+	//debugger.Println("Sending", writer)
+	writer.Flush()
+	return nil
+}

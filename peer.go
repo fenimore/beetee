@@ -55,6 +55,7 @@ func (p *Peer) ListenToPeer() {
 		if err != nil {
 			debugger.Println("Error Reading, Stopping")
 			// TODO: Stop connection
+			return
 		}
 		payload := make([]byte, binary.BigEndian.Uint32(length))
 		_, err = io.ReadFull(p.Conn, payload)
@@ -63,34 +64,6 @@ func (p *Peer) ListenToPeer() {
 			// TODO: Stop connection
 		}
 		go p.decodeMessage(payload)
-	}
-
-}
-
-func (p *Peer) decodeMessage(payload []byte) {
-	// first byte is msg type
-	msg := payload[1:]
-	switch payload[0] {
-	case ChokeMsg:
-		logger.Println("Choked", msg)
-	case UnchokeMsg:
-		logger.Println("UnChocke", msg)
-	case InterestedMsg:
-		logger.Println("Interested", msg)
-	case NotInterestedMsg:
-		logger.Println("NotInterested", msg)
-	case HaveMsg:
-		logger.Println("Have", msg)
-	case BitFieldMsg:
-		logger.Println("Bitfield", msg)
-	case RequestMsg:
-		logger.Println("Request", msg)
-	case BlockMsg:
-		logger.Println("Piece", msg)
-	case CancelMsg:
-		logger.Println("Payload", msg)
-	case PortMsg:
-		logger.Println("Port", msg)
 	}
 
 }

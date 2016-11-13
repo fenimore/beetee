@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"sync"
+	"time"
 )
 
 var (
@@ -36,7 +37,7 @@ func main() {
 	debugger.Println("Piece Len: ", len(meta.Info.Pieces))
 	debugger.Println(binary.BigEndian.Uint32([]byte{'0', '0', '0', '6'}))
 	//logger.Println("Pieces:\n\n", string(meta.Info.Pieces))
-	return
+	//return
 	/*Parse Tracker Response*/
 	resp, err := GetTrackerResponse(meta)
 	if err != nil {
@@ -49,9 +50,16 @@ func main() {
 	if err != nil {
 		debugger.Println(err)
 	}
-
+	/* Listen to Peer */
 	logger.Println(peer.Id)
 	go peer.ListenToPeer()
+
+	/* Tell Peer I'm interested */
+	time.Sleep(40000)
+	err = peer.sendStatusMessage(InterestedMsg)
+	if err != nil {
+		debugger.Println("Status Error: ", err)
+	}
 	wg.Add(1)
 
 	/* TODO: Request Blocks */
