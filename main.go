@@ -34,16 +34,15 @@ func main() {
 		//fmt.Println(err)
 	}
 
-	debugger.Println("Length: ", meta.Info.Length)
-	debugger.Println("Piece Length: ", meta.Info.PieceLength)
-	debugger.Println("Piece Len: ", len(meta.Info.Pieces))
-	debugger.Println(meta.InfoHash)
-	debugger.Println(string(meta.Info.Pieces[:5]))
-	debugger.Println(meta.Info.Pieces[:5])
-	debugger.Println(':')
-	logger.Println("Pieces:\n\n", meta.Info.Pieces)
-	return
-	//return
+	// debugger.Println("Length: ", meta.Info.Length)
+	// debugger.Println("Piece Length: ", meta.Info.PieceLength)
+	// debugger.Println("Piece Len: ", len(meta.Info.Pieces))
+	// debugger.Println(meta.InfoHash)
+	// debugger.Println(string(meta.Info.Pieces[:5]))
+	// debugger.Println(meta.Info.Pieces[:5])
+	// debugger.Println(':')
+	// debugger.Println("Pieces:\n\n", meta.Info.Pieces)
+
 	/*Parse Tracker Response*/
 	resp, err := GetTrackerResponse(meta)
 	if err != nil {

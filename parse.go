@@ -43,6 +43,7 @@ type TorrentInfo struct {
 	PieceLength int64         `bencode:"piece length"`
 	Pieces      bencode.Bytes `bencode:"pieces"`
 	Private     int64         `bencode:"private"`
+	PieceList   []*Piece
 	// md5sum for single files
 	// files for multiple files
 	// path for multiple files
@@ -50,7 +51,7 @@ type TorrentInfo struct {
 	// Concatenation of all 20 byte SHA1
 }
 
-// ParseTorrent parses a torrent file
+// ParseTorrent parses a torrent file.
 func ParseTorrent(file string) (TorrentMeta, error) {
 	var data TorrentMeta
 	f, err := os.Open(file)
@@ -73,7 +74,8 @@ func ParseTorrent(file string) (TorrentMeta, error) {
 	// Compute the info_hash
 	data.InfoHash = sha1.Sum(data.InfoBytes)
 	data.InfoHashEnc = UrlEncode(data.InfoHash)
-	data.Info.cleanPieces()
+	//data.Info.cleanPieces()
+	data.Info.parsePieces()
 	return data, nil
 }
 
@@ -83,7 +85,7 @@ func (info *TorrentInfo) cleanPieces() {
 	var idx int
 	for i, val := range info.Pieces {
 		if val == ':' {
-			idx = i
+			idx = i + 1
 			break
 		}
 	}
