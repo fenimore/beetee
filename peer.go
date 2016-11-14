@@ -19,10 +19,12 @@ type Peer struct {
 	Shaken bool
 	Conn   net.Conn
 	Id     string
-	// Peer Values
+	// Peer Status
 	Interesed bool
 	Choked    bool
 	Bitfield  []bool
+	// What the Peer Has, index wise
+	has map[uint32]bool
 }
 
 func (p *Peer) ConnectToPeer() error {
@@ -35,6 +37,7 @@ func (p *Peer) ConnectToPeer() error {
 	}
 
 	p.Conn = conn
+	p.has = make(map[uint32]bool)
 	err = p.ShakeHands()
 	if err != nil {
 		return err

@@ -86,21 +86,30 @@ func (p *Peer) decodeMessage(payload []byte) {
 		return
 	}
 	msg := payload[1:]
+	logger.Println("recieved a Message:", payload[0])
 	switch payload[0] {
 	case ChokeMsg:
 		logger.Println("Choked", msg)
 	case UnchokeMsg:
 		logger.Println("UnChoke", msg)
-		err := p.sendRequestMessage(1)
-		if err != nil {
-			debugger.Println("Request Failure", err)
+		for k, v := range p.has {
+			if !v {
+				go func(msg uint32) {
+					err := p.sendRequestMessage(msg)
+					if err != nil {
+						debugger.Println("Error Requesting", err)
+					}
+				}(k)
+			}
 		}
+
 	case InterestedMsg:
 		logger.Println("Interested", msg)
 	case NotInterestedMsg:
 		logger.Println("NotInterested", msg)
 	case HaveMsg:
 		logger.Println("Have", msg)
+		p.has[binary.BigEndian.Uint32(msg)] = false
 	case BitFieldMsg:
 		logger.Println("Bitfield", msg)
 		err := p.sendStatusMessage(InterestedMsg)
@@ -110,7 +119,7 @@ func (p *Peer) decodeMessage(payload []byte) {
 	case RequestMsg:
 		logger.Println("Request", msg)
 	case BlockMsg:
-		logger.Println("Piece", msg)
+		logger.Println("Piece")
 	case CancelMsg:
 		logger.Println("Payload", msg)
 	case PortMsg:
@@ -154,8 +163,8 @@ func (p *Peer) sendStatusMessage(msg int) error {
 	return nil
 }
 
-// sendRequestMessage pass in the index of the piece your looking for.
-func (p *Peer) sendRequestMessage(idx int) error {
+// Sendrequestmessage pass in the index of the piece your looking for.
+func (p *Peer) sendRequestMessage(idx uint32) error {
 	// Request lenght := 16384
 	// From kristen:
 	//The ‘Request’ message type consists of the
@@ -174,7 +183,7 @@ func (p *Peer) sendRequestMessage(idx int) error {
 	id := byte(RequestMsg)
 	// payload
 	index := make([]byte, 4)
-	binary.BigEndian.PutUint32(index, uint32(idx))
+	binary.BigEndian.PutUint32(index, idx)
 	begin := make([]byte, 4)
 	binary.BigEndian.PutUint32(begin, 0)
 	length := make([]byte, 4)
@@ -192,13 +201,14 @@ func (p *Peer) sendRequestMessage(idx int) error {
 	if err != nil {
 		return err
 	}
-	_, err = writer.Write(length)
-	if err != nil {
-		return err
-	}
 	_, err = writer.Write(begin)
 	if err != nil {
 		return err
 	}
+	_, err = writer.Write(length)
+	if err != nil {
+		return err
+	}
+	writer.Flush()
 	return nil
 }
