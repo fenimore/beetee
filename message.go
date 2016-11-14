@@ -141,18 +141,17 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	// that is, which BLOCK this is within piece
 	begin := binary.BigEndian.Uint32(msg[4:8])
 	debugger.Println("Index:", int(index), begin)
-	//debugger.Println(msg[4:8])
+	pieceList := p.meta.Info.PieceList // for readability
 	// TODO: put into Block, and then check if
 	// there are other blocks to get..
-	p.meta.Info.PieceList[index].data = msg[8:]
-	//var validator [20]byte
-	if p.meta.Info.PieceList[index].hash == sha1.Sum(msg[8:]) {
+	// TODO: Only if NOTE block but all of piece..
+	if pieceList[index].hash == sha1.Sum(msg[8:]) {
 		debugger.Println("Valid Hash")
+		pieceList[index].data = msg[8:]
+		pieceList[index].have = true
 	} else {
 		debugger.Println("Invalid Hash :( ")
 	}
-	debugger.Println(p.meta.Info.PieceList[index].hash)
-	debugger.Println(sha1.Sum(msg[8:]))
 }
 
 func (p *Peer) sendStatusMessage(msg int) error {
@@ -178,7 +177,6 @@ func (p *Peer) sendStatusMessage(msg int) error {
 		err = writer.WriteByte((uint8)(1))
 	case InterestedMsg:
 		err = writer.WriteByte(byte(2))
-		//r = writer.WriteByte((uint8)(2))
 	case NotInterestedMsg:
 		err = writer.WriteByte((uint8)(3))
 	}

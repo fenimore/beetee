@@ -8,11 +8,11 @@ Bittorrent Client implemented in Go
 [ ] Parse Have and BitField
 
 ## Downloading
-[1] ask peer for index // not a big deal
+[x] ask peer for index // not a big deal
+### blocks
 [ ] put that block into piece by index
 [ ] concat blocks into data field
-
-
+### Write to disk
 [ ] manage blocks
 [ ] write to disk
 
