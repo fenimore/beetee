@@ -13,6 +13,7 @@ Bittorrent Client implemented in Go
 [ ] put that block into piece by index
 [ ] concat blocks into data field
 ### Write to disk
+
 [ ] manage blocks
 [ ] write to disk
 

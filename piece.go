@@ -1,5 +1,7 @@
 package main
 
+const BLOCKSIZE int = 16384
+
 type Piece struct {
 	index  int // redundant
 	data   []byte
@@ -32,4 +34,9 @@ func (info *TorrentInfo) parsePieces() {
 		piece.size = info.PieceLength
 		info.PieceList = append(info.PieceList, &piece)
 	}
+}
+
+func (p *Piece) countBlocks() int {
+	//p.size
+	return 1
 }

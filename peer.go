@@ -64,9 +64,9 @@ func (p *Peer) ListenToPeer() {
 		//debugger.Println(length)
 		if err != nil {
 			debugger.Println("Error Reading, Stopping", err)
-			p.sendStatusMessage(-1)
+			//p.sendStatusMessage(-1)
+			p.Conn.Close()
 			// TODO: Stop connection
-			// This is typicaly io.EOF error
 			return
 		} //make([]array,1)
 		payload := make([]byte, binary.BigEndian.Uint32(length))
@@ -74,6 +74,7 @@ func (p *Peer) ListenToPeer() {
 		if err != nil {
 			debugger.Println("Error Reading Payload", err)
 			// TODO: Stop connection
+			p.Conn.Close()
 			return
 		}
 		go p.decodeMessage(payload)
