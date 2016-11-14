@@ -47,7 +47,7 @@ func main() {
 	}
 
 	/*Connect to Peer*/
-	peer := resp.PeerList[2]
+	peer := resp.PeerList[1]
 	go peer.ListenToPeer()
 	/* Tell Peer I'm interested */
 	wg.Add(1)

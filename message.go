@@ -122,14 +122,16 @@ func (p *Peer) decodeMessage(payload []byte) {
 func (p *Peer) sendStatusMessage(msg int) error {
 	logger.Println("Sending Status Message: ", msg)
 	var err error
+	buf := make([]byte, 4)
 	writer := bufio.NewWriter(p.Conn)
 	if msg == -1 { // keep alive, do nothing TODO: add ot iota
-		_, err = writer.Write([]byte{byte(0),
-			(uint8)(0), byte(0), byte(0)})
+		binary.BigEndian.PutUint32(buf, 0)
 	} else {
-		_, err = writer.Write([]byte{byte(0),
-			(uint8)(0), byte(0), byte(1)})
+		binary.BigEndian.PutUint32(buf, 1)
+
 	}
+	writer.Write(buf)
+
 	if err != nil {
 		return err
 	}
@@ -147,10 +149,12 @@ func (p *Peer) sendStatusMessage(msg int) error {
 	if err != nil {
 		return err
 	}
+
 	writer.Flush()
 	return nil
 }
 
+// sendRequestMessage pass in the index of the piece your looking for.
 func (p *Peer) sendRequestMessage(idx int) error {
 	// Request lenght := 16384
 	// From kristen:
@@ -162,21 +166,20 @@ func (p *Peer) sendRequestMessage(idx int) error {
 	//4-byte block offset within the piece (measured in bytes), and
 	//4-byte block length
 	// <len=0013><id=6><index><begin><length>
-	//is this [0 0 1 3] or [0 0 0 13]
 	logger.Println("Sending Request Message: ", idx)
 	var err error
 	writer := bufio.NewWriter(p.Conn)
-	len := []byte{byte(0), (uint8)(0), byte(1), byte(3)}
+	len := make([]byte, 4)
+	binary.BigEndian.PutUint32(len, 13)
 	id := byte(RequestMsg)
 	// payload
-	index := []byte{byte(0), (uint8)(0), byte(0), byte(idx)}
-	begin := []byte{byte(0), (uint8)(0), byte(0), byte(1)}
-	//length := []byte{byte(0), byte(0), byte(255), byte(255)}
-	lenBuf := make([]byte, 4)
-	//binary.BigEndian.PutUint32(lenBuf, 16384)
-	binary.BigEndian.PutUint32(lenBuf, 16384)
-	//debugger.Println([]byte{})
-	//debugger.Println()
+	index := make([]byte, 4)
+	binary.BigEndian.PutUint32(index, uint32(idx))
+	begin := make([]byte, 4)
+	binary.BigEndian.PutUint32(begin, 0)
+	length := make([]byte, 4)
+	binary.BigEndian.PutUint32(length, 16384)
+
 	_, err = writer.Write(len)
 	if err != nil {
 		return err
@@ -189,7 +192,7 @@ func (p *Peer) sendRequestMessage(idx int) error {
 	if err != nil {
 		return err
 	}
-	_, err = writer.Write(lenBuf)
+	_, err = writer.Write(length)
 	if err != nil {
 		return err
 	}
