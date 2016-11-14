@@ -37,10 +37,7 @@ func main() {
 	// debugger.Println("Length: ", meta.Info.Length)
 	// debugger.Println("Piece Length: ", meta.Info.PieceLength)
 	// debugger.Println("Piece Len: ", len(meta.Info.Pieces))
-	// debugger.Println(meta.InfoHash)
-	// debugger.Println(string(meta.Info.Pieces[:5]))
-	// debugger.Println(meta.Info.Pieces[:5])
-	// debugger.Println(':')
+	// debugger.Println("PieceList:", meta.Info.PieceList)
 	// debugger.Println("Pieces:\n\n", meta.Info.Pieces)
 
 	/*Parse Tracker Response*/
@@ -50,7 +47,7 @@ func main() {
 	}
 
 	/*Connect to Peer*/
-	peer := resp.PeerList[1]
+	peer := resp.PeerList[2]
 	go peer.ListenToPeer()
 	/* Tell Peer I'm interested */
 	wg.Add(1)

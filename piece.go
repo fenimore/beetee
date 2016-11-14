@@ -7,6 +7,7 @@ type Piece struct {
 	peer   *Peer
 	hash   [20]byte
 	size   int64
+	have   bool
 }
 
 type Block struct {
@@ -21,8 +22,8 @@ type Block struct {
 // the Info list of
 func (info *TorrentInfo) parsePieces() {
 	info.cleanPieces()
-	len := len(info.Pieces) / 20
-	info.PieceList = make([]*Piece, len)
+	len := len(info.Pieces)
+	info.PieceList = make([]*Piece, 0, len/20)
 	for i := 0; i < len; i = i + 20 {
 		j := i + 20
 		piece := Piece{}
