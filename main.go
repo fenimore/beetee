@@ -37,8 +37,12 @@ func main() {
 	debugger.Println("Length: ", meta.Info.Length)
 	debugger.Println("Piece Length: ", meta.Info.PieceLength)
 	debugger.Println("Piece Len: ", len(meta.Info.Pieces))
-
-	//logger.Println("Pieces:\n\n", string(meta.Info.Pieces))
+	debugger.Println(meta.InfoHash)
+	debugger.Println(string(meta.Info.Pieces[:5]))
+	debugger.Println(meta.Info.Pieces[:5])
+	debugger.Println(':')
+	logger.Println("Pieces:\n\n", meta.Info.Pieces)
+	return
 	//return
 	/*Parse Tracker Response*/
 	resp, err := GetTrackerResponse(meta)

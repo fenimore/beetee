@@ -4,6 +4,7 @@ import "bufio"
 import "errors"
 import "io"
 import "bytes"
+import "encoding/binary"
 
 // 19 bytes
 
@@ -170,7 +171,12 @@ func (p *Peer) sendRequestMessage(idx int) error {
 	// payload
 	index := []byte{byte(0), (uint8)(0), byte(0), byte(idx)}
 	begin := []byte{byte(0), (uint8)(0), byte(0), byte(1)}
-	length := []byte{byte(0), (uint8)(0), byte(0), byte(15)}
+	//length := []byte{byte(0), byte(0), byte(255), byte(255)}
+	lenBuf := make([]byte, 4)
+	//binary.BigEndian.PutUint32(lenBuf, 16384)
+	binary.BigEndian.PutUint32(lenBuf, 16384)
+	//debugger.Println([]byte{})
+	//debugger.Println()
 	_, err = writer.Write(len)
 	if err != nil {
 		return err
@@ -183,7 +189,7 @@ func (p *Peer) sendRequestMessage(idx int) error {
 	if err != nil {
 		return err
 	}
-	_, err = writer.Write(length)
+	_, err = writer.Write(lenBuf)
 	if err != nil {
 		return err
 	}

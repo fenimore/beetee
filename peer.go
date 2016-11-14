@@ -45,6 +45,7 @@ func (p *Peer) ConnectToPeer() error {
 
 }
 
+//<len>   <id><payload>
 func (p *Peer) ListenToPeer() {
 	// Handshake
 	err := p.ConnectToPeer()
@@ -64,7 +65,7 @@ func (p *Peer) ListenToPeer() {
 			// TODO: Stop connection
 			// This is typicaly io.EOF error
 			return
-		}
+		} //make([]array,1)
 		payload := make([]byte, binary.BigEndian.Uint32(length))
 		_, err = io.ReadFull(p.Conn, payload)
 		if err != nil {

@@ -50,6 +50,7 @@ type TorrentInfo struct {
 	// Concatenation of all 20 byte SHA1
 }
 
+// ParseTorrent parses a torrent file
 func ParseTorrent(file string) (TorrentMeta, error) {
 	var data TorrentMeta
 	f, err := os.Open(file)
@@ -72,7 +73,21 @@ func ParseTorrent(file string) (TorrentMeta, error) {
 	// Compute the info_hash
 	data.InfoHash = sha1.Sum(data.InfoBytes)
 	data.InfoHashEnc = UrlEncode(data.InfoHash)
+	data.Info.cleanPieces()
 	return data, nil
+}
+
+// cleanPieces because the encoder includes the lenght of the
+// string of bytes
+func (info *TorrentInfo) cleanPieces() {
+	var idx int
+	for i, val := range info.Pieces {
+		if val == ':' {
+			idx = i
+			break
+		}
+	}
+	info.Pieces = info.Pieces[idx:]
 }
 
 func UrlEncode(hash [20]byte) string {
