@@ -143,6 +143,17 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	}
 }
 
+func (p *Peer) requestPiece() {
+	//countBlocks()
+	// For every block in a piece
+	// request that piece with offset
+	//
+}
+
+func (p *Piece) checkBlockCompletion() {
+
+}
+
 func (p *Peer) sendStatusMessage(msg int) error {
 	logger.Println("Sending Status Message: ", msg)
 	var err error
@@ -238,11 +249,4 @@ func (p *Peer) requestAllPieces() {
 			debugger.Println("Error Requesting", err)
 		}
 	}
-}
-
-func (p *Peer) requestPiece() {
-	//countBlocks()
-	// For every block in a piece
-	// request that piece with offset
-	//
 }
