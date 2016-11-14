@@ -5,6 +5,7 @@ import "errors"
 import "io"
 import "bytes"
 import "encoding/binary"
+import "crypto/sha1"
 
 // 19 bytes
 
@@ -86,23 +87,27 @@ func (p *Peer) decodeMessage(payload []byte) {
 		return
 	}
 	msg := payload[1:]
-	logger.Println("recieved a Message:", payload[0])
+	//logger.Println("recieved a Message:", payload[0])
 	switch payload[0] {
 	case ChokeMsg:
 		logger.Println("Choked", msg)
 	case UnchokeMsg:
 		logger.Println("UnChoke", msg)
-		for k, v := range p.has {
-			if !v {
-				go func(msg uint32) {
-					err := p.sendRequestMessage(msg)
-					if err != nil {
-						debugger.Println("Error Requesting", err)
-					}
-				}(k)
-			}
+		err := p.sendRequestMessage(0)
+		if err != nil {
+			debugger.Println("Error Requesting", err)
 		}
 
+		// for k, v := range p.has {
+		//	if !v {
+		//		go func(msg uint32) {
+		//			err := p.sendRequestMessage(msg)
+		//			if err != nil {
+		//				debugger.Println("Error Requesting", err)
+		//			}
+		//		}(k)
+		//	}
+		// }
 	case InterestedMsg:
 		logger.Println("Interested", msg)
 	case NotInterestedMsg:
@@ -112,6 +117,7 @@ func (p *Peer) decodeMessage(payload []byte) {
 		p.has[binary.BigEndian.Uint32(msg)] = false
 	case BitFieldMsg:
 		logger.Println("Bitfield", msg)
+		// Bitfield comes right after handshake
 		err := p.sendStatusMessage(InterestedMsg)
 		if err != nil {
 			debugger.Println("Status Error: ", err)
@@ -119,13 +125,34 @@ func (p *Peer) decodeMessage(payload []byte) {
 	case RequestMsg:
 		logger.Println("Request", msg)
 	case BlockMsg:
-		logger.Println("Piece")
+		logger.Println("Piece", msg[:4])
+		p.decodeBlockMessage(msg)
 	case CancelMsg:
 		logger.Println("Payload", msg)
 	case PortMsg:
 		logger.Println("Port", msg)
 	}
 
+}
+
+func (p *Peer) decodeBlockMessage(msg []byte) {
+	index := binary.BigEndian.Uint32(msg[:4])
+	// Begin is which 0 based offset within the piece.
+	// that is, which BLOCK this is within piece
+	begin := binary.BigEndian.Uint32(msg[4:8])
+	debugger.Println("Index:", int(index), begin)
+	//debugger.Println(msg[4:8])
+	// TODO: put into Block, and then check if
+	// there are other blocks to get..
+	p.meta.Info.PieceList[index].data = msg[8:]
+	//var validator [20]byte
+	if p.meta.Info.PieceList[index].hash == sha1.Sum(msg[8:]) {
+		debugger.Println("Valid Hash")
+	} else {
+		debugger.Println("Invalid Hash :( ")
+	}
+	debugger.Println(p.meta.Info.PieceList[index].hash)
+	debugger.Println(sha1.Sum(msg[8:]))
 }
 
 func (p *Peer) sendStatusMessage(msg int) error {
@@ -185,6 +212,7 @@ func (p *Peer) sendRequestMessage(idx uint32) error {
 	index := make([]byte, 4)
 	binary.BigEndian.PutUint32(index, idx)
 	begin := make([]byte, 4)
+	// Change which block to request TODO:
 	binary.BigEndian.PutUint32(begin, 0)
 	length := make([]byte, 4)
 	binary.BigEndian.PutUint32(length, 16384)
@@ -211,4 +239,13 @@ func (p *Peer) sendRequestMessage(idx uint32) error {
 	}
 	writer.Flush()
 	return nil
+}
+
+// FOR TESTING NOTE
+func (p *Peer) requestAllPieces() {
+	total := len(p.meta.Info.PieceList)
+
+	for i := 0; i < total; i++ {
+
+	}
 }
