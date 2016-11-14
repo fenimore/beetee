@@ -1,6 +1,5 @@
 package main
 
-import "net"
 import "bufio"
 import "errors"
 import "io"
@@ -21,77 +20,63 @@ const (
 	PortMsg
 )
 
-type HandShake struct {
-	pstr     []byte
-	pstrlen  uint8 // fit into one byte
-	reserved []byte
-	infoHash []byte
-	peerId   []byte
-	conn     net.Conn
-	writer   *bufio.Writer
-}
-
-///<pstrlen><pstr><reserved><info_hash><peer_id>
-// 68 bytes long.
-func NewHandShake(meta *TorrentMeta, c net.Conn) *HandShake {
-	handshake := new(HandShake)
-	handshake.pstr = []byte{'B', 'i', 't', 'T', 'o', 'r', 'r', 'e', 'n', 't', ' ', 'p', 'r', 'o', 't', 'o', 'c', 'o', 'l'}
-	handshake.pstrlen = (uint8)(len(handshake.pstr))
-	handshake.reserved = make([]byte, 8) // 8 empty bytes
-
-	handshake.infoHash = meta.InfoHash[:]
-	handshake.peerId = peerId[:]
-
-	handshake.conn = c
-
-	handshake.writer = bufio.NewWriter(handshake.conn)
-
-	return handshake
-}
-
-func (h *HandShake) ShakeHands() (string, error) {
+func (p *Peer) ShakeHands() error {
+	///<pstrlen><pstr><reserved><info_hash><peer_id>
+	// 68 bytes long.
 	var n int
 	var err error
-	err = h.writer.WriteByte(h.pstrlen)
+	writer := bufio.NewWriter(p.Conn)
+	// Handshake message:
+	pstrlen := byte(19) // or len(pstr)
+	pstr := []byte{'B', 'i', 't', 'T', 'o', 'r',
+		'r', 'e', 'n', 't', ' ', 'p', 'r',
+		'o', 't', 'o', 'c', 'o', 'l'}
+	reserved := make([]byte, 8)
+	info := p.meta.InfoHash[:]
+	id := peerId[:] // my peerId
+	// Send handshake message
+	err = writer.WriteByte(pstrlen)
 	if err != nil {
-		return "", err
+		return err
 	}
-	n, err = h.writer.Write(h.pstr)
-	if err != nil || n != len(h.pstr) {
-		return "", err
+	n, err = writer.Write(pstr)
+	if err != nil || n != len(pstr) {
+		return err
 	}
-	n, err = h.writer.Write(h.reserved)
-	if err != nil || n != len(h.reserved) {
-		return "", err
+	n, err = writer.Write(reserved)
+	if err != nil || n != len(reserved) {
+		return err
 	}
-	n, err = h.writer.Write(h.infoHash)
-	if err != nil || n != len(h.infoHash) {
-		return "", err
+	n, err = writer.Write(info)
+	if err != nil || n != len(info) {
+		return err
 	}
-	n, err = h.writer.Write(h.peerId)
-	if err != nil || n != len(h.peerId) {
-		return "", err
+	n, err = writer.Write(id)
+	if err != nil || n != len(id) {
+		return err
 	}
-	err = h.writer.Flush()
+	err = writer.Flush()
 	if err != nil {
-		return "", err
+		return err
 	}
+	// receive confirmation
 
 	// The response handshake
 	shake := make([]byte, 68)
-	n, err = io.ReadFull(h.conn, shake)
+	n, err = io.ReadFull(p.Conn, shake)
 	if err != nil {
-		return "", err
+		return err
 	}
 	// TODO: Check for Length
-	if !bytes.Equal(shake[1:20], h.pstr) {
-		return "", errors.New("Protocol does not match")
+	if !bytes.Equal(shake[1:20], pstr) {
+		return errors.New("Protocol does not match")
 	}
-	if !bytes.Equal(shake[28:48], h.infoHash) {
-		return "", errors.New("InfoHash Does not match")
+	if !bytes.Equal(shake[28:48], info) {
+		return errors.New("InfoHash Does not match")
 	}
-
-	return string(shake[48:68]), nil
+	p.Id = string(shake[48:68])
+	p.Shaken = true
+	return nil
 }
 
 func (p *Peer) decodeMessage(payload []byte) {
@@ -105,6 +90,10 @@ func (p *Peer) decodeMessage(payload []byte) {
 		logger.Println("Choked", msg)
 	case UnchokeMsg:
 		logger.Println("UnChoke", msg)
+		err := p.sendRequestMessage(1)
+		if err != nil {
+			debugger.Println("Request Failure", err)
+		}
 	case InterestedMsg:
 		logger.Println("Interested", msg)
 	case NotInterestedMsg:
@@ -113,6 +102,10 @@ func (p *Peer) decodeMessage(payload []byte) {
 		logger.Println("Have", msg)
 	case BitFieldMsg:
 		logger.Println("Bitfield", msg)
+		err := p.sendStatusMessage(InterestedMsg)
+		if err != nil {
+			debugger.Println("Status Error: ", err)
+		}
 	case RequestMsg:
 		logger.Println("Request", msg)
 	case BlockMsg:
@@ -130,21 +123,16 @@ func (p *Peer) sendStatusMessage(msg int) error {
 	var err error
 	writer := bufio.NewWriter(p.Conn)
 	if msg == -1 { // keep alive, do nothing TODO: add ot iota
-		_, err = writer.Write([]byte{'0', '0', '0', '0'})
-
+		_, err = writer.Write([]byte{byte(0),
+			(uint8)(0), byte(0), byte(0)})
 	} else {
-		//_, err = writer.Write([]byte{(uint8)(0),
-		//	(uint8)(0), (uint8)(0), (uint8)(1)})
 		_, err = writer.Write([]byte{byte(0),
 			(uint8)(0), byte(0), byte(1)})
 	}
 	if err != nil {
 		return err
 	}
-
-	// Format
-	//<len=0001><id=0>
-	switch msg {
+	switch msg { //<len=0001><id=0>
 	case ChokeMsg:
 		err = writer.WriteByte((uint8)(0))
 	case UnchokeMsg:
@@ -158,7 +146,50 @@ func (p *Peer) sendStatusMessage(msg int) error {
 	if err != nil {
 		return err
 	}
-	//debugger.Println("Sending", writer)
 	writer.Flush()
+	return nil
+}
+
+func (p *Peer) sendRequestMessage(idx int) error {
+	// Request lenght := 16384
+	// From kristen:
+	//The ‘Request’ message type consists of the
+	//4-byte message length,
+	//1-byte message ID,
+	//and a payload composed of a
+	//4-byte piece index (0 based),
+	//4-byte block offset within the piece (measured in bytes), and
+	//4-byte block length
+	// <len=0013><id=6><index><begin><length>
+	//is this [0 0 1 3] or [0 0 0 13]
+	logger.Println("Sending Request Message: ", idx)
+	var err error
+	writer := bufio.NewWriter(p.Conn)
+	len := []byte{byte(0), (uint8)(0), byte(1), byte(3)}
+	id := byte(RequestMsg)
+	// payload
+	index := []byte{byte(0), (uint8)(0), byte(0), byte(idx)}
+	begin := []byte{byte(0), (uint8)(0), byte(0), byte(1)}
+	length := []byte{byte(0), (uint8)(0), byte(0), byte(15)}
+	_, err = writer.Write(len)
+	if err != nil {
+		return err
+	}
+	err = writer.WriteByte(id)
+	if err != nil {
+		return err
+	}
+	_, err = writer.Write(index)
+	if err != nil {
+		return err
+	}
+	_, err = writer.Write(length)
+	if err != nil {
+		return err
+	}
+	_, err = writer.Write(begin)
+	if err != nil {
+		return err
+	}
 	return nil
 }

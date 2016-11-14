@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"sync"
-	"time"
 )
 
 var (
@@ -22,8 +21,9 @@ func main() {
 
 	debugger = log.New(os.Stdout, "DEBUG: ", log.Ltime|log.Lshortfile)
 	logger = log.New(os.Stdout, "LOG: ", log.Ltime|log.Lshortfile)
-	//	logger.Println([]byte{(uint8)(0),
-	//		(uint8)(0), (uint8)(0), (uint8)(1)})
+	// logger.Println([]byte{(uint8)(0),
+	//	(uint8)(0), (uint8)(1), (uint8)(3)})
+	// return
 
 	peerId = GenPeerId()
 
@@ -48,20 +48,8 @@ func main() {
 
 	/*Connect to Peer*/
 	peer := resp.PeerList[1]
-	err = peer.ConnectToPeer()
-	if err != nil {
-		debugger.Println(err)
-	}
-	/* Listen to Peer */
-	logger.Println(peer.Id)
 	go peer.ListenToPeer()
-
 	/* Tell Peer I'm interested */
-	time.Sleep(40000)
-	err = peer.sendStatusMessage(InterestedMsg)
-	if err != nil {
-		debugger.Println("Status Error: ", err)
-	}
 	wg.Add(1)
 
 	/* TODO: Request Blocks */

@@ -13,6 +13,8 @@ type Peer struct {
 	PeerId string `bencode:"peer id"` // Bencoding not being used
 	Ip     string `bencode:"ip"`
 	Port   uint16 `bencode:"port"`
+	// Buffer
+	// TODO: make writer?
 	// After connection
 	Shaken bool
 	Conn   net.Conn
@@ -32,38 +34,44 @@ func (p *Peer) ConnectToPeer() error {
 		return err
 	}
 
-	hs := NewHandShake(p.meta, conn)
-	pId, err := hs.ShakeHands()
+	p.Conn = conn
+	err = p.ShakeHands()
 	if err != nil {
 		return err
 	}
-	p.Id = pId
-	p.Shaken = true
-	p.Conn = conn
-	logger.Println("Connected to Peer: ", pId)
+	logger.Println("Connected to Peer: ", p.Id)
 
 	return nil
 
 }
 
 func (p *Peer) ListenToPeer() {
-	logger.Printf("Peer %s : starting Listen\n", string(p.PeerId))
+	// Handshake
+	err := p.ConnectToPeer()
+	if err != nil {
+		debugger.Println("Error Connecting to  %s: %s", p.Id, err)
+		return
+	}
+	logger.Printf("Peer %s : starting to Listen\n", p.Id)
 	// handshake is already authed
 	for {
 		length := make([]byte, 4)
-		_, err := io.ReadFull(p.Conn, length)
+		_, err = io.ReadFull(p.Conn, length)
+		//debugger.Println(length)
 		if err != nil {
-			debugger.Println("Error Reading, Stopping")
+			debugger.Println("Error Reading, Stopping", err)
+			p.sendStatusMessage(-1)
 			// TODO: Stop connection
+			// This is typicaly io.EOF error
 			return
 		}
 		payload := make([]byte, binary.BigEndian.Uint32(length))
 		_, err = io.ReadFull(p.Conn, payload)
 		if err != nil {
-			debugger.Println("Error Reading Payload")
+			debugger.Println("Error Reading Payload", err)
 			// TODO: Stop connection
+			return
 		}
 		go p.decodeMessage(payload)
 	}
-
 }
