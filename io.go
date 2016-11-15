@@ -23,6 +23,5 @@ func (info *TorrentInfo) WriteData() error {
 	}
 	writer.Flush()
 	logger.Println("Success Writing Data") // Not working?
-
 	return nil
 }

@@ -6,7 +6,7 @@ type Piece struct {
 	index      int
 	data       []byte
 	numBlocks  int
-	blocks     map[int]*Block
+	blocks     []*Block //map[int]*Block
 	chanBlocks chan *Block
 	peer       *Peer
 	hash       [20]byte
@@ -34,16 +34,19 @@ func (info *TorrentInfo) parsePieces() {
 	// TODO: set this dynamically
 	numBlocks := info.PieceLength / int64(BLOCKSIZE)
 	info.BlocksPerPiece = int(numBlocks)
-	len := len(info.Pieces)
-	info.PieceList = make([]*Piece, 0, len/20)
-	for i := 0; i < len; i = i + 20 {
+	piecesLength := len(info.Pieces)
+	info.PieceList = make([]*Piece, 0, piecesLength/20)
+	for i := 0; i < piecesLength; i = i + 20 {
 		j := i + 20
 		piece := Piece{size: info.PieceLength, numBlocks: int(numBlocks)}
 		piece.chanBlocks = make(chan *Block)
-		piece.blocks = make(map[int]*Block)
+		//piece.blocks = make(map[int]*Block)
+		piece.blocks = make([]*Block, numBlocks)
 		// Copy to next 20 into Piece Hash
 		copy(piece.hash[:], info.Pieces[i:j])
 		piece.length = int(info.PieceLength)
+		piece.index = len(info.PieceList)
+		//piece.index = len(info.PieceList)
 		info.PieceList = append(info.PieceList, &piece)
 		go piece.checkPieceCompletion()
 	}

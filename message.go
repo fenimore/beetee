@@ -93,7 +93,9 @@ func (p *Peer) decodeMessage(payload []byte) {
 		logger.Println("Choked", msg)
 	case UnchokeMsg:
 		logger.Println("UnChoke", msg)
-		p.requestAllPieces()
+		//p.requestAllPieces()
+		p.requestPiece(3)
+		//p.requestPiece(4)
 	case InterestedMsg:
 		logger.Println("Interested", msg)
 	case NotInterestedMsg:
@@ -136,7 +138,7 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	block.data = msg[8:]
 	block.offset = int(begin)
 	// block.length = len(block.data) // Not necessary?
-	pieceList[index].index = int(index)
+	//pieceList[index].index = int(index)
 	pieceList[index].chanBlocks <- block
 
 }
@@ -147,26 +149,30 @@ BlockLoop:
 	for {
 		b := <-p.chanBlocks
 		p.blocks[b.offset] = b
-		if len(p.blocks) == p.numBlocks {
-			break BlockLoop
+		debugger.Printf("Block %d Length for index %d : %d", b.offset, p.index, len(p.blocks))
+		for _, val := range p.blocks {
+			if val == nil {
+				continue BlockLoop
+			}
 		}
+		break BlockLoop
 	}
-	blockList := make([]*Block, 0, p.numBlocks)
-	for i := 0; i < p.numBlocks; i++ {
-		blockList = append(blockList, p.blocks[i])
-	}
-	data := make([]byte, 0, p.length)
-	buf := bytes.NewBuffer(data)
-	writer := bufio.NewWriter(buf)
+	var buffer bytes.Buffer
 	for _, block := range p.blocks {
-		writer.Write(block.data)
+		debugger.Println(block.offset, block.data[:3])
+		buffer.Write(block.data)
 	}
-	writer.Flush()
-	if p.hash == sha1.Sum(buf.Bytes()) {
-		p.data = buf.Bytes()
+	//logger.Println("Piece", len(data), "Buffer", len(buf.Bytes()))
+	//debugger.Println(buffer.Bytes())
+	debugger.Println("Buffer Length", buffer.Len())
+	if p.hash == sha1.Sum(buffer.Bytes()) {
+		p.data = buffer.Bytes()
 		p.have = true
+		logger.Printf("Piece at %d is downloaded", p.index)
+		return
 	}
-	logger.Printf("Piece at %d is downloaded", p.index)
+	debugger.Println(p.hash, sha1.Sum(buffer.Bytes()))
+	logger.Println("Failure to sha1 hash")
 }
 
 func (p *Peer) sendStatusMessage(msg int) error {
@@ -225,7 +231,6 @@ func (p *Peer) sendRequestMessage(idx uint32, offset int) error {
 	index := make([]byte, 4)
 	binary.BigEndian.PutUint32(index, idx)
 	begin := make([]byte, 4)
-	// Change which block to request TODO:
 	binary.BigEndian.PutUint32(begin, uint32(offset))
 	length := make([]byte, 4)
 	binary.BigEndian.PutUint32(length, 16384)
@@ -259,9 +264,22 @@ func (p *Peer) requestAllPieces() {
 	total := len(p.meta.Info.PieceList)
 	debugger.Println("Requesting all pieces")
 	for i := 0; i < total; i++ {
-		err := p.sendRequestMessage(uint32(i), 0)
+		for j := 0; j < p.meta.Info.BlocksPerPiece; j++ {
+			err := p.sendRequestMessage(uint32(i), j)
+			if err != nil {
+				debugger.Println("Error Requesting", err)
+			}
+
+		}
+	}
+}
+
+func (p *Peer) requestPiece(piece int) {
+	for j := 0; j < p.meta.Info.BlocksPerPiece; j++ {
+		err := p.sendRequestMessage(uint32(piece), j)
 		if err != nil {
 			debugger.Println("Error Requesting", err)
 		}
+
 	}
 }

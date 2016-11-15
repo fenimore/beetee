@@ -53,7 +53,7 @@ func (p *Peer) ListenToPeer() {
 	// Handshake
 	err := p.ConnectToPeer()
 	if err != nil {
-		debugger.Println("Error Connecting to  %s: %s", p.Id, err)
+		debugger.Printf("Error Connecting to  %s: %s", p.Id, err)
 		return
 	}
 	logger.Printf("Peer %s : starting to Listen\n", p.Id)
