@@ -136,7 +136,7 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	// TODO: Only if NOTE block but all of piece..
 	if p.meta.Info.BlocksPerPiece == 1 {
 		if pieceList[index].hash == sha1.Sum(msg[8:]) {
-			debugger.Printf("Valid Hash at %d offset: %d\n", index, begin)
+			//debugger.Printf("Valid Hash at %d offset: %d\n", index, begin)
 			pieceList[index].data = msg[8:]
 			pieceList[index].have = true
 		}
@@ -166,7 +166,8 @@ func (p *Piece) checkPieceCompletion() {
 		}
 	}
 	piece := make([]byte, 0, p.length)
-	writer := bufio.NewWriter(&piece)
+	buf := bytes.NewBuffer(piece)
+	writer := bufio.NewWriter(buf)
 	for _, block := range p.blocks {
 		writer.Write(block.data)
 	}
@@ -175,6 +176,7 @@ func (p *Piece) checkPieceCompletion() {
 		p.data = piece
 		p.have = true
 	}
+	debugger.Println(piece, buf)
 	logger.Printf("Piece at %s is downloaded", p.index)
 }
 
