@@ -12,13 +12,14 @@ type Piece struct {
 	hash       [20]byte
 	size       int64
 	have       bool
+	length     int
 }
 
 type Block struct {
-	piece      *Piece
+	piece      *Piece // Not necessary?
 	offset     int
-	length     int
-	downloaded bool
+	length     int  // Not necessary?
+	downloaded bool // Not necessary?
 	data       []byte
 }
 
@@ -26,7 +27,9 @@ type Block struct {
 // the Info list of
 func (info *TorrentInfo) parsePieces() {
 	info.cleanPieces()
+	// TODO: set this dynamically
 	numBlocks := info.PieceLength / int64(BLOCKSIZE)
+	info.BlocksPerPiece = int(numBlocks)
 	len := len(info.Pieces)
 	info.PieceList = make([]*Piece, 0, len/20)
 	for i := 0; i < len; i = i + 20 {
@@ -36,6 +39,7 @@ func (info *TorrentInfo) parsePieces() {
 		piece.blocks = make([]*Block, 0, piece.numBlocks)
 		// Copy to next 20 into Piece Hash
 		copy(piece.hash[:], info.Pieces[i:j])
+		piece.length = int64(info.PieceLength)
 		info.PieceList = append(info.PieceList, &piece)
 	}
 }

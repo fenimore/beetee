@@ -134,13 +134,48 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	// TODO: put into Block, and then check if
 	// there are other blocks to get..
 	// TODO: Only if NOTE block but all of piece..
-	if pieceList[index].hash == sha1.Sum(msg[8:]) {
-		debugger.Printf("Valid Hash at %d offset: %d\n", index, begin)
-		pieceList[index].data = msg[8:]
-		pieceList[index].have = true
-	} else {
-		//debugger.Println("Invalid Hash :( ")
+	if p.meta.Info.BlocksPerPiece == 1 {
+		if pieceList[index].hash == sha1.Sum(msg[8:]) {
+			debugger.Printf("Valid Hash at %d offset: %d\n", index, begin)
+			pieceList[index].data = msg[8:]
+			pieceList[index].have = true
+		}
+	} else { // add block to piece channel
+		block := new(Block)
+		//block.piece = pieceList[index] //Not necessary?
+		block.data = msg[8:]
+		block.offset = int(begin)
+		// block.length = len(block.data) // Not necessary?
+		pieceList[index].chanBlocks <- block
 	}
+}
+
+// Should call one time for every piece
+func (p *Piece) checkPieceCompletion() {
+	for {
+		if p.have {
+			break
+		}
+		b := <-p.chanBlocks
+		p.blocks[b.offset] = b
+		for _, block := range p.blocks {
+			if block == nil {
+				continue
+			}
+			// Otherwise, all blocks are downloaded
+		}
+	}
+	piece := make([]byte, 0, p.length)
+	writer := bufio.NewWriter(&piece)
+	for _, block := range p.blocks {
+		writer.Write(block.data)
+	}
+	writer.Flush()
+	if p.hash == sha1.Sum(piece) {
+		p.data = piece
+		p.have = true
+	}
+	logger.Printf("Piece at %s is downloaded", p.index)
 }
 
 func (p *Peer) requestPiece() {

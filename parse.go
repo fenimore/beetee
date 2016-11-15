@@ -38,12 +38,13 @@ func (t *TorrentMeta) String() string {
 }
 
 type TorrentInfo struct {
-	Length      int64         `bencode:"length"`
-	Name        string        `bencode:"name"`
-	PieceLength int64         `bencode:"piece length"`
-	Pieces      bencode.Bytes `bencode:"pieces"`
-	Private     int64         `bencode:"private"`
-	PieceList   []*Piece
+	Length         int64         `bencode:"length"`
+	Name           string        `bencode:"name"`
+	PieceLength    int64         `bencode:"piece length"`
+	Pieces         bencode.Bytes `bencode:"pieces"`
+	Private        int64         `bencode:"private"`
+	PieceList      []*Piece
+	BlocksPerPiece int
 	// md5sum for single files
 	// files for multiple files
 	// path for multiple files
