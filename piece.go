@@ -3,10 +3,10 @@ package main
 const BLOCKSIZE int = 16384
 
 type Piece struct {
-	index      int // redundant
+	index      int
 	data       []byte
 	numBlocks  int
-	blocks     []*Block
+	blocks     map[int]*Block
 	chanBlocks chan *Block
 	peer       *Peer
 	hash       [20]byte
@@ -23,6 +23,10 @@ type Block struct {
 	data       []byte
 }
 
+func (b *Block) String() string {
+	return (string(b.offset) + " ")
+}
+
 // parsePieces parses the big wacky string of sha-1 hashes int
 // the Info list of
 func (info *TorrentInfo) parsePieces() {
@@ -36,10 +40,12 @@ func (info *TorrentInfo) parsePieces() {
 		j := i + 20
 		piece := Piece{size: info.PieceLength, numBlocks: int(numBlocks)}
 		piece.chanBlocks = make(chan *Block)
-		piece.blocks = make([]*Block, 0, piece.numBlocks)
+		piece.blocks = make(map[int]*Block)
 		// Copy to next 20 into Piece Hash
 		copy(piece.hash[:], info.Pieces[i:j])
 		piece.length = int(info.PieceLength)
 		info.PieceList = append(info.PieceList, &piece)
+		go piece.checkPieceCompletion()
 	}
+
 }

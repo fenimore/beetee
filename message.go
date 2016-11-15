@@ -111,7 +111,7 @@ func (p *Peer) decodeMessage(payload []byte) {
 	case RequestMsg:
 		logger.Println("Request", msg)
 	case BlockMsg:
-		logger.Println("Piece", msg[:4])
+		//logger.Println("Piece", msg[:4])
 		p.decodeBlockMessage(msg)
 		go func() {
 			_ = p.meta.Info.WriteData()
@@ -131,64 +131,42 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	begin := binary.BigEndian.Uint32(msg[4:8])
 	//debugger.Println("Index:", int(index), begin)
 	pieceList := p.meta.Info.PieceList // for readability
-	// TODO: put into Block, and then check if
-	// there are other blocks to get..
-	// TODO: Only if NOTE block but all of piece..
-	if p.meta.Info.BlocksPerPiece == 1 {
-		if pieceList[index].hash == sha1.Sum(msg[8:]) {
-			//debugger.Printf("Valid Hash at %d offset: %d\n", index, begin)
-			pieceList[index].data = msg[8:]
-			pieceList[index].have = true
-		}
-	} else { // add block to piece channel
-		block := new(Block)
-		//block.piece = pieceList[index] //Not necessary?
-		block.data = msg[8:]
-		block.offset = int(begin)
-		// block.length = len(block.data) // Not necessary?
-		pieceList[index].chanBlocks <- block
-	}
+
+	block := new(Block)
+	block.data = msg[8:]
+	block.offset = int(begin)
+	// block.length = len(block.data) // Not necessary?
+	pieceList[index].index = int(index)
+	pieceList[index].chanBlocks <- block
+
 }
 
 // Should call one time for every piece
 func (p *Piece) checkPieceCompletion() {
+BlockLoop:
 	for {
-		if p.have {
-			break
-		}
 		b := <-p.chanBlocks
 		p.blocks[b.offset] = b
-		for _, block := range p.blocks {
-			if block == nil {
-				continue
-			}
-			// Otherwise, all blocks are downloaded
+		if len(p.blocks) == p.numBlocks {
+			break BlockLoop
 		}
 	}
-	piece := make([]byte, 0, p.length)
-	buf := bytes.NewBuffer(piece)
+	blockList := make([]*Block, 0, p.numBlocks)
+	for i := 0; i < p.numBlocks; i++ {
+		blockList = append(blockList, p.blocks[i])
+	}
+	data := make([]byte, 0, p.length)
+	buf := bytes.NewBuffer(data)
 	writer := bufio.NewWriter(buf)
 	for _, block := range p.blocks {
 		writer.Write(block.data)
 	}
 	writer.Flush()
-	if p.hash == sha1.Sum(piece) {
-		p.data = piece
+	if p.hash == sha1.Sum(buf.Bytes()) {
+		p.data = buf.Bytes()
 		p.have = true
 	}
-	debugger.Println(piece, buf)
-	logger.Printf("Piece at %s is downloaded", p.index)
-}
-
-func (p *Peer) requestPiece() {
-	//countBlocks()
-	// For every block in a piece
-	// request that piece with offset
-	//
-}
-
-func (p *Piece) checkBlockCompletion() {
-
+	logger.Printf("Piece at %d is downloaded", p.index)
 }
 
 func (p *Peer) sendStatusMessage(msg int) error {

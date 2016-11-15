@@ -33,7 +33,6 @@ func main() {
 		debugger.Println(err)
 		//fmt.Println(err)
 	}
-
 	debugger.Println("Length: ", meta.Info.Length)
 	debugger.Println("Piece Length: ", meta.Info.PieceLength)
 	debugger.Println("Piece Len: ", len(meta.Info.Pieces))
