@@ -53,7 +53,7 @@ func main() {
 	//	go p.ListenToPeer()
 	// }
 	/* Tell Peer I'm interested */
-	go resp.PeerList[3].ListenToPeer()
+	go resp.PeerList[5].ListenToPeer()
 	wg.Add(1)
 
 	/* TODO: Request Blocks */

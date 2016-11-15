@@ -1,6 +1,11 @@
 package main
 
-const BLOCKSIZE int = 16384
+import (
+	"fmt"
+)
+
+const BLOCKSIZE int = 16384 //32768
+//const BLOCKSIZE int = 32768
 
 type Piece struct {
 	index      int
@@ -10,6 +15,7 @@ type Piece struct {
 	chanBlocks chan *Block
 	peer       *Peer
 	hash       [20]byte
+	hex        string
 	size       int64
 	have       bool
 	length     int
@@ -34,6 +40,7 @@ func (info *TorrentInfo) parsePieces() {
 	// TODO: set this dynamically
 	numBlocks := info.PieceLength / int64(BLOCKSIZE)
 	info.BlocksPerPiece = int(numBlocks)
+
 	piecesLength := len(info.Pieces)
 	info.PieceList = make([]*Piece, 0, piecesLength/20)
 	for i := 0; i < piecesLength; i = i + 20 {
@@ -46,6 +53,7 @@ func (info *TorrentInfo) parsePieces() {
 		copy(piece.hash[:], info.Pieces[i:j])
 		piece.length = int(info.PieceLength)
 		piece.index = len(info.PieceList)
+		piece.hex = fmt.Sprintf("%x", piece.hash)
 		//piece.index = len(info.PieceList)
 		info.PieceList = append(info.PieceList, &piece)
 		go piece.checkPieceCompletion()

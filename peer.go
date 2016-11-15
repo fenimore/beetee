@@ -77,6 +77,11 @@ func (p *Peer) ListenToPeer() {
 			p.Conn.Close()
 			return
 		}
+		// debugger.Printf("PyloadLen %d, IndicatedLength: %d",
+		//	len(payload), binary.BigEndian.Uint32(length))
+		// if len(payload) > 13 {
+		//	debugger.Println(payload[:13])
+		// }
 		go p.decodeMessage(payload)
 	}
 }

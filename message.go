@@ -94,8 +94,8 @@ func (p *Peer) decodeMessage(payload []byte) {
 	case UnchokeMsg:
 		logger.Println("UnChoke", msg)
 		//p.requestAllPieces()
-		p.requestPiece(3)
-		//p.requestPiece(4)
+		//p.requestPiece(2886)
+		//p.requestPiece(0)
 	case InterestedMsg:
 		logger.Println("Interested", msg)
 	case NotInterestedMsg:
@@ -113,13 +113,13 @@ func (p *Peer) decodeMessage(payload []byte) {
 	case RequestMsg:
 		logger.Println("Request", msg)
 	case BlockMsg:
-		//logger.Println("Piece", msg[:4])
+		logger.Println("Piece")
 		p.decodeBlockMessage(msg)
 		go func() {
 			_ = p.meta.Info.WriteData()
 		}()
 	case CancelMsg:
-		logger.Println("Payload", msg)
+		logger.Println("Cancel", msg)
 	case PortMsg:
 		logger.Println("Port", msg)
 	}
@@ -139,6 +139,7 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	block.offset = int(begin)
 	// block.length = len(block.data) // Not necessary?
 	//pieceList[index].index = int(index)
+	//debugger.Println(len(msg), block.offset)
 	pieceList[index].chanBlocks <- block
 
 }
@@ -148,8 +149,7 @@ func (p *Piece) checkPieceCompletion() {
 BlockLoop:
 	for {
 		b := <-p.chanBlocks
-		p.blocks[b.offset] = b
-		debugger.Printf("Block %d Length for index %d : %d", b.offset, p.index, len(p.blocks))
+		p.blocks[b.offset/BLOCKSIZE] = b
 		for _, val := range p.blocks {
 			if val == nil {
 				continue BlockLoop
@@ -159,12 +159,9 @@ BlockLoop:
 	}
 	var buffer bytes.Buffer
 	for _, block := range p.blocks {
-		debugger.Println(block.offset, block.data[:3])
 		buffer.Write(block.data)
 	}
-	//logger.Println("Piece", len(data), "Buffer", len(buf.Bytes()))
-	//debugger.Println(buffer.Bytes())
-	debugger.Println("Buffer Length", buffer.Len())
+	//debugger.Println(p.hex, fmt.Sprintf("%x", sha1.Sum(buffer.Bytes())))
 	if p.hash == sha1.Sum(buffer.Bytes()) {
 		p.data = buffer.Bytes()
 		p.have = true
@@ -233,7 +230,7 @@ func (p *Peer) sendRequestMessage(idx uint32, offset int) error {
 	begin := make([]byte, 4)
 	binary.BigEndian.PutUint32(begin, uint32(offset))
 	length := make([]byte, 4)
-	binary.BigEndian.PutUint32(length, 16384)
+	binary.BigEndian.PutUint32(length, uint32(BLOCKSIZE))
 
 	_, err = writer.Write(len)
 	if err != nil {
@@ -264,19 +261,13 @@ func (p *Peer) requestAllPieces() {
 	total := len(p.meta.Info.PieceList)
 	debugger.Println("Requesting all pieces")
 	for i := 0; i < total; i++ {
-		for j := 0; j < p.meta.Info.BlocksPerPiece; j++ {
-			err := p.sendRequestMessage(uint32(i), j)
-			if err != nil {
-				debugger.Println("Error Requesting", err)
-			}
-
-		}
+		p.requestPiece(i)
 	}
 }
 
 func (p *Peer) requestPiece(piece int) {
-	for j := 0; j < p.meta.Info.BlocksPerPiece; j++ {
-		err := p.sendRequestMessage(uint32(piece), j)
+	for offset := 0; offset < p.meta.Info.BlocksPerPiece; offset++ {
+		err := p.sendRequestMessage(uint32(piece), offset*BLOCKSIZE)
 		if err != nil {
 			debugger.Println("Error Requesting", err)
 		}
