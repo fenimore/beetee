@@ -39,12 +39,7 @@ func (info *TorrentInfo) parsePieces() {
 		piece.blocks = make([]*Block, 0, piece.numBlocks)
 		// Copy to next 20 into Piece Hash
 		copy(piece.hash[:], info.Pieces[i:j])
-		piece.length = int64(info.PieceLength)
+		piece.length = int(info.PieceLength)
 		info.PieceList = append(info.PieceList, &piece)
 	}
-}
-
-func (p *Piece) countBlocks() int {
-	//p.size
-	return 1
 }
