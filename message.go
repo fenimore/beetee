@@ -94,19 +94,22 @@ func (p *Peer) decodeMessage(payload []byte) {
 	case UnchokeMsg:
 		logger.Println("UnChoke", msg)
 		//p.requestAllPieces()
-		//p.requestPiece(2886)
-		//p.requestPiece(0)
+		p.requestPiece(2886)
+
+		p.requestPiece(0)
 	case InterestedMsg:
 		logger.Println("Interested", msg)
 	case NotInterestedMsg:
 		logger.Println("NotInterested", msg)
 	case HaveMsg:
 		logger.Println("Have", msg)
-		p.has[binary.BigEndian.Uint32(msg)] = false
+		p.has[binary.BigEndian.Uint32(msg)] = true
+		logger.Println(p.has)
 	case BitFieldMsg:
 		logger.Println("Bitfield", msg)
 		// Bitfield comes right after handshake
 		err := p.sendStatusMessage(InterestedMsg)
+		debugger.Println(len(msg))
 		if err != nil {
 			debugger.Println("Status Error: ", err)
 		}
@@ -123,7 +126,6 @@ func (p *Peer) decodeMessage(payload []byte) {
 	case PortMsg:
 		logger.Println("Port", msg)
 	}
-
 }
 
 func (p *Peer) decodeBlockMessage(msg []byte) {
@@ -161,7 +163,6 @@ BlockLoop:
 	for _, block := range p.blocks {
 		buffer.Write(block.data)
 	}
-	//debugger.Println(p.hex, fmt.Sprintf("%x", sha1.Sum(buffer.Bytes())))
 	if p.hash == sha1.Sum(buffer.Bytes()) {
 		p.data = buffer.Bytes()
 		p.have = true

@@ -15,10 +15,10 @@ type Piece struct {
 	chanBlocks chan *Block
 	peer       *Peer
 	hash       [20]byte
-	hex        string
-	size       int64
-	have       bool
-	length     int
+	//hex        string // Not used
+	size   int64
+	have   bool
+	length int
 }
 
 type Block struct {
@@ -53,8 +53,7 @@ func (info *TorrentInfo) parsePieces() {
 		copy(piece.hash[:], info.Pieces[i:j])
 		piece.length = int(info.PieceLength)
 		piece.index = len(info.PieceList)
-		piece.hex = fmt.Sprintf("%x", piece.hash)
-		//piece.index = len(info.PieceList)
+		//piece.hex = fmt.Sprintf("%x", piece.hash)
 		info.PieceList = append(info.PieceList, &piece)
 		go piece.checkPieceCompletion()
 	}
