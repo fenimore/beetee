@@ -8,8 +8,9 @@ import (
 
 var (
 	//meta   TorrentMeta
-	peerId [20]byte
-	blocks map[[20]byte]bool
+	manager Manager
+	peerId  [20]byte
+	blocks  map[[20]byte]bool
 
 	debugger *log.Logger
 	logger   *log.Logger
@@ -18,7 +19,7 @@ var (
 )
 
 func main() {
-
+	manager := new(Manager)
 	debugger = log.New(os.Stdout, "DEBUG: ", log.Ltime|log.Lshortfile)
 	logger = log.New(os.Stdout, "LOG: ", log.Ltime|log.Lshortfile)
 	// logger.Println([]byte{(uint8)(0),
@@ -54,6 +55,7 @@ func main() {
 	// }
 	/* Tell Peer I'm interested */
 	peers := resp.PeerList
+	manager.peers = peers
 	for _, val := range peers {
 		logger.Println(val)
 	}
