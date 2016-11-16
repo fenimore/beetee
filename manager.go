@@ -2,18 +2,18 @@ package main
 
 // Flood is when the client run
 func Flood() {
-	completionSync.Add(len(Pieces) - 1)
+	completionSync.Add(len(Pieces))
+	debugger.Println("This many peers", len(Peers))
 	go FillQueue()
-	//group := Peers[
-	//go group.AskForData()
-	for _, p := range Peers {
-		go p.AskForData()
-	}
+	go ConnectPeers()
 
+	for {
+		peer := <-PeerQueue
+		go peer.AskForData()
+	}
 }
 
 func (p *Peer) AskForData() {
-
 	err := p.ListenToPeer()
 	if err != nil {
 		debugger.Println("Error connection", err)
@@ -25,11 +25,24 @@ func (p *Peer) AskForData() {
 		if !p.Alive {
 			break
 		}
+		// TODO: if peer.has piece
+		// if not, put piece back into Queue
 		piece := <-PieceQueue
 		//debugger.Println(piece.hash, piece.index)
 		p.requestPiece(piece.index)
 		piece.Pending.Wait()
 
+	}
+}
+
+func ConnectPeers() {
+	for _, peer := range Peers {
+		err := peer.ConnectToPeer()
+		if err == nil {
+			PeerQueue <- peer
+		} else {
+			debugger.Printf("Error Connecting to  %s: %s", peer.Ip, err)
+		}
 	}
 }
 

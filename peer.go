@@ -33,7 +33,7 @@ type Peer struct {
 
 func (p *Peer) ConnectToPeer() error {
 	addr := fmt.Sprintf("%s:%d", p.Ip, p.Port)
-	logger.Println("Connecting to Peer: ", addr)
+	//logger.Println("Connecting to Peer: ", addr)
 
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
@@ -46,6 +46,8 @@ func (p *Peer) ConnectToPeer() error {
 	if err != nil {
 		return err
 	}
+	p.Alive = true
+	p.ChokeWg.Add(1)
 	logger.Println("Connected to Peer: ", p.Id)
 	// TODO: Keep alive loop in goroutine
 	return nil
@@ -54,21 +56,15 @@ func (p *Peer) ConnectToPeer() error {
 
 // ListenToPeer handshakes with peer and sends
 // messages to the decoder
+// Connect first
 func (p *Peer) ListenToPeer() error {
 	// Handshake
-	err := p.ConnectToPeer()
-	if err != nil {
-		debugger.Printf("Error Connecting to  %s: %s", p.Id, err)
-		return err
-	}
 	logger.Printf("Peer %s : starting to Listen\n", p.Id)
-	p.Alive = true
-	p.ChokeWg.Add(1)
 	// Listen Loop
 	go func() {
 		for {
 			length := make([]byte, 4)
-			_, err = io.ReadFull(p.Conn, length)
+			_, err := io.ReadFull(p.Conn, length)
 			//debugger.Println(length)
 			if err != nil {
 				debugger.Printf("Error Reading Length %s, Stopping: %s", p.Id, err)

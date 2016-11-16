@@ -12,12 +12,14 @@ var ( // NOTE Global Important Variables
 	Pieces  []*Piece
 	PeerId  [20]byte
 	// Channels
-	PieceQueue chan *Piece
-	PeerQueue  chan *Peer
+	PieceQueue  chan *Piece
+	PeerQueue   chan *Peer
+	ActivePeers []*Peer
 	// Status ongoing
 	Left       int
 	Uploaded   int
 	AliveDelta int // TODO:
+	MaxPeers   int
 	// Loggers
 	debugger *log.Logger
 	logger   *log.Logger
@@ -41,7 +43,7 @@ func main() {
 	PeerId = GenPeerId()
 
 	/* Parse Torrent*/
-	Torrent, err = ParseTorrent("torrents/ubuntu.torrent")
+	Torrent, err = ParseTorrent("torrents/archlinux.torrent")
 
 	//debugger.Println(meta.Info)
 
@@ -52,7 +54,7 @@ func main() {
 	debugger.Println("Length: ", Torrent.Info.Length)
 	debugger.Println("Piece Length: ", Torrent.Info.PieceLength)
 	debugger.Println("Piece Len: ", len(Torrent.Info.Pieces))
-	debugger.Println(len(Pieces))
+	debugger.Println("Pieces count: ", len(Pieces))
 	/*Parse Tracker Response*/
 	_, err = GetTrackerResponse(Torrent)
 	if err != nil {
@@ -60,7 +62,8 @@ func main() {
 	}
 	/* What next? */
 	PieceQueue = make(chan *Piece)
-	PeerQueue = make(chan *Peer)
+	PeerQueue = make(chan *Peer, MaxPeers)
+	MaxPeers = len(Peers) / 2
 	Flood()
 	completionSync.Wait()
 	err = Torrent.Info.WriteData()
