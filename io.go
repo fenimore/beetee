@@ -14,10 +14,11 @@ func (info *TorrentInfo) WriteData() error {
 		return err
 	}
 	writer := bufio.NewWriter(file)
-	for _, val := range info.PieceList {
+	for _, val := range Pieces {
 		//debugger.Println(idx)
 		if !val.have {
-			return errors.New("All pieces are not had")
+			msg := string(val.index) + " Is not had"
+			return errors.New(msg)
 		}
 		writer.Write(val.data)
 	}

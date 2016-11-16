@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"sync"
 )
 
 type Peer struct {
@@ -20,10 +21,11 @@ type Peer struct {
 	Conn   net.Conn
 	Id     string
 	// Peer Status
-	Alive     bool
-	Interesed bool
-	Choked    bool
-	Stop      chan bool // TODO: What?
+	Alive      bool
+	Interested bool
+	Choked     bool
+	Stop       chan bool // TODO: What?
+	ChokeWg    sync.WaitGroup
 	// What the Peer Has, index wise
 	Bitfield []bool
 	has      map[uint32]bool
@@ -50,37 +52,42 @@ func (p *Peer) ConnectToPeer() error {
 
 }
 
-//<len>   <id><payload>
-func (p *Peer) ListenToPeer() {
+// ListenToPeer handshakes with peer and sends
+// messages to the decoder
+func (p *Peer) ListenToPeer() error {
 	// Handshake
 	err := p.ConnectToPeer()
 	if err != nil {
 		debugger.Printf("Error Connecting to  %s: %s", p.Id, err)
-		return
+		return err
 	}
 	logger.Printf("Peer %s : starting to Listen\n", p.Id)
 	p.Alive = true
+	p.ChokeWg.Add(1)
 	// Listen Loop
-	for {
-		length := make([]byte, 4)
-		_, err = io.ReadFull(p.Conn, length)
-		//debugger.Println(length)
-		if err != nil {
-			debugger.Println("Error Reading, Stopping", err)
-			p.Alive = false
-			p.Conn.Close()
-			return
+	go func() {
+		for {
+			length := make([]byte, 4)
+			_, err = io.ReadFull(p.Conn, length)
+			//debugger.Println(length)
+			if err != nil {
+				debugger.Printf("Error Reading Length %s, Stopping: %s", p.Id, err)
+				p.Alive = false
+				p.Conn.Close()
+				return
+			}
+			payload := make([]byte, binary.BigEndian.Uint32(length))
+			_, err = io.ReadFull(p.Conn, payload)
+			if err != nil {
+				debugger.Printf("Error Reading Payload %s, Stopping: %s", p.Id, err)
+				// TODO: Stop connection
+				//p.Stop <- true
+				p.Alive = false
+				p.Conn.Close()
+				return
+			}
+			go p.decodeMessage(payload)
 		}
-		payload := make([]byte, binary.BigEndian.Uint32(length))
-		_, err = io.ReadFull(p.Conn, payload)
-		if err != nil {
-			debugger.Println("Error Reading Payload", err)
-			// TODO: Stop connection
-			//p.Stop <- true
-			p.Alive = false
-			p.Conn.Close()
-			return
-		}
-		go p.decodeMessage(payload)
-	}
+	}()
+	return nil
 }

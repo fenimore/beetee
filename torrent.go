@@ -20,7 +20,7 @@ type TorrentMeta struct {
 	Encoding     string        `bencode:"encoding"`
 	UrlList      []string      `bencode:"url-list"`
 	InfoBytes    bencode.Bytes `bencode:"info"`
-	Info         TorrentInfo
+	Info         *TorrentInfo
 	InfoHash     [20]byte
 	InfoHashEnc  string
 }
@@ -30,13 +30,14 @@ func (t *TorrentMeta) String() string {
 }
 
 // TorrentInfo for single file torrent
+// TODO: add support for multiple files
 type TorrentInfo struct {
-	Length         int64         `bencode:"length"`
-	Name           string        `bencode:"name"`
-	PieceLength    int64         `bencode:"piece length"`
-	Pieces         bencode.Bytes `bencode:"pieces"`
-	Private        int64         `bencode:"private"`
-	PieceList      []*Piece
+	Length      int64         `bencode:"length"`
+	Name        string        `bencode:"name"`
+	PieceLength int64         `bencode:"piece length"`
+	Pieces      bencode.Bytes `bencode:"pieces"` // The concatnated Bytes
+	Private     int64         `bencode:"private"`
+	//PieceList      []*Piece
 	BlocksPerPiece int
 	// md5sum for single files
 	// files for multiple files
@@ -46,11 +47,11 @@ type TorrentInfo struct {
 }
 
 // ParseTorrent parses a torrent file.
-func ParseTorrent(file string) (TorrentMeta, error) {
+func ParseTorrent(file string) (*TorrentMeta, error) {
 	var data TorrentMeta
 	f, err := os.Open(file)
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 	defer f.Close()
 	// Parse the File
@@ -58,7 +59,7 @@ func ParseTorrent(file string) (TorrentMeta, error) {
 	err = dec.Decode(&data)
 
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// Parse the Info Dictionary
@@ -68,9 +69,33 @@ func ParseTorrent(file string) (TorrentMeta, error) {
 	// Compute the info_hash
 	data.InfoHash = sha1.Sum(data.InfoBytes)
 	data.InfoHashEnc = UrlEncode(data.InfoHash)
-	//data.Info.cleanPieces()
 	data.Info.parsePieces()
-	return data, nil
+	return &data, nil
+}
+
+// parsePieces parses the big wacky string of sha-1 hashes int
+// the Info list of
+func (info *TorrentInfo) parsePieces() {
+	info.cleanPieces()
+	// TODO: set this dynamically
+	numBlocks := info.PieceLength / int64(BLOCKSIZE)
+	info.BlocksPerPiece = int(numBlocks)
+
+	piecesLength := len(info.Pieces)
+	Pieces = make([]*Piece, 0, piecesLength/20)
+	for i := 0; i < piecesLength; i = i + 20 {
+		j := i + 20
+		piece := Piece{size: info.PieceLength, numBlocks: int(numBlocks)}
+		piece.chanBlocks = make(chan *Block)
+		//piece.blocks = make(map[int]*Block)
+		piece.blocks = make([]*Block, numBlocks)
+		// Copy to next 20 into Piece Hash
+		copy(piece.hash[:], info.Pieces[i:j])
+		piece.length = int(info.PieceLength)
+		piece.index = len(Pieces)
+		//piece.hex = fmt.Sprintf("%x", piece.hash)
+		Pieces = append(Pieces, &piece)
+	}
 }
 
 // cleanPieces because the encoder includes the lenght of the

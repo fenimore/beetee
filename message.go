@@ -92,23 +92,25 @@ func (p *Peer) decodeMessage(payload []byte) {
 	switch payload[0] {
 	case ChokeMsg:
 		p.Choked = true
+		p.ChokeWg.Done() // Does this go into the Negative nUmbers?
+		p.ChokeWg.Add(1)
 		logger.Println("Choked", msg)
 	case UnchokeMsg:
 		p.Choked = false
+		p.ChokeWg.Done()
 		logger.Println("UnChoke", p.Id)
 		//p.requestAllPieces()
 		//p.requestPiece(2886)
 		//p.requestPiece(0)
 	case InterestedMsg:
-		p.Interesed = true
+		p.Interested = true
 		logger.Println("Interested", msg)
 	case NotInterestedMsg:
-		p.Interesed = false
+		p.Interested = false
 		logger.Println("NotInterested", msg)
 	case HaveMsg:
 		logger.Println("Have", msg)
-		p.has[binary.BigEndian.Uint32(msg)] = true
-		logger.Println(p.has)
+		//p.has[binary.BigEndian.Uint32(msg)] = true
 	case BitFieldMsg:
 		logger.Println("Bitfield", p.Id) //, msg)
 		//TODO: Parse Bitfield
@@ -121,11 +123,8 @@ func (p *Peer) decodeMessage(payload []byte) {
 	case RequestMsg:
 		logger.Println("Request", msg)
 	case BlockMsg:
-		logger.Println("Piece")
+		logger.Println("Piece Message Received")
 		p.decodeBlockMessage(msg)
-		go func() {
-			_ = p.meta.Info.WriteData()
-		}()
 	case CancelMsg:
 		logger.Println("Cancel", msg)
 	case PortMsg:
@@ -154,7 +153,7 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	if len(block.data) < 1 {
 		return
 	}
-	p.meta.Info.PieceList[index].chanBlocks <- block
+	Pieces[index].chanBlocks <- block
 }
 
 func (p *Peer) decodeCancelMessage(msg []byte) {
@@ -186,9 +185,9 @@ BlockLoop:
 	if p.hash == sha1.Sum(buffer.Bytes()) {
 		p.data = buffer.Bytes()
 		p.have = true
+		completionSync.Done()
+		//debugger.Println(len(completionSync))
 		logger.Printf("Piece at %d is downloaded", p.index)
-		// Make one piece done
-		manager.wg.Done()
 		return
 	}
 	debugger.Println(p.hash, sha1.Sum(buffer.Bytes()))
@@ -275,7 +274,8 @@ func (p *Peer) sendRequestMessage(idx uint32, offset int) error {
 
 // FOR TESTING NOTE
 func (p *Peer) requestAllPieces() {
-	total := len(p.meta.Info.PieceList)
+	total := len(Pieces)
+	completionSync.Add(total - 1)
 	debugger.Println("Requesting all pieces")
 	for i := 0; i < total; i++ {
 		p.requestPiece(i)
@@ -287,10 +287,9 @@ func (p *Peer) requestPiece(piece int) {
 	for offset := 0; offset < p.meta.Info.BlocksPerPiece; offset++ {
 		err := p.sendRequestMessage(uint32(piece), offset*BLOCKSIZE)
 		if err != nil {
-			manager.pieceStatus[piece] = 0
 			debugger.Println("Error Requesting", err)
 		}
 	}
 	// Make sure to check for it's completion
-	go p.meta.Info.PieceList[piece].checkPieceCompletion()
+	go Pieces[piece].checkPieceCompletion()
 }

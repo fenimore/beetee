@@ -27,40 +27,29 @@ type TrackerRequest struct {
 
 // TrackerResponse takes in the BIN response, not dict
 type TrackerResponse struct {
-	FailureReason string        `bencode:"failure reason"`
-	Interval      int32         `bencode:"interval"`
-	TrackerId     string        `bencode:"tracker id"`
-	Complete      int32         `bencode:"complete"`
-	Incomplete    int32         `bencode:"incomplete"`
-	Peers         bencode.Bytes `bencode:"peers"`
-	PeerList      []*Peer
+	FailureReason string `bencode:"failure reason"`
+	Interval      int32  `bencode:"interval"`
+	//	IntervalMin int64         `bencode:"min interval"`
+	TrackerId  string        `bencode:"tracker id"`
+	Complete   int32         `bencode:"complete"`
+	Incomplete int32         `bencode:"incomplete"`
+	Peers      bencode.Bytes `bencode:"peers"`
 }
 
-// type TrackerResponse struct {
-//	Failure     string        `bencode:"failure reason"`
-//	Interval    int64         `bencode:"interval"`
-//	IntervalMin int64         `bencode:"min interval"`
-//	TrackerId   string        `bencode:"tracker id"`
-//	Complete    int64         `bencode:"complete"`
-//	Incomplete  int64         `bencode:"incomplete"`
-//	Peers       bencode.Bytes `bencode:"peers"`
-//	//Peers Peer `bencode:"peers"`
-//	PeerDict []Peer
-// }
-
+// TODO: When tracker responds in dict instead of BIN
 type TrackerResponseDict struct {
 	Failure  string `bencode:"failure reason"`
 	Interval int64  `bencode:"interval"`
 }
 
 // GetTrackerResponse TODO: pass in TrackerRequest instead
-func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]interface{}, error) {
+func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string]interface{}, error) {
 	var response = TrackerResponse{} //make(map[string]interface{})
 
 	// TODO: Use scrape conventions
 	//url := strings.Replace(m.Announce, "announce", "scrape", 1)
 	//request := url + "?info_hash=" + m.InfoHashEnc + "&peer_id=" + GenPeerId() +
-	request := m.Announce + "?info_hash=" + m.InfoHashEnc + "&peer_id=" + UrlEncode(peerId) +
+	request := m.Announce + "?info_hash=" + m.InfoHashEnc + "&peer_id=" + UrlEncode(PeerId) +
 		"&uploaded=0" +
 		"&downloaded=0" +
 		"&left=" + strconv.Itoa(int(m.Info.Length)) +
@@ -100,9 +89,9 @@ func GetTrackerResponse(m TorrentMeta) (TrackerResponse, error) { //(map[string]
 		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
 		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
 		peer := Peer{Ip: ip.String(), Port: port}
-		peer.meta = &m
+		peer.meta = m
 		peer.Choked = true
-		response.PeerList = append(response.PeerList, &peer)
+		Peers = append(Peers, &peer)
 	}
 
 	return response, err

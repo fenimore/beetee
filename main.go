@@ -6,57 +6,78 @@ import (
 	"sync"
 )
 
-var (
-	//meta   TorrentMeta
-	manager *Manager
-	peerId  [20]byte
-	blocks  map[[20]byte]bool
-
+var ( // NOTE Global Important Variables
+	Torrent *TorrentMeta
+	Peers   []*Peer
+	Pieces  []*Piece
+	PeerId  [20]byte
+	// Status ongoing
+	Left       int
+	Uploaded   int
+	AliveDelta int // TODO:
+	// Loggers
 	debugger *log.Logger
 	logger   *log.Logger
+	// WaitGroup
+	completionSync sync.WaitGroup
+)
+
+var (
+	peerId [20]byte
+	blocks map[[20]byte]bool
 
 	wg sync.WaitGroup
 )
 
 func main() {
-	manager = new(Manager)
+	var err error
+
 	debugger = log.New(os.Stdout, "DEBUG: ", log.Ltime|log.Lshortfile)
 	logger = log.New(os.Stdout, "LOG: ", log.Ltime|log.Lshortfile)
-	// logger.Println([]byte{(uint8)(0),
-	//	(uint8)(0), (uint8)(1), (uint8)(3)})
-	// return
 
-	peerId = GenPeerId()
+	PeerId = GenPeerId()
 
 	/* Parse Torrent*/
-	meta, err := ParseTorrent("ubuntu.torrent")
+	Torrent, err = ParseTorrent("torrents/tom.torrent")
+
+	//debugger.Println(meta.Info)
+
 	if err != nil {
 		debugger.Println(err)
 		//fmt.Println(err)
 	}
-	debugger.Println("Length: ", meta.Info.Length)
-	debugger.Println("Piece Length: ", meta.Info.PieceLength)
-	debugger.Println("Piece Len: ", len(meta.Info.Pieces))
-	// debugger.Println("PieceList:", meta.Info.PieceList)
-	// debugger.Println("Pieces:\n\n", meta.Info.Pieces)
+	debugger.Println("Length: ", Torrent.Info.Length)
+	debugger.Println("Piece Length: ", Torrent.Info.PieceLength)
+	debugger.Println("Piece Len: ", len(Torrent.Info.Pieces))
 
 	/*Parse Tracker Response*/
-	resp, err := GetTrackerResponse(meta)
+	_, err = GetTrackerResponse(Torrent)
 	if err != nil {
 		debugger.Println(err)
 	}
 
-	/* Set Madnager traits*/
-	manager.peers = resp.PeerList
-	manager.torrent = &meta
-	manager.left = int(meta.Info.Length)
-	manager.pieceQ = make(chan int)
-	manager.pieceStatus = make(map[int]int)
-	/* Launch Manager */
-	manager.Flood()
+	/* What next? */
+	peer := Peers[1]
+	err = peer.ListenToPeer()
+	if err != nil {
+		debugger.Println("Error connection", err)
+		wg.Done()
+	} else {
+		// is connectedy
+		peer.sendStatusMessage(InterestedMsg)
+		peer.ChokeWg.Wait()
+		peer.requestAllPieces()
+		completionSync.Wait()
 
-	wg.Add(1)
+		err = Torrent.Info.WriteData()
+		if err != nil {
+			logger.Printf("Problem writing data %s", err)
+		} else {
+			logger.Printf("Wrote Data NP")
+			os.Exit(0)
+		}
 
+	}
 	/* TODO: Request Blocks */
-	wg.Wait()
+
 }
