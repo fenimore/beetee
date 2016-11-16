@@ -92,7 +92,7 @@ func (p *Peer) decodeMessage(payload []byte) {
 	switch payload[0] {
 	case ChokeMsg:
 		p.Choked = true
-		p.ChokeWg.Done() // Does this go into the Negative nUmbers?
+		//p.ChokeWg.Done() // Does this go into the Negative nUmbers?
 		p.ChokeWg.Add(1)
 		logger.Println("Choked", msg)
 	case UnchokeMsg:
@@ -149,10 +149,7 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	block := new(Block)
 	block.data = msg[8:]
 	block.offset = int(begin)
-	if index == 78 {
-		debugger.Println("This Index Does indeed exist")
-		debugger.Println(Pieces[index])
-	}
+
 	// Send to channel
 	if len(block.data) < 1 {
 		return

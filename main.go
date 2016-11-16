@@ -13,6 +13,7 @@ var ( // NOTE Global Important Variables
 	PeerId  [20]byte
 	// Channels
 	PieceQueue chan *Piece
+	PeerQueue  chan *Peer
 	// Status ongoing
 	Left       int
 	Uploaded   int
@@ -40,7 +41,7 @@ func main() {
 	PeerId = GenPeerId()
 
 	/* Parse Torrent*/
-	Torrent, err = ParseTorrent("torrents/tom.torrent")
+	Torrent, err = ParseTorrent("torrents/ubuntu.torrent")
 
 	//debugger.Println(meta.Info)
 
@@ -59,6 +60,7 @@ func main() {
 	}
 	/* What next? */
 	PieceQueue = make(chan *Piece)
+	PeerQueue = make(chan *Peer)
 	Flood()
 	completionSync.Wait()
 	err = Torrent.Info.WriteData()

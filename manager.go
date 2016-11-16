@@ -4,11 +4,11 @@ package main
 func Flood() {
 	completionSync.Add(len(Pieces) - 1)
 	go FillQueue()
-	group := Peers[1]
-	go group.AskForData()
-	//for _, p := range group {
-	//n	go p.AskForData()
-	//}
+	//group := Peers[
+	//go group.AskForData()
+	for _, p := range Peers {
+		go p.AskForData()
+	}
 
 }
 
