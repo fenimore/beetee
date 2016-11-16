@@ -45,7 +45,7 @@ func (p *Peer) ConnectToPeer() error {
 		return err
 	}
 	logger.Println("Connected to Peer: ", p.Id)
-
+	// TODO: Keep alive loop in goroutine
 	return nil
 
 }

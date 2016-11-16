@@ -60,6 +60,5 @@ func (info *TorrentInfo) parsePieces() {
 		info.PieceList = append(info.PieceList, &piece)
 		go piece.checkPieceCompletion()
 	}
-	manager.pieces = info.PieceList
 
 }
