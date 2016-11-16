@@ -55,7 +55,6 @@ func main() {
 	if err != nil {
 		debugger.Println(err)
 	}
-
 	/* What next? */
 	peer := Peers[1]
 	err = peer.ListenToPeer()
@@ -66,12 +65,15 @@ func main() {
 		// is connectedy
 		peer.sendStatusMessage(InterestedMsg)
 		peer.ChokeWg.Wait()
+		//peer.requestBlock(78, 0)
+		//completionSync.Add(1)
 		peer.requestAllPieces()
 		completionSync.Wait()
 
 		err = Torrent.Info.WriteData()
 		if err != nil {
 			logger.Printf("Problem writing data %s", err)
+			os.Exit(0)
 		} else {
 			logger.Printf("Wrote Data NP")
 			os.Exit(0)

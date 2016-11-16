@@ -280,9 +280,19 @@ func (p *Peer) sendRequestMessage(idx uint32, offset int) error {
 func (p *Peer) requestAllPieces() {
 	total := len(Pieces)
 	completionSync.Add(total - 1)
-	debugger.Println("Requesting all pieces")
+	debugger.Printf("Requesting all %d pieces", total)
 	for i := 0; i < total; i++ {
 		p.requestPiece(i)
+	}
+}
+
+// requestBlock takes in the block index, not the offset
+func (p *Peer) requestBlock(piece, block int) {
+	logger.Printf("Requesting piece %d at offset: %d", piece, block)
+	offset := block * BLOCKSIZE
+	err := p.sendRequestMessage(uint32(piece), offset)
+	if err != nil {
+		debugger.Println("Problem Requesting BLock")
 	}
 }
 

@@ -85,6 +85,7 @@ func (info *TorrentInfo) parsePieces() {
 	Pieces = make([]*Piece, 0, piecesLength/20)
 	for i := 0; i < piecesLength; i = i + 20 {
 		j := i + 20
+		debugger.Println(info.Pieces[i:j])
 		piece := Piece{size: info.PieceLength, numBlocks: int(numBlocks)}
 		piece.chanBlocks = make(chan *Block)
 		//piece.blocks = make(map[int]*Block)
@@ -94,6 +95,7 @@ func (info *TorrentInfo) parsePieces() {
 		piece.length = int(info.PieceLength)
 		piece.index = len(Pieces)
 		//piece.hex = fmt.Sprintf("%x", piece.hash)
+
 		Pieces = append(Pieces, &piece)
 	}
 }

@@ -14,13 +14,16 @@ func (info *TorrentInfo) WriteData() error {
 		return err
 	}
 	writer := bufio.NewWriter(file)
-	for _, val := range Pieces {
-		//dbugger.Println(idx)
+	for idx, val := range Pieces {
 		if !val.have {
-			//debugger.Println(Pieces[idx-1])
-			//debugger.Println("WHy Doesn't I have?", val.
+			fi, err := file.Stat()
+			if err != nil {
+				debugger.Println(err)
+			}
+			debugger.Printf("File is %d bytes, out of Length: %d", fi.Size(), Torrent.Info.Length)
 			debugger.Println("WHy Doesn't I have?", val)
-			msg := string(val.index) + " Is not had"
+			debugger.Println(idx)
+			msg := string(idx) + " Is not had"
 			return errors.New(msg)
 		}
 		writer.Write(val.data)
