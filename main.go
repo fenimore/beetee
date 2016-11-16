@@ -29,7 +29,7 @@ func main() {
 	peerId = GenPeerId()
 
 	/* Parse Torrent*/
-	meta, err := ParseTorrent("arch.torrent")
+	meta, err := ParseTorrent("ubuntu.torrent")
 	if err != nil {
 		debugger.Println(err)
 		//fmt.Println(err)
@@ -46,22 +46,15 @@ func main() {
 		debugger.Println(err)
 	}
 
-	/*Connect to Peer*/
-	// for idx, p := range resp.PeerList {
-	//	if idx > 2 {
-	//		break
-	//	}
-	//	go p.ListenToPeer()
-	// }
-	/* Tell Peer I'm interested */
-	peers := resp.PeerList
-	manager.peers = peers
-	for _, val := range peers {
-		logger.Println(val)
-	}
-	//go resp.PeerList[3].ListenToPeer()
-	// requestAllPieces
-	//resp.PeerList[8].requestAllPieces()
+	/* Set Madnager traits*/
+	manager.peers = resp.PeerList
+	manager.torrent = &meta
+	manager.left = int(meta.Info.Length)
+	manager.pieceQ = make(chan int)
+	manager.pieceStatus = make(map[int]int)
+	/* Launch Manager */
+	manager.Flood()
+
 	wg.Add(1)
 
 	/* TODO: Request Blocks */

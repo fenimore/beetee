@@ -81,6 +81,7 @@ func (p *Peer) ShakeHands() error {
 	return nil
 }
 
+// decodeMessage is the overall decoder, send payloads here.
 func (p *Peer) decodeMessage(payload []byte) {
 	// first byte is msg type
 	if len(payload) < 1 {
@@ -94,11 +95,10 @@ func (p *Peer) decodeMessage(payload []byte) {
 		logger.Println("Choked", msg)
 	case UnchokeMsg:
 		p.Choked = false
-		logger.Println("UnChoke", msg)
+		logger.Println("UnChoke", p.Id)
 		//p.requestAllPieces()
-		p.requestPiece(2886)
-
-		p.requestPiece(0)
+		//p.requestPiece(2886)
+		//p.requestPiece(0)
 	case InterestedMsg:
 		p.Interesed = true
 		logger.Println("Interested", msg)
@@ -110,10 +110,11 @@ func (p *Peer) decodeMessage(payload []byte) {
 		p.has[binary.BigEndian.Uint32(msg)] = true
 		logger.Println(p.has)
 	case BitFieldMsg:
-		logger.Println("Bitfield", msg)
+		logger.Println("Bitfield", p.Id) //, msg)
+		//TODO: Parse Bitfield
+		// debugger.Println(len(msg))
 		// Bitfield comes right after handshake
 		err := p.sendStatusMessage(InterestedMsg)
-		debugger.Println(len(msg))
 		if err != nil {
 			debugger.Println("Status Error: ", err)
 		}
@@ -129,6 +130,7 @@ func (p *Peer) decodeMessage(payload []byte) {
 		logger.Println("Cancel", msg)
 	case PortMsg:
 		logger.Println("Port", msg)
+
 	}
 }
 
@@ -149,6 +151,9 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	block.data = msg[8:]
 	block.offset = int(begin)
 	// Send to channel
+	if len(block.data) < 1 {
+		return
+	}
 	p.meta.Info.PieceList[index].chanBlocks <- block
 }
 
@@ -182,6 +187,8 @@ BlockLoop:
 		p.data = buffer.Bytes()
 		p.have = true
 		logger.Printf("Piece at %d is downloaded", p.index)
+		// Make one piece done
+		manager.wg.Done()
 		return
 	}
 	debugger.Println(p.hash, sha1.Sum(buffer.Bytes()))
@@ -276,11 +283,14 @@ func (p *Peer) requestAllPieces() {
 }
 
 func (p *Peer) requestPiece(piece int) {
+	logger.Printf("Requesting piece %d from peer %s", piece, p.Id)
 	for offset := 0; offset < p.meta.Info.BlocksPerPiece; offset++ {
 		err := p.sendRequestMessage(uint32(piece), offset*BLOCKSIZE)
 		if err != nil {
+			manager.pieceStatus[piece] = 0
 			debugger.Println("Error Requesting", err)
 		}
-
 	}
+	// Make sure to check for it's completion
+	go p.meta.Info.PieceList[piece].checkPieceCompletion()
 }

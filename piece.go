@@ -5,9 +5,9 @@ package main
 const BLOCKSIZE int = 16384 //32768
 
 const (
-	Undownloaded = iota
+	Empty = iota
 	Pending
-	Downloaded
+	Full
 )
 
 type Piece struct {
@@ -58,7 +58,5 @@ func (info *TorrentInfo) parsePieces() {
 		piece.index = len(info.PieceList)
 		//piece.hex = fmt.Sprintf("%x", piece.hash)
 		info.PieceList = append(info.PieceList, &piece)
-		go piece.checkPieceCompletion()
 	}
-
 }

@@ -9,6 +9,8 @@ import (
 	"os"
 )
 
+// TorrentMeta is the overarching torrent struct
+// and it's info subordinate houses the piece list
 type TorrentMeta struct {
 	Announce     string        `bencode:"announce"`
 	AnnounceList [][]string    `bencode:"announce-list"`
@@ -27,6 +29,7 @@ func (t *TorrentMeta) String() string {
 	return t.Announce
 }
 
+// TorrentInfo for single file torrent
 type TorrentInfo struct {
 	Length         int64         `bencode:"length"`
 	Name           string        `bencode:"name"`

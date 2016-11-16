@@ -67,6 +67,7 @@ func (p *Peer) ListenToPeer() {
 		//debugger.Println(length)
 		if err != nil {
 			debugger.Println("Error Reading, Stopping", err)
+			p.Alive = false
 			p.Conn.Close()
 			return
 		}
@@ -75,8 +76,9 @@ func (p *Peer) ListenToPeer() {
 		if err != nil {
 			debugger.Println("Error Reading Payload", err)
 			// TODO: Stop connection
-			p.Stop <- true
-			//p.Conn.Close()
+			//p.Stop <- true
+			p.Alive = false
+			p.Conn.Close()
 			return
 		}
 		go p.decodeMessage(payload)
