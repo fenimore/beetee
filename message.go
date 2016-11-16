@@ -149,6 +149,10 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	block := new(Block)
 	block.data = msg[8:]
 	block.offset = int(begin)
+	if index == 78 {
+		debugger.Println("This Index Does indeed exist")
+		debugger.Println(Pieces[index])
+	}
 	// Send to channel
 	if len(block.data) < 1 {
 		return

@@ -49,7 +49,7 @@ func main() {
 	debugger.Println("Length: ", Torrent.Info.Length)
 	debugger.Println("Piece Length: ", Torrent.Info.PieceLength)
 	debugger.Println("Piece Len: ", len(Torrent.Info.Pieces))
-
+	debugger.Println(len(Pieces))
 	/*Parse Tracker Response*/
 	_, err = GetTrackerResponse(Torrent)
 	if err != nil {

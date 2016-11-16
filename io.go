@@ -15,8 +15,11 @@ func (info *TorrentInfo) WriteData() error {
 	}
 	writer := bufio.NewWriter(file)
 	for _, val := range Pieces {
-		//debugger.Println(idx)
+		//dbugger.Println(idx)
 		if !val.have {
+			//debugger.Println(Pieces[idx-1])
+			//debugger.Println("WHy Doesn't I have?", val.
+			debugger.Println("WHy Doesn't I have?", val)
 			msg := string(val.index) + " Is not had"
 			return errors.New(msg)
 		}
@@ -26,3 +29,6 @@ func (info *TorrentInfo) WriteData() error {
 	logger.Println("Success Writing Data") // Not working?
 	return nil
 }
+
+// TODO: Write iteratively onto desk
+// TODO: Read the progress of blocks from disk
