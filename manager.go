@@ -37,12 +37,14 @@ func (p *Peer) AskForData() {
 
 func ConnectPeers() {
 	for _, peer := range Peers {
-		err := peer.ConnectToPeer()
-		if err == nil {
-			PeerQueue <- peer
-		} else {
-			debugger.Printf("Error Connecting to  %s: %s", peer.Ip, err)
-		}
+		go func(p *Peer) {
+			err := p.ConnectToPeer()
+			if err == nil {
+				PeerQueue <- p
+			} else {
+				debugger.Printf("Error Connecting to  %s: %s", p.Ip, err)
+			}
+		}(peer)
 	}
 }
 

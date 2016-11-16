@@ -33,5 +33,32 @@ func (info *TorrentInfo) WriteData() error {
 	return nil
 }
 
+func (info *TorrentInfo) ContinuousWrite() error {
+	fullFile := true
+	for {
+		file, err := os.Create(info.Name)
+		if err != nil {
+			debugger.Println("File creation err: ", err)
+		}
+		writer := bufio.NewWriter(file)
+		for _, val := range Pieces {
+			if val.have {
+				//blank := make([]byte, info.PieceLength)
+				//writer.Write(blank)
+				//fullFile = false
+				writer.Write(val.data)
+			} else {
+				fullFile = false
+			}
+		}
+		writer.Flush()
+		if fullFile {
+			break
+		}
+	}
+	logger.Println("Success Writing Data") // Not working?
+	return nil
+}
+
 // TODO: Write iteratively onto desk
 // TODO: Read the progress of blocks from disk

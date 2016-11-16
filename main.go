@@ -25,6 +25,7 @@ var ( // NOTE Global Important Variables
 	logger   *log.Logger
 	// WaitGroup
 	completionSync sync.WaitGroup
+	writeSync      sync.WaitGroup
 )
 
 var (
@@ -64,6 +65,7 @@ func main() {
 	PieceQueue = make(chan *Piece)
 	PeerQueue = make(chan *Peer, MaxPeers)
 	MaxPeers = len(Peers) / 2
+	go Torrent.Info.ContinuousWrite()
 	Flood()
 	completionSync.Wait()
 	err = Torrent.Info.WriteData()
@@ -74,29 +76,7 @@ func main() {
 		logger.Printf("Wrote Data NP")
 		os.Exit(0)
 	}
-	// peer := Peers[1]
-	// err = peer.ListenToPeer()
-	// if err != nil {
-	//	debugger.Println("Error connection", err)
-	// } else {
-	//	// is connectedy
-	//	peer.sendStatusMessage(InterestedMsg)
-	//	peer.ChokeWg.Wait()
-	//	//peer.requestBlock(78, 0)
-	//	completionSync.Add(len(Pieces) - 1)
-	//	peer.requestAllPieces()
-	//	completionSync.Wait()
 
-	//	err = Torrent.Info.WriteData()
-	//	if err != nil {
-	//		logger.Printf("Problem writing data %s", err)
-	//		os.Exit(0)
-	//	} else {
-	//		logger.Printf("Wrote Data NP")
-	//		os.Exit(0)
-	//	}
-
-	// }
 	/* TODO: Request Blocks */
 
 }

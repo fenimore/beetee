@@ -33,7 +33,7 @@ type Peer struct {
 
 func (p *Peer) ConnectToPeer() error {
 	addr := fmt.Sprintf("%s:%d", p.Ip, p.Port)
-	//logger.Println("Connecting to Peer: ", addr)
+	logger.Println("Connecting to Peer: ", addr)
 
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {

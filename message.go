@@ -96,12 +96,11 @@ func (p *Peer) decodeMessage(payload []byte) {
 		p.ChokeWg.Add(1)
 		logger.Println("Choked", msg)
 	case UnchokeMsg:
-		p.Choked = false
-		p.ChokeWg.Done()
+		if p.Choked {
+			p.ChokeWg.Done()
+			p.Choked = false
+		}
 		logger.Println("UnChoke", p.Id)
-		//p.requestAllPieces()
-		//p.requestPiece(2886)
-		//p.requestPiece(0)
 	case InterestedMsg:
 		p.Interested = true
 		logger.Println("Interested", msg)
@@ -123,7 +122,7 @@ func (p *Peer) decodeMessage(payload []byte) {
 	case RequestMsg:
 		logger.Println("Request", msg)
 	case BlockMsg:
-		logger.Println("Piece Message Received")
+		//logger.Println("Piece Message Received")
 		p.decodeBlockMessage(msg)
 	case CancelMsg:
 		logger.Println("Cancel", msg)
@@ -205,7 +204,7 @@ BlockLoop:
 // sendStatusMessage sends the status message to peer.
 // If sent -1 then a Keep alive message is sent.
 func (p *Peer) sendStatusMessage(msg int) error {
-	logger.Println("Sending Status Message: ", msg)
+	logger.Printf("Sending Status Message: %d to %s", msg, p.Id)
 	var err error
 	buf := make([]byte, 4)
 	writer := bufio.NewWriter(p.Conn)
