@@ -11,6 +11,8 @@ var ( // NOTE Global Important Variables
 	Peers   []*Peer
 	Pieces  []*Piece
 	PeerId  [20]byte
+	// Channels
+	PieceQueue chan *Piece
 	// Status ongoing
 	Left       int
 	Uploaded   int
@@ -56,30 +58,40 @@ func main() {
 		debugger.Println(err)
 	}
 	/* What next? */
-	peer := Peers[1]
-	err = peer.ListenToPeer()
+	PieceQueue = make(chan *Piece)
+	Flood()
+	completionSync.Wait()
+	err = Torrent.Info.WriteData()
 	if err != nil {
-		debugger.Println("Error connection", err)
-		wg.Done()
+		logger.Printf("Problem writing data %s", err)
+		os.Exit(0)
 	} else {
-		// is connectedy
-		peer.sendStatusMessage(InterestedMsg)
-		peer.ChokeWg.Wait()
-		//peer.requestBlock(78, 0)
-		//completionSync.Add(1)
-		peer.requestAllPieces()
-		completionSync.Wait()
-
-		err = Torrent.Info.WriteData()
-		if err != nil {
-			logger.Printf("Problem writing data %s", err)
-			os.Exit(0)
-		} else {
-			logger.Printf("Wrote Data NP")
-			os.Exit(0)
-		}
-
+		logger.Printf("Wrote Data NP")
+		os.Exit(0)
 	}
+	// peer := Peers[1]
+	// err = peer.ListenToPeer()
+	// if err != nil {
+	//	debugger.Println("Error connection", err)
+	// } else {
+	//	// is connectedy
+	//	peer.sendStatusMessage(InterestedMsg)
+	//	peer.ChokeWg.Wait()
+	//	//peer.requestBlock(78, 0)
+	//	completionSync.Add(len(Pieces) - 1)
+	//	peer.requestAllPieces()
+	//	completionSync.Wait()
+
+	//	err = Torrent.Info.WriteData()
+	//	if err != nil {
+	//		logger.Printf("Problem writing data %s", err)
+	//		os.Exit(0)
+	//	} else {
+	//		logger.Printf("Wrote Data NP")
+	//		os.Exit(0)
+	//	}
+
+	// }
 	/* TODO: Request Blocks */
 
 }

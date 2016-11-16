@@ -1,6 +1,8 @@
 package main
 
-//import ()
+import (
+	"sync"
+)
 
 const BLOCKSIZE int = 16384 //32768
 
@@ -23,6 +25,8 @@ type Piece struct {
 	size   int64
 	have   bool
 	length int
+	// WaitGroup
+	Pending sync.WaitGroup
 }
 
 type Block struct {

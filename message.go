@@ -190,10 +190,15 @@ BlockLoop:
 		p.data = buffer.Bytes()
 		p.have = true
 		completionSync.Done()
-		//debugger.Println(len(completionSync))
+		p.status = Full
+		p.Pending.Done()
 		logger.Printf("Piece at %d is downloaded", p.index)
 		return
 	}
+	p.status = Empty
+	p.Pending.Done()
+
+	// TODO: This part is not making much sense
 	debugger.Println(p.hash, sha1.Sum(buffer.Bytes()))
 	logger.Println("Failure to sha1 hash")
 	// NOTE: Call again method if fail... ?
@@ -279,7 +284,7 @@ func (p *Peer) sendRequestMessage(idx uint32, offset int) error {
 // FOR TESTING NOTE
 func (p *Peer) requestAllPieces() {
 	total := len(Pieces)
-	completionSync.Add(total - 1)
+	//completionSync.Add(total - 1)
 	debugger.Printf("Requesting all %d pieces", total)
 	for i := 0; i < total; i++ {
 		p.requestPiece(i)
@@ -305,5 +310,7 @@ func (p *Peer) requestPiece(piece int) {
 		}
 	}
 	// Make sure to check for it's completion
+	Pieces[piece].Pending.Add(1)
+	Pieces[piece].status = Pending
 	go Pieces[piece].checkPieceCompletion()
 }
