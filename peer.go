@@ -20,11 +20,13 @@ type Peer struct {
 	Conn   net.Conn
 	Id     string
 	// Peer Status
+	Alive     bool
 	Interesed bool
 	Choked    bool
-	Bitfield  []bool
+	Stop      chan bool // TODO: What?
 	// What the Peer Has, index wise
-	has map[uint32]bool
+	Bitfield []bool
+	has      map[uint32]bool
 }
 
 func (p *Peer) ConnectToPeer() error {
@@ -57,31 +59,26 @@ func (p *Peer) ListenToPeer() {
 		return
 	}
 	logger.Printf("Peer %s : starting to Listen\n", p.Id)
-	// handshake is already authed
+	p.Alive = true
+	// Listen Loop
 	for {
 		length := make([]byte, 4)
 		_, err = io.ReadFull(p.Conn, length)
 		//debugger.Println(length)
 		if err != nil {
 			debugger.Println("Error Reading, Stopping", err)
-			//p.sendStatusMessage(-1)
 			p.Conn.Close()
-			// TODO: Stop connection
 			return
-		} //make([]array,1)
+		}
 		payload := make([]byte, binary.BigEndian.Uint32(length))
 		_, err = io.ReadFull(p.Conn, payload)
 		if err != nil {
 			debugger.Println("Error Reading Payload", err)
 			// TODO: Stop connection
-			p.Conn.Close()
+			p.Stop <- true
+			//p.Conn.Close()
 			return
 		}
-		// debugger.Printf("PyloadLen %d, IndicatedLength: %d",
-		//	len(payload), binary.BigEndian.Uint32(length))
-		// if len(payload) > 13 {
-		//	debugger.Println(payload[:13])
-		// }
 		go p.decodeMessage(payload)
 	}
 }

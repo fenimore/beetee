@@ -90,16 +90,20 @@ func (p *Peer) decodeMessage(payload []byte) {
 	//logger.Println("recieved a Message:", payload[0])
 	switch payload[0] {
 	case ChokeMsg:
+		p.Choked = true
 		logger.Println("Choked", msg)
 	case UnchokeMsg:
+		p.Choked = false
 		logger.Println("UnChoke", msg)
 		//p.requestAllPieces()
 		p.requestPiece(2886)
 
 		p.requestPiece(0)
 	case InterestedMsg:
+		p.Interesed = true
 		logger.Println("Interested", msg)
 	case NotInterestedMsg:
+		p.Interesed = false
 		logger.Println("NotInterested", msg)
 	case HaveMsg:
 		logger.Println("Have", msg)
@@ -128,24 +132,35 @@ func (p *Peer) decodeMessage(payload []byte) {
 	}
 }
 
+func (p *Peer) decodeHaveMessage(msg []byte) {
+}
+
+func (p *Peer) decodeBitfieldMessage(msg []byte) {
+}
+
+func (p *Peer) decodeRequestMessage(msg []byte) {
+}
+
 func (p *Peer) decodeBlockMessage(msg []byte) {
 	index := binary.BigEndian.Uint32(msg[:4])
-	// Begin is which 0 based offset within the piece.
-	// that is, which BLOCK this is within piece
 	begin := binary.BigEndian.Uint32(msg[4:8])
-	//debugger.Println("Index:", int(index), begin)
-	pieceList := p.meta.Info.PieceList // for readability
-
+	// Blocks...
 	block := new(Block)
 	block.data = msg[8:]
 	block.offset = int(begin)
-	// block.length = len(block.data) // Not necessary?
-	//pieceList[index].index = int(index)
-	//debugger.Println(len(msg), block.offset)
-	pieceList[index].chanBlocks <- block
-
+	// Send to channel
+	p.meta.Info.PieceList[index].chanBlocks <- block
 }
 
+func (p *Peer) decodeCancelMessage(msg []byte) {
+}
+
+func (p *Peer) decodePortMessage(msg []byte) {
+}
+
+// checkPieceCompletion this is the loop which
+// is constantly checking whether a piece has been
+// downloaded.
 // Should call one time for every piece
 func (p *Piece) checkPieceCompletion() {
 BlockLoop:
@@ -171,8 +186,12 @@ BlockLoop:
 	}
 	debugger.Println(p.hash, sha1.Sum(buffer.Bytes()))
 	logger.Println("Failure to sha1 hash")
+	// NOTE: Call again method if fail... ?
+	go p.checkPieceCompletion() // In goroutine?
 }
 
+// sendStatusMessage sends the status message to peer.
+// If sent -1 then a Keep alive message is sent.
 func (p *Peer) sendStatusMessage(msg int) error {
 	logger.Println("Sending Status Message: ", msg)
 	var err error
@@ -182,10 +201,8 @@ func (p *Peer) sendStatusMessage(msg int) error {
 		binary.BigEndian.PutUint32(buf, 0)
 	} else {
 		binary.BigEndian.PutUint32(buf, 1)
-
 	}
 	writer.Write(buf)
-
 	if err != nil {
 		return err
 	}
@@ -202,24 +219,17 @@ func (p *Peer) sendStatusMessage(msg int) error {
 	if err != nil {
 		return err
 	}
-
 	writer.Flush()
 	return nil
 }
 
-// Sendrequestmessage pass in the index of the piece your looking for.
+// sendRequestMessage pass in the index of the piece your looking for,
+// and the offset of the piece (it's offset index * BLOCKSIZE
 func (p *Peer) sendRequestMessage(idx uint32, offset int) error {
-	// Request lenght := 16384
-	// From kristen:
-	//The ‘Request’ message type consists of the
-	//4-byte message length,
-	//1-byte message ID,
-	//and a payload composed of a
-	//4-byte piece index (0 based),
-	//4-byte block offset within the piece (measured in bytes), and
-	//4-byte block length
+	//4-byte message length,1-byte message ID, and payload:
 	// <len=0013><id=6><index><begin><length>
-	//logger.Println("Sending Request Message: ", idx)
+	// NOTE: being offset the offset by byte:
+	// that is  0, 16K, 13K, etc
 	var err error
 	writer := bufio.NewWriter(p.Conn)
 	len := make([]byte, 4)
@@ -232,7 +242,6 @@ func (p *Peer) sendRequestMessage(idx uint32, offset int) error {
 	binary.BigEndian.PutUint32(begin, uint32(offset))
 	length := make([]byte, 4)
 	binary.BigEndian.PutUint32(length, uint32(BLOCKSIZE))
-
 	_, err = writer.Write(len)
 	if err != nil {
 		return err

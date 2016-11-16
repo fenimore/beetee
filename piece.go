@@ -1,11 +1,14 @@
 package main
 
-import (
-	"fmt"
-)
+//import ()
 
 const BLOCKSIZE int = 16384 //32768
-//const BLOCKSIZE int = 32768
+
+const (
+	Undownloaded = iota
+	Pending
+	Downloaded
+)
 
 type Piece struct {
 	index      int
