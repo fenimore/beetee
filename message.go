@@ -314,28 +314,44 @@ func (p *Peer) requestPiece(piece int) {
 }
 
 func (p *Piece) askForPiece(peer *Peer) {
-	p.Lock() // Lock locks for writing, not reading
+	//p.Lock() // Lock locks for writing, not reading
 	// Calculate how many blocks, there will be.
 	p.Pending.Add(1)
 	p.status = Pending
 	for offset := 0; offset < Torrent.Info.BlocksPerPiece; offset++ {
-		err := peer.requestBlock(uint32(p.index), offset*BLOCKSIZE)
+		err := peer.sendRequestMessage(uint32(p.index), offset*BLOCKSIZE)
 		if err != nil {
 			debugger.Println("Error Requesting", err)
 		}
 	}
-
-BlockLoop:
+	for len(p.chanBlocks) < cap(p.chanBlocks) {
+		// TODO: Set  Timeout
+		// Wait
+	}
 	for {
 		b := <-p.chanBlocks
 		p.blocks[b.offset/BLOCKSIZE] = b
-		for _, val := range p.blocks {
-			if val == nil {
-				continue BlockLoop
-			}
+		if len(p.chanBlocks) < 1 {
+			break
 		}
-		break BlockLoop
 	}
+	var buffer bytes.Buffer
+	for _, block := range p.blocks {
+		buffer.Write(block.data)
+	}
+	if p.hash == sha1.Sum(buffer.Bytes()) {
+		p.data = buffer.Bytes()
+		p.have = true
+		p.status = Full
+		p.Pending.Done()
+		logger.Printf("Piece at %d is downloaded", p.index)
+		return
+	}
+	//p.Unlock()
+	p.status = Empty
+	p.Pending.Done()
 
-	p.Unlock()
+	// TODO: This part is not making much sense
+	debugger.Println(p.hash, sha1.Sum(buffer.Bytes()))
+	logger.Println("Failure to sha1 hash")
 }

@@ -1,5 +1,27 @@
 package main
 
+func Run() {
+	//completion.Sync.Add(len(Pieces))
+	debugger.Println("Running with This many peers", len(Peers))
+	go FillQueue()    // Fill PieceQueu
+	go ConnectPeers() // Fill PeerQueue
+
+	for {
+		piece := <-PieceQueue
+		// Check if next peer has piece,
+		// otherwise add it back to the queue and
+		peer := <-PeerQueue
+		go piece.AskAPeer(peer)
+		PeerQueue <- peer
+
+	}
+}
+
+func (piece *Piece) AskAPeer(peer *Peer) {
+
+}
+
+/* VERSION ONE */
 // Flood is when the client run
 func Flood() {
 	completionSync.Add(len(Pieces))
@@ -19,9 +41,9 @@ func (p *Peer) AskForData() {
 	p.ListenWg.Wait()
 	p.sendStatusMessage(InterestedMsg)
 	p.ChokeWg.Wait()
-
 	for {
 		if !p.Alive {
+			debugger.Printf("Peer %s is nolonger alive: %s", p.Id, p.Ip)
 			break
 		}
 		// TODO: if peer.has piece
@@ -29,6 +51,7 @@ func (p *Peer) AskForData() {
 		piece := <-PieceQueue
 		//debugger.Println(piece.hash, piece.index)
 		p.requestPiece(piece.index)
+		//piece.askForPiece(p)
 		piece.status = 1
 		piece.Pending.Wait()
 	}

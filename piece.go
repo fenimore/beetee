@@ -55,7 +55,7 @@ func (info *TorrentInfo) parsePieces() {
 		j := i + 20
 		//debugger.Println(info.Pieces[i:j])
 		piece := Piece{size: info.PieceLength, numBlocks: int(numBlocks)}
-		piece.chanBlocks = make(chan *Block)
+		piece.chanBlocks = make(chan *Block, numBlocks)
 		//piece.blocks = make(map[int]*Block)
 		piece.blocks = make([]*Block, numBlocks)
 		// Copy to next 20 into Piece Hash
