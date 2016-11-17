@@ -58,7 +58,7 @@ func main() {
 	PeerId = GenPeerId()
 
 	/* Parse Torrent*/
-	Torrent, err = ParseTorrent("torrents/tom.torrent")
+	Torrent, err = ParseTorrent("torrents/ubuntu.torrent")
 	if err != nil {
 		debugger.Println(err)
 	}

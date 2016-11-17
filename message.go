@@ -89,6 +89,7 @@ func (p *Peer) ShakeHands() error {
 func (p *Peer) decodeMessage(payload []byte) {
 	// first byte is msg type
 	if len(payload) < 1 {
+		p.sendStatusMessage(-1)
 		return
 	}
 	msg := payload[1:]
@@ -167,6 +168,7 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	Pieces[index].chanBlocks <- block
 }
 
+// DEPRECATED
 // checkPieceCompletion this is the loop which
 // is constantly checking whether a piece has been
 // downloaded.
@@ -316,10 +318,12 @@ func (p *Peer) requestPiece(piece int) {
 	go Pieces[piece].checkPieceCompletion()
 }
 
+// AskForPiece takes in a peer and asks for that piece from them.
 func (p *Piece) AskForPiece(peer *Peer) {
+	logger.Printf("Asking %s for piece %d", peer.Id, p.index)
 	//p.Lock() // Lock locks for writing, not reading
 	// Calculate how many blocks, there will be.
-	p.Lock() // Write lock
+	p.Lock() // Write lock // NOTE: Are these necessary?
 	p.timeCalled = time.Now()
 	p.status = Pending
 	p.Unlock()
@@ -338,6 +342,7 @@ func (p *Piece) AskForPiece(peer *Peer) {
 			p.status = Empty
 			p.Unlock()
 			p.Pending.Done()
+			PieceQueue <- p
 			return
 		}
 	}
