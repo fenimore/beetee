@@ -142,6 +142,13 @@ func (p *Peer) decodeBitfieldMessage(msg []byte) {
 func (p *Peer) decodeRequestMessage(msg []byte) {
 }
 
+func (p *Peer) decodeCancelMessage(msg []byte) {
+}
+
+func (p *Peer) decodePortMessage(msg []byte) {
+}
+
+/* Block and Piece Messages */
 func (p *Peer) decodeBlockMessage(msg []byte) {
 	index := binary.BigEndian.Uint32(msg[:4])
 	begin := binary.BigEndian.Uint32(msg[4:8])
@@ -155,12 +162,6 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 		return
 	}
 	Pieces[index].chanBlocks <- block
-}
-
-func (p *Peer) decodeCancelMessage(msg []byte) {
-}
-
-func (p *Peer) decodePortMessage(msg []byte) {
 }
 
 // checkPieceCompletion this is the loop which

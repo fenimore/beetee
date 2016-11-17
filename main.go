@@ -28,6 +28,7 @@ var ( // NOTE Global Important Variables
 	completionSync sync.WaitGroup
 	writeSync      sync.WaitGroup
 	queueSync      sync.WaitGroup
+	// Mutex
 )
 
 //var continWG sync.WaitGro[up
