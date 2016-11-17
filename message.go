@@ -312,3 +312,30 @@ func (p *Peer) requestPiece(piece int) {
 	Pieces[piece].status = Pending
 	go Pieces[piece].checkPieceCompletion()
 }
+
+func (p *Piece) askForPiece(peer *Peer) {
+	p.Lock() // Lock locks for writing, not reading
+	// Calculate how many blocks, there will be.
+	p.Pending.Add(1)
+	p.status = Pending
+	for offset := 0; offset < Torrent.Info.BlocksPerPiece; offset++ {
+		err := peer.requestBlock(uint32(p.index), offset*BLOCKSIZE)
+		if err != nil {
+			debugger.Println("Error Requesting", err)
+		}
+	}
+
+BlockLoop:
+	for {
+		b := <-p.chanBlocks
+		p.blocks[b.offset/BLOCKSIZE] = b
+		for _, val := range p.blocks {
+			if val == nil {
+				continue BlockLoop
+			}
+		}
+		break BlockLoop
+	}
+
+	p.Unlock()
+}
