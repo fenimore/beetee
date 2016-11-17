@@ -6,6 +6,7 @@ import "io"
 import "bytes"
 import "encoding/binary"
 import "crypto/sha1"
+import "time"
 
 // 19 bytes
 
@@ -83,6 +84,8 @@ func (p *Peer) ShakeHands() error {
 }
 
 // decodeMessage is the overall decoder, send payloads here.
+// TODO: pass in a channel, and constantly be decoding for the peer
+// using the switch statement
 func (p *Peer) decodeMessage(payload []byte) {
 	// first byte is msg type
 	if len(payload) < 1 {
@@ -313,11 +316,13 @@ func (p *Peer) requestPiece(piece int) {
 	go Pieces[piece].checkPieceCompletion()
 }
 
-func (p *Piece) askForPiece(peer *Peer) {
+func (p *Piece) AskForPiece(peer *Peer) {
 	//p.Lock() // Lock locks for writing, not reading
 	// Calculate how many blocks, there will be.
-	p.Pending.Add(1)
+	p.Lock() // Write lock
+	p.timeCalled = time.Now()
 	p.status = Pending
+	p.Unlock()
 	for offset := 0; offset < Torrent.Info.BlocksPerPiece; offset++ {
 		err := peer.sendRequestMessage(uint32(p.index), offset*BLOCKSIZE)
 		if err != nil {
@@ -327,6 +332,14 @@ func (p *Piece) askForPiece(peer *Peer) {
 	for len(p.chanBlocks) < cap(p.chanBlocks) {
 		// TODO: Set  Timeout
 		// Wait
+		if 30*time.Second < time.Since(p.timeCalled) {
+			debugger.Println("One Minute Passed!", p.index)
+			p.Lock()
+			p.status = Empty
+			p.Unlock()
+			p.Pending.Done()
+			return
+		}
 	}
 	for {
 		b := <-p.chanBlocks
@@ -342,13 +355,17 @@ func (p *Piece) askForPiece(peer *Peer) {
 	if p.hash == sha1.Sum(buffer.Bytes()) {
 		p.data = buffer.Bytes()
 		p.have = true
+		p.Lock()
 		p.status = Full
+		p.Unlock()
 		p.Pending.Done()
 		logger.Printf("Piece at %d is downloaded", p.index)
 		return
 	}
 	//p.Unlock()
+	p.Lock()
 	p.status = Empty
+	p.Unlock()
 	p.Pending.Done()
 
 	// TODO: This part is not making much sense

@@ -2,6 +2,7 @@ package main
 
 import (
 	"sync"
+	"time"
 )
 
 const BLOCKSIZE int = 16384 //32768
@@ -29,8 +30,8 @@ type Piece struct {
 	length int
 	// WaitGroup
 	Pending sync.WaitGroup
-
 	// TODO: Request Timeout
+	timeCalled time.Time
 }
 
 type Block struct {
