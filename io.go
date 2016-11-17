@@ -69,7 +69,7 @@ func (info *TorrentInfo) ContinuousWrite() error {
 		}
 	}
 	logger.Println("Success Writing Data") // Not working?
-	continWG.Done()
+	writeSync.Done()
 	return nil
 }
 

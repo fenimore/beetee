@@ -29,8 +29,7 @@ var ( // NOTE Global Important Variables
 	writeSync      sync.WaitGroup
 )
 
-// TESTING
-var continWG sync.WaitGroup
+//var continWG sync.WaitGroup
 
 var (
 	peerId [20]byte
@@ -78,10 +77,10 @@ func main() {
 	PieceQueue = make(chan *Piece)
 	PeerQueue = make(chan *Peer, MaxPeers)
 	MaxPeers = len(Peers) / 2
-	continWG.Add(1)
+	writeSync.Add(1)
 	go Torrent.Info.ContinuousWrite()
 	go Flood()
-	continWG.Wait()
+	writeSync.Wait()
 	//completionSync.Wait()
 	err = Torrent.Info.WriteData()
 	if err != nil {
