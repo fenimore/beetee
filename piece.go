@@ -27,6 +27,7 @@ type Piece struct {
 	length int
 	// WaitGroup
 	Pending sync.WaitGroup
+	// TODO: Request Timeout
 }
 
 type Block struct {

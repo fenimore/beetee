@@ -39,6 +39,7 @@ func (info *TorrentInfo) WriteData() error {
 // When the lenght matches up, or if all pieces are there,
 // then it terminates and writes to disk.
 func (info *TorrentInfo) ContinuousWrite() error {
+	queueSync.Wait() // don't start writing until atleast the queue of requests is made.
 	fullFile := true
 	for {
 		file, err := os.Create(info.Name)
@@ -55,9 +56,6 @@ func (info *TorrentInfo) ContinuousWrite() error {
 			} else {
 				fullFile = false
 				if len(PieceQueue) < 1 && val.status == 0 {
-					debugger.Println("Refilling Queue")
-					debugger.Println(val.status)
-					debugger.Println(val.have, val.index)
 					PieceQueue <- val
 				}
 
