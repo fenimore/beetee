@@ -56,6 +56,8 @@ func (info *TorrentInfo) ContinuousWrite() error {
 				fullFile = false
 				if len(PieceQueue) < 1 && val.status == 0 {
 					debugger.Println("Refilling Queue")
+					debugger.Println(val.status)
+					debugger.Println(val.have, val.index)
 					PieceQueue <- val
 				}
 

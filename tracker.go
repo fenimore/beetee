@@ -2,15 +2,7 @@ package main
 
 import "github.com/anacrolix/torrent/bencode"
 import "strconv"
-import "net"
-
-//import "bytes"
-
 import "net/http"
-
-//import "strings"
-
-//import "io/ioutil"
 
 type TrackerRequest struct {
 	InfoHash,

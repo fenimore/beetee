@@ -29,7 +29,7 @@ var ( // NOTE Global Important Variables
 	writeSync      sync.WaitGroup
 )
 
-//var continWG sync.WaitGroup
+//var continWG sync.WaitGro[up
 
 var (
 	peerId [20]byte
@@ -56,7 +56,7 @@ func main() {
 	PeerId = GenPeerId()
 
 	/* Parse Torrent*/
-	Torrent, err = ParseTorrent("torrents/archlinux.torrent")
+	Torrent, err = ParseTorrent("torrents/tom.torrent")
 	if err != nil {
 		debugger.Println(err)
 	}

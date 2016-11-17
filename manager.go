@@ -4,7 +4,7 @@ package main
 func Flood() {
 	completionSync.Add(len(Pieces))
 	debugger.Println("This many peers", len(Peers))
-	go FillQueue()
+	//go FillQueue()
 	go ConnectPeers()
 
 	for {
