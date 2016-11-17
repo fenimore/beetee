@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"os/signal"
 	"sync"
 )
 
@@ -39,6 +40,15 @@ var (
 )
 
 func main() {
+	c := make(chan os.Signal, 1) // SIGINT
+	signal.Notify(c, os.Interrupt)
+
+	go func() {
+		<-c
+		Torrent.Info.WriteData()
+		os.Exit(1)
+	}()
+
 	var err error
 
 	debugger = log.New(os.Stdout, "DEBUG: ", log.Ltime|log.Lshortfile)
@@ -47,7 +57,7 @@ func main() {
 	PeerId = GenPeerId()
 
 	/* Parse Torrent*/
-	Torrent, err = ParseTorrent("torrents/archlinux.torrent")
+	Torrent, err = ParseTorrent("torrents/tom.torrent")
 
 	//debugger.Println(meta.Info)
 
