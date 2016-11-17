@@ -8,6 +8,7 @@ func Flood() {
 	go ConnectPeers()
 
 	for {
+
 		peer := <-PeerQueue
 		go peer.AskForData()
 	}
