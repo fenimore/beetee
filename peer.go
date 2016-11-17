@@ -26,6 +26,7 @@ type Peer struct {
 	Choked     bool
 	Stop       chan bool // TODO: What?
 	ChokeWg    sync.WaitGroup
+	ListenWg   sync.WaitGroup
 	// What the Peer Has, index wise
 	Bitfield map[*Piece]bool
 	has      map[uint32]bool
@@ -86,6 +87,7 @@ func (p *Peer) ConnectToPeer() error {
 func (p *Peer) ListenToPeer() {
 	logger.Printf("Peer %s : starting to Listen\n", p.Id)
 	// Listen Loop
+	p.ListenWg.Done() // No I'm listening, go ahead and send the status message.
 	for {
 		length := make([]byte, 4)
 		_, err := io.ReadFull(p.Conn, length)

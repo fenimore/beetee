@@ -14,8 +14,9 @@ func Flood() {
 }
 
 func (p *Peer) AskForData() {
-	go p.ListenToPeer() // includes it's own goroutine
-
+	p.ListenWg.Add(1)
+	go p.ListenToPeer()
+	p.ListenWg.Wait()
 	p.sendStatusMessage(InterestedMsg)
 	p.ChokeWg.Wait()
 
