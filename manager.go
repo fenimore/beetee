@@ -30,8 +30,8 @@ func (p *Peer) AskForData() {
 		piece := <-PieceQueue
 		//debugger.Println(piece.hash, piece.index)
 		p.requestPiece(piece.index)
+		piece.status = 1
 		piece.Pending.Wait()
-
 	}
 }
 

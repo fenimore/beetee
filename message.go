@@ -185,7 +185,7 @@ BlockLoop:
 	if p.hash == sha1.Sum(buffer.Bytes()) {
 		p.data = buffer.Bytes()
 		p.have = true
-		completionSync.Done()
+		//completionSync.Done()
 		p.status = Full
 		p.Pending.Done()
 		logger.Printf("Piece at %d is downloaded", p.index)
