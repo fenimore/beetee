@@ -1,1725 +1,1214 @@
-DEBUG: 12:53:39 main.go:65: Length:  1513308160
-DEBUG: 12:53:39 main.go:66: Piece Length:  524288
-DEBUG: 12:53:39 main.go:67: Piece Len:  57740
-DEBUG: 12:53:39 main.go:68: Pieces count:  2887
-LOG: 12:53:39 tracker.go:53: TRACKER REQUEST: http://torrent.ubuntu.com:6969/announce?info_hash=%9f%91e%d9%a2%81%a9%b8%e7%82%cdQv%bb%cc%82V%fd%18q&peer_id=-TR3440-91a24W577461&uploaded=0&downloaded=0&left=1513308160&port=51413&key=60502143&numwant=80&compact=1&supportcrypto=1&event=started
-DEBUG: 12:53:39 manager.go:6: This many peers 50
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  151.29.243.28:58114
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  91.116.192.196:9420
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  98.213.102.24:55865
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  185.21.216.152:55746
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  185.149.90.4:54043
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  142.4.212.123:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  213.108.170.240:57131
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  95.211.86.13:62383
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  95.25.167.231:6881
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  192.131.44.28:64657
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  72.14.186.209:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  77.12.159.169:54413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  146.115.161.94:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  90.171.189.67:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  37.187.107.212:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  216.15.59.145:40779
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  212.80.59.96:44455
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  212.67.148.194:53664
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  75.55.120.107:51414
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  46.10.101.184:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  95.17.127.73:6881
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  62.210.181.33:6831
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  220.255.119.231:59356
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  188.36.184.27:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  203.206.87.12:54321
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  94.179.177.53:12744
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  95.211.86.29:33139
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  95.174.99.93:49653
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  83.252.176.98:1990
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  149.91.81.176:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  50.4.224.194:55000
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  188.40.52.187:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  31.208.41.158:6881
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  62.165.234.90:64915
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  86.143.211.247:19958
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  47.54.148.237:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  103.224.116.250:64711
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  58.70.67.115:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  37.195.52.153:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  81.183.35.5:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  178.237.176.172:41969
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  64.137.249.162:52632
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  213.188.127.208:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  128.70.225.73:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  78.159.59.54:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  78.223.146.135:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  100.37.108.22:29686
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  156.212.81.61:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  65.28.67.105:51413
-LOG: 12:53:39 peer.go:63: Connecting to Peer:  85.17.29.115:61020
-LOG: 12:53:39 peer.go:78: Connected to Peer:  -qB3360-rrRbw0F7dbbb
-LOG: 12:53:39 peer.go:88: Peer -qB3360-rrRbw0F7dbbb : starting to Listen
-LOG: 12:53:39 message.go:214: Sending Status Message: 2 to -qB3360-rrRbw0F7dbbb
-LOG: 12:53:39 peer.go:78: Connected to Peer:  -lt0D60-ÁãÊB#KÔ‹
-LOG: 12:53:39 peer.go:88: Peer -lt0D60-ÁãÊB#KÔ‹ : starting to Listen
-LOG: 12:53:39 message.go:214: Sending Status Message: 2 to -lt0D60-ÁãÊB#KÔ‹
-LOG: 12:53:39 message.go:119: Bitfield -qB3360-rrRbw0F7dbbb
-LOG: 12:53:39 message.go:214: Sending Status Message: 2 to -qB3360-rrRbw0F7dbbb
-LOG: 12:53:39 message.go:116: Have [0 0 1 105]
-LOG: 12:53:39 message.go:116: Have [0 0 1 75]
-LOG: 12:53:39 message.go:116: Have [0 0 0 254]
-LOG: 12:53:39 message.go:116: Have [0 0 2 22]
-LOG: 12:53:39 message.go:116: Have [0 0 1 206]
-LOG: 12:53:39 message.go:116: Have [0 0 1 94]
-LOG: 12:53:39 message.go:116: Have [0 0 2 245]
-LOG: 12:53:39 message.go:116: Have [0 0 2 81]
-LOG: 12:53:39 message.go:116: Have [0 0 2 191]
-LOG: 12:53:39 message.go:116: Have [0 0 2 169]
-LOG: 12:53:39 message.go:116: Have [0 0 3 23]
-LOG: 12:53:39 message.go:116: Have [0 0 2 225]
-LOG: 12:53:39 message.go:116: Have [0 0 2 58]
-LOG: 12:53:39 message.go:116: Have [0 0 1 37]
-LOG: 12:53:39 message.go:116: Have [0 0 1 82]
-LOG: 12:53:39 message.go:116: Have [0 0 3 57]
-LOG: 12:53:39 message.go:116: Have [0 0 2 24]
-LOG: 12:53:39 message.go:116: Have [0 0 5 120]
-LOG: 12:53:39 message.go:116: Have [0 0 3 230]
-LOG: 12:53:39 message.go:116: Have [0 0 5 46]
-LOG: 12:53:39 message.go:116: Have [0 0 5 205]
-LOG: 12:53:39 message.go:116: Have [0 0 4 146]
-LOG: 12:53:39 message.go:116: Have [0 0 5 249]
-LOG: 12:53:39 message.go:116: Have [0 0 4 48]
-LOG: 12:53:39 message.go:116: Have [0 0 6 129]
-LOG: 12:53:39 message.go:116: Have [0 0 7 220]
-LOG: 12:53:39 message.go:116: Have [0 0 6 112]
-LOG: 12:53:39 message.go:116: Have [0 0 7 224]
-LOG: 12:53:39 message.go:116: Have [0 0 7 63]
-LOG: 12:53:39 message.go:116: Have [0 0 7 67]
-LOG: 12:53:39 message.go:116: Have [0 0 9 52]
-LOG: 12:53:39 message.go:116: Have [0 0 5 193]
-LOG: 12:53:39 message.go:116: Have [0 0 3 68]
-LOG: 12:53:39 message.go:116: Have [0 0 6 207]
-LOG: 12:53:39 message.go:116: Have [0 0 7 129]
-LOG: 12:53:39 message.go:116: Have [0 0 8 6]
-LOG: 12:53:39 message.go:116: Have [0 0 8 54]
-LOG: 12:53:39 message.go:116: Have [0 0 8 103]
-LOG: 12:53:39 message.go:116: Have [0 0 9 203]
-LOG: 12:53:39 message.go:116: Have [0 0 6 184]
-LOG: 12:53:39 message.go:116: Have [0 0 8 32]
-LOG: 12:53:39 message.go:116: Have [0 0 9 114]
-LOG: 12:53:39 message.go:116: Have [0 0 9 72]
-LOG: 12:53:39 message.go:116: Have [0 0 6 4]
-LOG: 12:53:39 message.go:116: Have [0 0 11 11]
-LOG: 12:53:39 message.go:116: Have [0 0 10 161]
-LOG: 12:53:39 message.go:116: Have [0 0 9 155]
-LOG: 12:53:39 message.go:116: Have [0 0 10 81]
-LOG: 12:53:39 message.go:116: Have [0 0 9 211]
-LOG: 12:53:39 message.go:116: Have [0 0 7 18]
-LOG: 12:53:40 message.go:108: UnChoke -qB3360-rrRbw0F7dbbb
-LOG: 12:53:40 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 0
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -UT3200-∞k#~åˇÄ~D«
-LOG: 12:53:40 peer.go:88: Peer -UT3200-∞k#~åˇÄ~D« : starting to Listen
-LOG: 12:53:40 message.go:119: Bitfield -lt0D60-ÁãÊB#KÔ‹
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -lt0D60-ÁãÊB#KÔ‹
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT3200-∞k#~åˇÄ~D«
-LOG: 12:53:40 message.go:108: UnChoke -lt0D60-ÁãÊB#KÔ‹
-LOG: 12:53:40 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 1
-LOG: 12:53:40 message.go:116: Have [0 0 4 251]
-LOG: 12:53:40 message.go:119: Bitfield -UT3200-∞k#~åˇÄ~D«
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT3200-∞k#~åˇÄ~D«
-LOG: 12:53:40 message.go:116: Have [0 0 8 38]
-LOG: 12:53:40 message.go:116: Have [0 0 5 162]
-LOG: 12:53:40 message.go:116: Have [0 0 6 124]
-LOG: 12:53:40 message.go:116: Have [0 0 2 104]
-LOG: 12:53:40 message.go:116: Have [0 0 2 108]
-LOG: 12:53:40 message.go:116: Have [0 0 10 107]
-LOG: 12:53:40 message.go:116: Have [0 0 5 129]
-LOG: 12:53:40 message.go:116: Have [0 0 2 241]
-LOG: 12:53:40 message.go:116: Have [0 0 3 248]
-LOG: 12:53:40 message.go:116: Have [0 0 3 99]
-LOG: 12:53:40 message.go:116: Have [0 0 6 237]
-LOG: 12:53:40 message.go:116: Have [0 0 5 218]
-LOG: 12:53:40 message.go:116: Have [0 0 9 19]
-LOG: 12:53:40 message.go:116: Have [0 0 1 52]
-LOG: 12:53:40 message.go:116: Have [0 0 0 187]
-LOG: 12:53:40 message.go:116: Have [0 0 8 131]
-LOG: 12:53:40 message.go:116: Have [0 0 8 204]
-LOG: 12:53:40 message.go:116: Have [0 0 7 2]
-LOG: 12:53:40 message.go:116: Have [0 0 8 25]
-LOG: 12:53:40 message.go:116: Have [0 0 6 245]
-LOG: 12:53:40 message.go:116: Have [0 0 8 2]
-LOG: 12:53:40 message.go:116: Have [0 0 2 73]
-LOG: 12:53:40 message.go:116: Have [0 0 4 226]
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -lt0D30-˘ÄUîe°xñ¯ú
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -lt0D60-Ç<‰¢ds‰Dí|%
-LOG: 12:53:40 peer.go:88: Peer -lt0D30-˘ÄUîe°xñ¯ú : starting to Listen
-LOG: 12:53:40 peer.go:88: Peer -lt0D60-Ç<‰¢ds‰Dí|% : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -lt0D30-˘ÄUîe°xñ¯ú
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -lt0D60-Ç<‰¢ds‰Dí|%
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -UT2210-÷bèÚø_™ç!R
-LOG: 12:53:40 peer.go:88: Peer -UT2210-÷bèÚø_™ç!R : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT2210-÷bèÚø_™ç!R
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -lt0D60-KúHzˇï≈äß°æ
-LOG: 12:53:40 peer.go:88: Peer -lt0D60-KúHzˇï≈äß°æ : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -lt0D60-KúHzˇï≈äß°æ
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -lt0D40-Õ4í—IGlF¬⁄ %
-LOG: 12:53:40 peer.go:88: Peer -lt0D40-Õ4í—IGlF¬⁄ % : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -lt0D40-Õ4í—IGlF¬⁄ %
-LOG: 12:53:40 message.go:367: Piece at 0 is downloaded
-LOG: 12:53:40 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 2
-DEBUG: 12:53:40 manager.go:46: Error Connecting to  31.208.41.158: read tcp 10.0.19.133:49508->31.208.41.158:6881: read: connection reset by peer
-LOG: 12:53:40 message.go:367: Piece at 1 is downloaded
-LOG: 12:53:40 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 3
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2920-8veubtm1rsns
-LOG: 12:53:40 peer.go:88: Peer -TR2920-8veubtm1rsns : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2920-8veubtm1rsns
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2920-jrvjsnezxj40
-LOG: 12:53:40 peer.go:88: Peer -TR2920-jrvjsnezxj40 : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2920-jrvjsnezxj40
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -qB3310-AIKaH!q6*S5p
-LOG: 12:53:40 peer.go:88: Peer -qB3310-AIKaH!q6*S5p : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -qB3310-AIKaH!q6*S5p
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2840-i02z01p0z8ow
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -UT2210-sbó˙ÏÓﬁÆé
-LOG: 12:53:40 peer.go:88: Peer -TR2840-i02z01p0z8ow : starting to Listen
-LOG: 12:53:40 peer.go:88: Peer -UT2210-sbó˙ÏÓﬁÆé : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-i02z01p0z8ow
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT2210-sbó˙ÏÓﬁÆé
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -UT2210-÷b–|òGËöo%¸
-LOG: 12:53:40 peer.go:88: Peer -UT2210-÷b–|òGËöo%¸ : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT2210-÷b–|òGËöo%¸
-LOG: 12:53:40 message.go:116: Have [0 0 10 175]
-LOG: 12:53:40 message.go:119: Bitfield -UT2210-÷bèÚø_™ç!R
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT2210-÷bèÚø_™ç!R
-LOG: 12:53:40 message.go:116: Have [0 0 1 237]
-LOG: 12:53:40 message.go:116: Have [0 0 5 10]
-LOG: 12:53:40 message.go:116: Have [0 0 1 64]
-LOG: 12:53:40 message.go:116: Have [0 0 0 98]
-LOG: 12:53:40 message.go:116: Have [0 0 7 32]
-LOG: 12:53:40 message.go:116: Have [0 0 5 99]
-LOG: 12:53:40 message.go:116: Have [0 0 4 171]
-LOG: 12:53:40 message.go:116: Have [0 0 6 66]
-LOG: 12:53:40 message.go:116: Have [0 0 2 10]
-LOG: 12:53:40 message.go:116: Have [0 0 4 59]
-LOG: 12:53:40 message.go:116: Have [0 0 8 222]
-LOG: 12:53:40 message.go:116: Have [0 0 4 75]
-LOG: 12:53:40 message.go:116: Have [0 0 7 10]
-LOG: 12:53:40 message.go:116: Have [0 0 6 42]
-LOG: 12:53:40 message.go:116: Have [0 0 4 200]
-LOG: 12:53:40 message.go:116: Have [0 0 8 18]
-LOG: 12:53:40 message.go:116: Have [0 0 7 9]
-LOG: 12:53:40 message.go:116: Have [0 0 10 31]
-LOG: 12:53:40 message.go:116: Have [0 0 8 40]
-LOG: 12:53:40 message.go:116: Have [0 0 5 233]
-LOG: 12:53:40 message.go:116: Have [0 0 4 216]
-LOG: 12:53:40 message.go:116: Have [0 0 11 15]
-LOG: 12:53:40 message.go:116: Have [0 0 6 19]
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -UT1820-˝;.i‘D≠ÌóáÚõ
-LOG: 12:53:40 peer.go:88: Peer -UT1820-˝;.i‘D≠ÌóáÚõ : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT1820-˝;.i‘D≠ÌóáÚõ
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -UT2210-÷bÑq‘ƒwoR
-LOG: 12:53:40 peer.go:88: Peer -UT2210-÷bÑq‘ƒwoR : starting to Listen
-LOG: 12:53:40 message.go:119: Bitfield -lt0D30-˘ÄUîe°xñ¯ú
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -lt0D30-˘ÄUîe°xñ¯ú
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT2210-÷bÑq‘ƒwoR
-LOG: 12:53:40 message.go:119: Bitfield -lt0D60-Ç<‰¢ds‰Dí|%
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -lt0D60-Ç<‰¢ds‰Dí|%
-LOG: 12:53:40 message.go:119: Bitfield -lt0D60-KúHzˇï≈äß°æ
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -lt0D60-KúHzˇï≈äß°æ
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -DE13D0-Ej.3Sv8FJ6LG
-LOG: 12:53:40 peer.go:88: Peer -DE13D0-Ej.3Sv8FJ6LG : starting to Listen
-LOG: 12:53:40 message.go:119: Bitfield -DE13D0-Ej.3Sv8FJ6LG
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -DE13D0-Ej.3Sv8FJ6LG
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -DE13D0-Ej.3Sv8FJ6LG
-LOG: 12:53:40 message.go:119: Bitfield -lt0D40-Õ4í—IGlF¬⁄ %
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -lt0D40-Õ4í—IGlF¬⁄ %
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -DE13C0-AKSCRg~e*DMg
-LOG: 12:53:40 peer.go:88: Peer -DE13C0-AKSCRg~e*DMg : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -DE13C0-AKSCRg~e*DMg
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2820-e7i5p6gcgx2q
-LOG: 12:53:40 peer.go:88: Peer -TR2820-e7i5p6gcgx2q : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2820-e7i5p6gcgx2q
-LOG: 12:53:40 message.go:367: Piece at 2 is downloaded
-LOG: 12:53:40 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 4
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -UT1820-˝;2£òCFô˘‰·a
-LOG: 12:53:40 peer.go:88: Peer -UT1820-˝;2£òCFô˘‰·a : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT1820-˝;2£òCFô˘‰·a
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -DE13C0-qPM51wBHC3m8
-LOG: 12:53:40 peer.go:88: Peer -DE13C0-qPM51wBHC3m8 : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -DE13C0-qPM51wBHC3m8
-LOG: 12:53:40 message.go:116: Have [0 0 0 193]
-LOG: 12:53:40 message.go:119: Bitfield -qB3310-AIKaH!q6*S5p
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -qB3310-AIKaH!q6*S5p
-LOG: 12:53:40 message.go:116: Have [0 0 0 55]
-LOG: 12:53:40 message.go:116: Have [0 0 0 96]
-LOG: 12:53:40 message.go:116: Have [0 0 0 147]
-LOG: 12:53:40 message.go:116: Have [0 0 0 226]
-LOG: 12:53:40 message.go:116: Have [0 0 0 195]
-LOG: 12:53:40 message.go:116: Have [0 0 1 48]
-LOG: 12:53:40 message.go:116: Have [0 0 1 85]
-LOG: 12:53:40 message.go:116: Have [0 0 3 34]
-LOG: 12:53:40 message.go:116: Have [0 0 1 188]
-LOG: 12:53:40 message.go:116: Have [0 0 2 33]
-LOG: 12:53:40 message.go:116: Have [0 0 2 130]
-LOG: 12:53:40 message.go:116: Have [0 0 2 140]
-LOG: 12:53:40 message.go:116: Have [0 0 2 244]
-LOG: 12:53:40 message.go:116: Have [0 0 3 27]
-LOG: 12:53:40 message.go:116: Have [0 0 3 28]
-LOG: 12:53:40 message.go:116: Have [0 0 3 120]
-LOG: 12:53:40 message.go:116: Have [0 0 3 38]
-LOG: 12:53:40 message.go:116: Have [0 0 3 41]
-LOG: 12:53:40 message.go:116: Have [0 0 3 84]
-LOG: 12:53:40 message.go:116: Have [0 0 3 147]
-LOG: 12:53:40 message.go:116: Have [0 0 3 128]
-LOG: 12:53:40 message.go:116: Have [0 0 3 188]
-LOG: 12:53:40 message.go:116: Have [0 0 3 220]
-LOG: 12:53:40 message.go:116: Have [0 0 5 155]
-LOG: 12:53:40 message.go:116: Have [0 0 4 22]
-LOG: 12:53:40 message.go:116: Have [0 0 4 43]
-LOG: 12:53:40 message.go:116: Have [0 0 4 88]
-LOG: 12:53:40 message.go:116: Have [0 0 4 90]
-LOG: 12:53:40 message.go:116: Have [0 0 4 179]
-LOG: 12:53:40 message.go:116: Have [0 0 4 209]
-LOG: 12:53:40 message.go:116: Have [0 0 5 42]
-LOG: 12:53:40 message.go:116: Have [0 0 5 135]
-LOG: 12:53:40 message.go:116: Have [0 0 6 116]
-LOG: 12:53:40 message.go:116: Have [0 0 5 239]
-LOG: 12:53:40 message.go:116: Have [0 0 6 35]
-LOG: 12:53:40 message.go:116: Have [0 0 6 39]
-LOG: 12:53:40 message.go:116: Have [0 0 6 237]
-LOG: 12:53:40 message.go:116: Have [0 0 6 182]
-LOG: 12:53:40 message.go:116: Have [0 0 7 46]
-LOG: 12:53:40 message.go:116: Have [0 0 7 107]
-LOG: 12:53:40 message.go:116: Have [0 0 11 26]
-LOG: 12:53:40 message.go:116: Have [0 0 9 40]
-LOG: 12:53:40 message.go:116: Have [0 0 8 158]
-LOG: 12:53:40 message.go:116: Have [0 0 8 221]
-LOG: 12:53:40 message.go:116: Have [0 0 9 38]
-LOG: 12:53:40 message.go:116: Have [0 0 10 37]
-LOG: 12:53:40 message.go:116: Have [0 0 9 211]
-LOG: 12:53:40 message.go:116: Have [0 0 10 89]
-LOG: 12:53:40 message.go:116: Have [0 0 8 152]
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2920-zwfr0d6xfqnr
-LOG: 12:53:40 peer.go:88: Peer -TR2920-zwfr0d6xfqnr : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2920-zwfr0d6xfqnr
-LOG: 12:53:40 message.go:116: Have [0 0 10 203]
-LOG: 12:53:40 message.go:116: Have [0 0 8 250]
-LOG: 12:53:40 message.go:119: Bitfield -UT2210-sbó˙ÏÓﬁÆé
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT2210-sbó˙ÏÓﬁÆé
-LOG: 12:53:40 message.go:116: Have [0 0 9 7]
-LOG: 12:53:40 message.go:116: Have [0 0 6 45]
-LOG: 12:53:40 message.go:116: Have [0 0 0 218]
-LOG: 12:53:40 message.go:116: Have [0 0 5 127]
-LOG: 12:53:40 message.go:116: Have [0 0 7 164]
-LOG: 12:53:40 message.go:116: Have [0 0 7 78]
-LOG: 12:53:40 message.go:116: Have [0 0 9 215]
-LOG: 12:53:40 message.go:116: Have [0 0 6 145]
-LOG: 12:53:40 message.go:116: Have [0 0 5 237]
-LOG: 12:53:40 message.go:116: Have [0 0 0 174]
-LOG: 12:53:40 message.go:116: Have [0 0 8 2]
-LOG: 12:53:40 message.go:116: Have [0 0 5 74]
-LOG: 12:53:40 message.go:116: Have [0 0 4 17]
-LOG: 12:53:40 message.go:116: Have [0 0 1 138]
-LOG: 12:53:40 message.go:116: Have [0 0 0 42]
-LOG: 12:53:40 message.go:116: Have [0 0 5 36]
-LOG: 12:53:40 message.go:116: Have [0 0 5 30]
-LOG: 12:53:40 message.go:116: Have [0 0 6 228]
-LOG: 12:53:40 message.go:116: Have [0 0 1 34]
-LOG: 12:53:40 message.go:116: Have [0 0 4 1]
-LOG: 12:53:40 message.go:116: Have [0 0 2 20]
-LOG: 12:53:40 message.go:116: Have [0 0 8 230]
-LOG: 12:53:40 message.go:116: Have [0 0 6 35]
-LOG: 12:53:40 message.go:119: Bitfield -UT2210-÷b–|òGËöo%¸
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT2210-÷b–|òGËöo%¸
-LOG: 12:53:40 message.go:116: Have [0 0 5 51]
-LOG: 12:53:40 message.go:116: Have [0 0 3 6]
-LOG: 12:53:40 message.go:116: Have [0 0 7 70]
-LOG: 12:53:40 message.go:116: Have [0 0 0 158]
-LOG: 12:53:40 message.go:116: Have [0 0 10 181]
-LOG: 12:53:40 message.go:116: Have [0 0 2 34]
-LOG: 12:53:40 message.go:116: Have [0 0 8 135]
-LOG: 12:53:40 message.go:116: Have [0 0 0 243]
-LOG: 12:53:40 message.go:116: Have [0 0 0 76]
-LOG: 12:53:40 message.go:116: Have [0 0 5 58]
-LOG: 12:53:40 message.go:116: Have [0 0 2 131]
-LOG: 12:53:40 message.go:116: Have [0 0 9 188]
-LOG: 12:53:40 message.go:116: Have [0 0 2 158]
-LOG: 12:53:40 message.go:116: Have [0 0 7 56]
-LOG: 12:53:40 message.go:116: Have [0 0 8 111]
-LOG: 12:53:40 message.go:116: Have [0 0 3 43]
-LOG: 12:53:40 message.go:116: Have [0 0 7 186]
-LOG: 12:53:40 message.go:116: Have [0 0 4 145]
-LOG: 12:53:40 message.go:116: Have [0 0 1 196]
-LOG: 12:53:40 message.go:116: Have [0 0 3 141]
-LOG: 12:53:40 message.go:116: Have [0 0 5 178]
-LOG: 12:53:40 message.go:116: Have [0 0 5 245]
-LOG: 12:53:40 message.go:116: Have [0 0 2 167]
-LOG: 12:53:40 message.go:108: UnChoke -lt0D30-˘ÄUîe°xñ¯ú
-LOG: 12:53:40 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 5
-LOG: 12:53:40 message.go:108: UnChoke -lt0D60-Ç<‰¢ds‰Dí|%
-LOG: 12:53:40 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 6
-LOG: 12:53:40 message.go:367: Piece at 3 is downloaded
-LOG: 12:53:40 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 7
-DEBUG: 12:53:40 manager.go:46: Error Connecting to  58.70.67.115: EOF
-LOG: 12:53:40 message.go:108: UnChoke -DE13D0-Ej.3Sv8FJ6LG
-LOG: 12:53:40 message.go:323: Asking -DE13D0-Ej.3Sv8FJ6LG for piece 8
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2840-zb1cym02clzv
-LOG: 12:53:40 peer.go:78: Connected to Peer:  TIX0248-a8g8g3h7i1a3
-LOG: 12:53:40 peer.go:88: Peer TIX0248-a8g8g3h7i1a3 : starting to Listen
-DEBUG: 12:53:40 peer.go:96: Error Reading Length TIX0248-a8g8g3h7i1a3, Stopping: EOF
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to TIX0248-a8g8g3h7i1a3
-LOG: 12:53:40 peer.go:88: Peer -TR2840-zb1cym02clzv : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-zb1cym02clzv
-LOG: 12:53:40 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 9
-LOG: 12:53:40 message.go:108: UnChoke -lt0D60-KúHzˇï≈äß°æ
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2840-z86yg6aqcdms
-LOG: 12:53:40 message.go:108: UnChoke -lt0D40-Õ4í—IGlF¬⁄ %
-LOG: 12:53:40 peer.go:88: Peer -TR2840-z86yg6aqcdms : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-z86yg6aqcdms
-LOG: 12:53:40 message.go:116: Have [0 0 5 13]
-LOG: 12:53:40 message.go:116: Have [0 0 3 100]
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2840-edjmvi3qftl5
-LOG: 12:53:40 peer.go:88: Peer -TR2840-edjmvi3qftl5 : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-edjmvi3qftl5
-LOG: 12:53:40 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 10
-LOG: 12:53:40 message.go:119: Bitfield -UT1820-˝;.i‘D≠ÌóáÚõ
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT1820-˝;.i‘D≠ÌóáÚõ
-LOG: 12:53:40 message.go:116: Have [0 0 10 202]
-LOG: 12:53:40 message.go:116: Have [0 0 5 161]
-LOG: 12:53:40 message.go:116: Have [0 0 8 70]
-LOG: 12:53:40 message.go:116: Have [0 0 8 137]
-LOG: 12:53:40 message.go:116: Have [0 0 5 62]
-LOG: 12:53:40 message.go:116: Have [0 0 6 30]
-LOG: 12:53:40 message.go:116: Have [0 0 10 98]
-LOG: 12:53:40 message.go:116: Have [0 0 5 108]
-LOG: 12:53:40 message.go:116: Have [0 0 7 170]
-LOG: 12:53:40 message.go:116: Have [0 0 8 244]
-LOG: 12:53:40 message.go:116: Have [0 0 8 196]
-LOG: 12:53:40 message.go:116: Have [0 0 0 225]
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -qB3370-IhOTWTM3-XTq
-LOG: 12:53:40 message.go:116: Have [0 0 8 143]
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2920-u9ofnfexj06s
-LOG: 12:53:40 peer.go:88: Peer -TR2920-u9ofnfexj06s : starting to Listen
-LOG: 12:53:40 message.go:116: Have [0 0 5 254]
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2920-u9ofnfexj06s
-LOG: 12:53:40 message.go:116: Have [0 0 6 107]
-LOG: 12:53:40 message.go:116: Have [0 0 8 100]
-LOG: 12:53:40 message.go:116: Have [0 0 7 226]
-LOG: 12:53:40 message.go:116: Have [0 0 1 4]
-LOG: 12:53:40 message.go:116: Have [0 0 8 226]
-LOG: 12:53:40 message.go:116: Have [0 0 1 109]
-LOG: 12:53:40 message.go:116: Have [0 0 9 163]
-LOG: 12:53:40 message.go:116: Have [0 0 1 204]
-LOG: 12:53:40 message.go:116: Have [0 0 10 12]
-LOG: 12:53:40 message.go:116: Have [0 0 0 12]
-LOG: 12:53:40 message.go:116: Have [0 0 7 32]
-LOG: 12:53:40 message.go:116: Have [0 0 4 155]
-LOG: 12:53:40 message.go:116: Have [0 0 2 46]
-LOG: 12:53:40 message.go:116: Have [0 0 5 139]
-LOG: 12:53:40 message.go:116: Have [0 0 4 88]
-LOG: 12:53:40 message.go:116: Have [0 0 2 254]
-LOG: 12:53:40 message.go:116: Have [0 0 1 192]
-LOG: 12:53:40 message.go:116: Have [0 0 7 194]
-LOG: 12:53:40 message.go:116: Have [0 0 10 68]
-LOG: 12:53:40 message.go:116: Have [0 0 2 42]
-LOG: 12:53:40 message.go:116: Have [0 0 6 97]
-LOG: 12:53:40 message.go:116: Have [0 0 2 27]
-LOG: 12:53:40 message.go:116: Have [0 0 5 74]
-LOG: 12:53:40 message.go:116: Have [0 0 0 9]
-LOG: 12:53:40 peer.go:88: Peer -qB3370-IhOTWTM3-XTq : starting to Listen
-LOG: 12:53:40 message.go:116: Have [0 0 1 57]
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -qB3370-IhOTWTM3-XTq
-LOG: 12:53:40 message.go:116: Have [0 0 3 19]
-LOG: 12:53:40 message.go:116: Have [0 0 3 93]
-LOG: 12:53:40 message.go:119: Bitfield -UT2210-÷bÑq‘ƒwoR
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT2210-÷bÑq‘ƒwoR
-LOG: 12:53:40 message.go:116: Have [0 0 1 214]
-LOG: 12:53:40 message.go:116: Have [0 0 8 15]
-LOG: 12:53:40 message.go:116: Have [0 0 3 77]
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2920-hb1rug930be5
-LOG: 12:53:40 peer.go:88: Peer -TR2920-hb1rug930be5 : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2920-hb1rug930be5
-LOG: 12:53:40 message.go:116: Have [0 0 9 104]
-LOG: 12:53:40 message.go:116: Have [0 0 8 187]
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2840-uo289lmrdvo5
-LOG: 12:53:40 peer.go:88: Peer -TR2840-uo289lmrdvo5 : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-uo289lmrdvo5
-LOG: 12:53:40 message.go:367: Piece at 4 is downloaded
-LOG: 12:53:40 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 11
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -DE13C0-QS~IIjV4bczQ
-LOG: 12:53:40 peer.go:88: Peer -DE13C0-QS~IIjV4bczQ : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -DE13C0-QS~IIjV4bczQ
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2840-brfog0es4qlu
-LOG: 12:53:40 peer.go:88: Peer -TR2840-brfog0es4qlu : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-brfog0es4qlu
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -qB3370-K6cCkzZ.kBjQ
-LOG: 12:53:40 peer.go:88: Peer -qB3370-K6cCkzZ.kBjQ : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -qB3370-K6cCkzZ.kBjQ
-LOG: 12:53:40 message.go:108: UnChoke -UT2210-sbó˙ÏÓﬁÆé
-LOG: 12:53:40 message.go:323: Asking -UT2210-sbó˙ÏÓﬁÆé for piece 12
-LOG: 12:53:40 message.go:119: Bitfield -DE13C0-qPM51wBHC3m8
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -DE13C0-qPM51wBHC3m8
-LOG: 12:53:40 message.go:116: Have [0 0 0 119]
-LOG: 12:53:40 message.go:119: Bitfield -UT1820-˝;2£òCFô˘‰·a
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -UT1820-˝;2£òCFô˘‰·a
-LOG: 12:53:40 message.go:116: Have [0 0 6 168]
-LOG: 12:53:40 message.go:116: Have [0 0 0 96]
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2820-wppmx7a3tfpq
-LOG: 12:53:40 peer.go:88: Peer -TR2820-wppmx7a3tfpq : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2820-wppmx7a3tfpq
-LOG: 12:53:40 message.go:116: Have [0 0 9 152]
-LOG: 12:53:40 message.go:116: Have [0 0 10 58]
-LOG: 12:53:40 message.go:116: Have [0 0 9 42]
-LOG: 12:53:40 message.go:116: Have [0 0 4 151]
-LOG: 12:53:40 message.go:116: Have [0 0 10 119]
-LOG: 12:53:40 message.go:116: Have [0 0 8 163]
-LOG: 12:53:40 message.go:116: Have [0 0 1 187]
-LOG: 12:53:40 message.go:116: Have [0 0 5 22]
-LOG: 12:53:40 message.go:116: Have [0 0 1 246]
-LOG: 12:53:40 message.go:116: Have [0 0 3 76]
-LOG: 12:53:40 message.go:116: Have [0 0 8 252]
-LOG: 12:53:40 message.go:116: Have [0 0 2 168]
-LOG: 12:53:40 message.go:116: Have [0 0 3 254]
-LOG: 12:53:40 message.go:116: Have [0 0 9 209]
-LOG: 12:53:40 message.go:116: Have [0 0 1 195]
-LOG: 12:53:40 message.go:116: Have [0 0 5 90]
-LOG: 12:53:40 message.go:116: Have [0 0 1 69]
-LOG: 12:53:40 message.go:116: Have [0 0 4 149]
-LOG: 12:53:40 message.go:116: Have [0 0 3 150]
-LOG: 12:53:40 message.go:116: Have [0 0 10 10]
-LOG: 12:53:40 message.go:116: Have [0 0 9 230]
-LOG: 12:53:40 message.go:367: Piece at 7 is downloaded
-LOG: 12:53:40 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 13
-LOG: 12:53:40 message.go:119: Bitfield -TR2920-8veubtm1rsns
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2920-8veubtm1rsns
-LOG: 12:53:40 message.go:108: UnChoke -UT3200-∞k#~åˇÄ~D«
-LOG: 12:53:40 message.go:323: Asking -UT3200-∞k#~åˇÄ~D« for piece 14
-LOG: 12:53:40 message.go:367: Piece at 11 is downloaded
-LOG: 12:53:40 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 15
-LOG: 12:53:40 message.go:108: UnChoke -UT2210-÷b–|òGËöo%¸
-LOG: 12:53:40 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 16
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2840-nkgnf6o3t4b6
-LOG: 12:53:40 peer.go:88: Peer -TR2840-nkgnf6o3t4b6 : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-nkgnf6o3t4b6
-LOG: 12:53:40 message.go:119: Bitfield -TR2840-nkgnf6o3t4b6
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-nkgnf6o3t4b6
-LOG: 12:53:40 message.go:119: Bitfield -TR2840-i02z01p0z8ow
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-i02z01p0z8ow
-LOG: 12:53:40 message.go:119: Bitfield -TR2920-jrvjsnezxj40
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2920-jrvjsnezxj40
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2840-5zkpd4h5veno
-LOG: 12:53:40 peer.go:88: Peer -TR2840-5zkpd4h5veno : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-5zkpd4h5veno
-LOG: 12:53:40 message.go:116: Have [0 0 11 12]
-LOG: 12:53:40 message.go:119: Bitfield -qB3370-IhOTWTM3-XTq
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -qB3370-IhOTWTM3-XTq
-LOG: 12:53:40 message.go:116: Have [0 0 0 43]
-LOG: 12:53:40 message.go:116: Have [0 0 0 62]
-LOG: 12:53:40 message.go:116: Have [0 0 0 158]
-LOG: 12:53:40 message.go:116: Have [0 0 1 86]
-LOG: 12:53:40 message.go:116: Have [0 0 1 127]
-LOG: 12:53:40 message.go:116: Have [0 0 1 155]
-LOG: 12:53:40 message.go:116: Have [0 0 1 194]
-LOG: 12:53:40 message.go:116: Have [0 0 1 249]
-LOG: 12:53:40 message.go:116: Have [0 0 2 31]
-LOG: 12:53:40 message.go:116: Have [0 0 2 73]
-LOG: 12:53:40 message.go:116: Have [0 0 2 93]
-LOG: 12:53:40 message.go:116: Have [0 0 2 102]
-LOG: 12:53:40 message.go:116: Have [0 0 2 181]
-LOG: 12:53:40 message.go:116: Have [0 0 2 237]
-LOG: 12:53:40 message.go:116: Have [0 0 3 104]
-LOG: 12:53:40 message.go:116: Have [0 0 3 167]
-LOG: 12:53:40 message.go:116: Have [0 0 4 5]
-LOG: 12:53:40 message.go:116: Have [0 0 4 49]
-LOG: 12:53:40 message.go:116: Have [0 0 4 52]
-LOG: 12:53:40 message.go:116: Have [0 0 4 60]
-LOG: 12:53:40 message.go:116: Have [0 0 4 65]
-LOG: 12:53:40 message.go:116: Have [0 0 5 3]
-LOG: 12:53:40 message.go:116: Have [0 0 5 91]
-LOG: 12:53:40 message.go:116: Have [0 0 5 217]
-LOG: 12:53:40 message.go:116: Have [0 0 6 125]
-LOG: 12:53:40 message.go:116: Have [0 0 6 164]
-LOG: 12:53:40 message.go:116: Have [0 0 6 186]
-LOG: 12:53:40 message.go:116: Have [0 0 6 227]
-LOG: 12:53:40 message.go:116: Have [0 0 7 10]
-LOG: 12:53:40 message.go:116: Have [0 0 7 49]
-LOG: 12:53:40 message.go:116: Have [0 0 7 94]
-LOG: 12:53:40 message.go:116: Have [0 0 7 112]
-LOG: 12:53:40 message.go:116: Have [0 0 7 238]
-LOG: 12:53:40 message.go:116: Have [0 0 7 240]
-LOG: 12:53:40 message.go:116: Have [0 0 7 242]
-LOG: 12:53:40 message.go:116: Have [0 0 8 14]
-LOG: 12:53:40 message.go:116: Have [0 0 8 165]
-LOG: 12:53:40 message.go:116: Have [0 0 8 183]
-LOG: 12:53:40 message.go:116: Have [0 0 9 180]
-LOG: 12:53:40 message.go:116: Have [0 0 9 239]
-LOG: 12:53:40 message.go:116: Have [0 0 9 242]
-LOG: 12:53:40 message.go:116: Have [0 0 10 20]
-LOG: 12:53:40 message.go:116: Have [0 0 10 79]
-LOG: 12:53:40 message.go:116: Have [0 0 10 87]
-LOG: 12:53:40 message.go:116: Have [0 0 10 152]
-LOG: 12:53:40 message.go:116: Have [0 0 10 223]
-LOG: 12:53:40 message.go:116: Have [0 0 10 225]
-LOG: 12:53:40 message.go:116: Have [0 0 10 244]
-LOG: 12:53:40 message.go:116: Have [0 0 10 251]
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2840-szozatvacjzk
-LOG: 12:53:40 peer.go:88: Peer -TR2840-szozatvacjzk : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-szozatvacjzk
-LOG: 12:53:40 message.go:119: Bitfield -DE13C0-QS~IIjV4bczQ
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -DE13C0-QS~IIjV4bczQ
-LOG: 12:53:40 message.go:108: UnChoke -UT1820-˝;2£òCFô˘‰·a
-LOG: 12:53:40 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 17
-LOG: 12:53:40 message.go:119: Bitfield -DE13C0-AKSCRg~e*DMg
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -DE13C0-AKSCRg~e*DMg
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2820-f7rrkdsftquf
-LOG: 12:53:40 peer.go:88: Peer -TR2820-f7rrkdsftquf : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2820-f7rrkdsftquf
-LOG: 12:53:40 message.go:367: Piece at 15 is downloaded
-LOG: 12:53:40 message.go:116: Have [0 0 11 21]
-LOG: 12:53:40 message.go:119: Bitfield -qB3370-K6cCkzZ.kBjQ
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -qB3370-K6cCkzZ.kBjQ
-LOG: 12:53:40 message.go:116: Have [0 0 0 41]
-LOG: 12:53:40 message.go:116: Have [0 0 0 94]
-LOG: 12:53:40 message.go:116: Have [0 0 0 191]
-LOG: 12:53:40 message.go:116: Have [0 0 1 56]
-LOG: 12:53:40 message.go:116: Have [0 0 1 118]
-LOG: 12:53:40 message.go:116: Have [0 0 1 151]
-LOG: 12:53:40 message.go:116: Have [0 0 1 193]
-LOG: 12:53:40 message.go:116: Have [0 0 1 254]
-LOG: 12:53:40 message.go:116: Have [0 0 2 53]
-LOG: 12:53:40 message.go:116: Have [0 0 2 57]
-LOG: 12:53:40 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 18
-LOG: 12:53:40 message.go:116: Have [0 0 2 108]
-LOG: 12:53:40 message.go:119: Bitfield -TR2820-e7i5p6gcgx2q
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2820-e7i5p6gcgx2q
-LOG: 12:53:40 message.go:116: Have [0 0 2 155]
-LOG: 12:53:40 message.go:116: Have [0 0 2 195]
-LOG: 12:53:40 message.go:116: Have [0 0 2 248]
-LOG: 12:53:40 message.go:116: Have [0 0 3 40]
-LOG: 12:53:40 message.go:116: Have [0 0 3 195]
-LOG: 12:53:40 message.go:116: Have [0 0 3 196]
-LOG: 12:53:40 message.go:116: Have [0 0 3 209]
-LOG: 12:53:40 message.go:116: Have [0 0 4 15]
-LOG: 12:53:40 message.go:116: Have [0 0 4 70]
-LOG: 12:53:40 message.go:116: Have [0 0 4 209]
-LOG: 12:53:40 message.go:116: Have [0 0 4 222]
-LOG: 12:53:40 message.go:116: Have [0 0 4 231]
-LOG: 12:53:40 message.go:116: Have [0 0 5 1]
-LOG: 12:53:40 message.go:116: Have [0 0 5 80]
-LOG: 12:53:40 message.go:116: Have [0 0 5 99]
-LOG: 12:53:40 message.go:116: Have [0 0 5 134]
-LOG: 12:53:40 message.go:116: Have [0 0 6 15]
-LOG: 12:53:40 message.go:116: Have [0 0 6 111]
-LOG: 12:53:40 message.go:116: Have [0 0 6 137]
-LOG: 12:53:40 message.go:116: Have [0 0 6 168]
-LOG: 12:53:40 message.go:116: Have [0 0 7 66]
-LOG: 12:53:40 message.go:116: Have [0 0 7 165]
-LOG: 12:53:40 message.go:116: Have [0 0 7 174]
-LOG: 12:53:40 message.go:116: Have [0 0 7 238]
-LOG: 12:53:40 message.go:116: Have [0 0 8 38]
-LOG: 12:53:40 message.go:116: Have [0 0 8 66]
-LOG: 12:53:40 message.go:116: Have [0 0 8 93]
-LOG: 12:53:40 message.go:116: Have [0 0 8 169]
-LOG: 12:53:40 message.go:116: Have [0 0 8 218]
-LOG: 12:53:40 message.go:116: Have [0 0 8 227]
-LOG: 12:53:40 message.go:116: Have [0 0 8 250]
-LOG: 12:53:40 message.go:116: Have [0 0 9 3]
-LOG: 12:53:40 message.go:116: Have [0 0 9 30]
-LOG: 12:53:40 message.go:116: Have [0 0 9 117]
-LOG: 12:53:40 message.go:116: Have [0 0 9 212]
-LOG: 12:53:40 message.go:116: Have [0 0 10 155]
-LOG: 12:53:40 message.go:116: Have [0 0 10 162]
-LOG: 12:53:40 message.go:116: Have [0 0 10 168]
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2840-k9p2k4efjesa
-LOG: 12:53:40 peer.go:88: Peer -TR2840-k9p2k4efjesa : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-k9p2k4efjesa
-LOG: 12:53:40 message.go:119: Bitfield -TR2920-zwfr0d6xfqnr
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2920-zwfr0d6xfqnr
-LOG: 12:53:40 message.go:367: Piece at 13 is downloaded
-LOG: 12:53:40 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 19
-LOG: 12:53:40 peer.go:78: Connected to Peer:  -TR2840-g8l1bu0ntbak
-LOG: 12:53:40 peer.go:88: Peer -TR2840-g8l1bu0ntbak : starting to Listen
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-g8l1bu0ntbak
-LOG: 12:53:40 message.go:119: Bitfield -TR2840-brfog0es4qlu
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-brfog0es4qlu
-LOG: 12:53:40 message.go:119: Bitfield -TR2840-z86yg6aqcdms
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-z86yg6aqcdms
-LOG: 12:53:40 message.go:119: Bitfield -TR2840-zb1cym02clzv
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-zb1cym02clzv
-LOG: 12:53:40 message.go:119: Bitfield -TR2840-edjmvi3qftl5
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2840-edjmvi3qftl5
-LOG: 12:53:40 message.go:119: Bitfield -TR2920-hb1rug930be5
-LOG: 12:53:40 message.go:214: Sending Status Message: 2 to -TR2920-hb1rug930be5
-LOG: 12:53:41 message.go:119: Bitfield -TR2920-u9ofnfexj06s
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2920-u9ofnfexj06s
-LOG: 12:53:41 peer.go:78: Connected to Peer:  -TR2820-2xffpt6n8rr6
-LOG: 12:53:41 peer.go:88: Peer -TR2820-2xffpt6n8rr6 : starting to Listen
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2820-2xffpt6n8rr6
-LOG: 12:53:41 message.go:119: Bitfield -TR2840-uo289lmrdvo5
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2840-uo289lmrdvo5
-LOG: 12:53:41 message.go:367: Piece at 18 is downloaded
-LOG: 12:53:41 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 20
-LOG: 12:53:41 message.go:119: Bitfield -TR2820-wppmx7a3tfpq
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2820-wppmx7a3tfpq
-LOG: 12:53:41 peer.go:78: Connected to Peer:  -TR2510-ykjzdtg87s8z
-LOG: 12:53:41 peer.go:88: Peer -TR2510-ykjzdtg87s8z : starting to Listen
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2510-ykjzdtg87s8z
-LOG: 12:53:41 message.go:108: UnChoke -qB3370-K6cCkzZ.kBjQ
-LOG: 12:53:41 message.go:323: Asking -qB3370-K6cCkzZ.kBjQ for piece 21
-LOG: 12:53:41 message.go:119: Bitfield -TR2840-5zkpd4h5veno
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2840-5zkpd4h5veno
-LOG: 12:53:41 message.go:108: UnChoke -qB3370-IhOTWTM3-XTq
-LOG: 12:53:41 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 22
-LOG: 12:53:41 message.go:108: UnChoke -DE13C0-QS~IIjV4bczQ
-LOG: 12:53:41 message.go:323: Asking -DE13C0-QS~IIjV4bczQ for piece 23
-LOG: 12:53:41 message.go:119: Bitfield -TR2840-szozatvacjzk
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2840-szozatvacjzk
-LOG: 12:53:41 message.go:119: Bitfield -TR2820-2xffpt6n8rr6
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2820-2xffpt6n8rr6
-LOG: 12:53:41 message.go:119: Bitfield -TR2840-g8l1bu0ntbak
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2840-g8l1bu0ntbak
-LOG: 12:53:41 message.go:367: Piece at 5 is downloaded
-LOG: 12:53:41 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 24
-LOG: 12:53:41 peer.go:78: Connected to Peer:  -TR2820-xll43upbzlnp
-LOG: 12:53:41 peer.go:88: Peer -TR2820-xll43upbzlnp : starting to Listen
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2820-xll43upbzlnp
-LOG: 12:53:41 peer.go:78: Connected to Peer:  -TR2920-5ip76u7xzpj6
-LOG: 12:53:41 peer.go:88: Peer -TR2920-5ip76u7xzpj6 : starting to Listen
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2920-5ip76u7xzpj6
-LOG: 12:53:41 peer.go:78: Connected to Peer:  -TR2820-3yrpisemhiug
-LOG: 12:53:41 peer.go:88: Peer -TR2820-3yrpisemhiug : starting to Listen
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2820-3yrpisemhiug
-LOG: 12:53:41 message.go:367: Piece at 19 is downloaded
-LOG: 12:53:41 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 25
-LOG: 12:53:41 message.go:367: Piece at 20 is downloaded
-LOG: 12:53:41 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 26
-LOG: 12:53:41 message.go:119: Bitfield -TR2820-xll43upbzlnp
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2820-xll43upbzlnp
-LOG: 12:53:41 message.go:119: Bitfield -TR2820-f7rrkdsftquf
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2820-f7rrkdsftquf
-LOG: 12:53:41 message.go:108: UnChoke -DE13C0-AKSCRg~e*DMg
-LOG: 12:53:41 message.go:323: Asking -DE13C0-AKSCRg~e*DMg for piece 27
-LOG: 12:53:41 message.go:119: Bitfield -TR2840-k9p2k4efjesa
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2840-k9p2k4efjesa
-LOG: 12:53:41 message.go:108: UnChoke -UT2210-÷bÑq‘ƒwoR
-LOG: 12:53:41 message.go:323: Asking -UT2210-÷bÑq‘ƒwoR for piece 28
-LOG: 12:53:41 peer.go:78: Connected to Peer:  -lt0D60-`jñ=Ö{◊»›:È
-LOG: 12:53:41 peer.go:88: Peer -lt0D60-`jñ=Ö{◊»›:È : starting to Listen
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -lt0D60-`jñ=Ö{◊»›:È
-LOG: 12:53:41 peer.go:78: Connected to Peer:  -TR2840-87bbdxayabyy
-LOG: 12:53:41 peer.go:88: Peer -TR2840-87bbdxayabyy : starting to Listen
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2840-87bbdxayabyy
-LOG: 12:53:41 message.go:367: Piece at 9 is downloaded
-LOG: 12:53:41 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 29
-LOG: 12:53:41 message.go:119: Bitfield -lt0D60-`jñ=Ö{◊»›:È
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -lt0D60-`jñ=Ö{◊»›:È
-LOG: 12:53:41 message.go:119: Bitfield -TR2820-3yrpisemhiug
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2820-3yrpisemhiug
-LOG: 12:53:41 message.go:119: Bitfield -TR2510-ykjzdtg87s8z
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2510-ykjzdtg87s8z
-LOG: 12:53:41 message.go:367: Piece at 25 is downloaded
-LOG: 12:53:41 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 30
-LOG: 12:53:41 message.go:367: Piece at 26 is downloaded
-LOG: 12:53:41 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 31
-LOG: 12:53:41 message.go:367: Piece at 6 is downloaded
-LOG: 12:53:41 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 32
-LOG: 12:53:41 message.go:119: Bitfield -TR2920-5ip76u7xzpj6
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2920-5ip76u7xzpj6
-LOG: 12:53:41 message.go:108: UnChoke -TR2820-e7i5p6gcgx2q
-LOG: 12:53:41 message.go:323: Asking -TR2820-e7i5p6gcgx2q for piece 33
-LOG: 12:53:41 message.go:108: UnChoke -TR2920-zwfr0d6xfqnr
-LOG: 12:53:41 message.go:323: Asking -TR2920-zwfr0d6xfqnr for piece 34
-LOG: 12:53:41 message.go:367: Piece at 24 is downloaded
-LOG: 12:53:41 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 35
-LOG: 12:53:41 message.go:119: Bitfield -TR2840-87bbdxayabyy
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2840-87bbdxayabyy
-LOG: 12:53:41 peer.go:78: Connected to Peer:  -TR2840-8b88lbj0vz4o
-LOG: 12:53:41 peer.go:88: Peer -TR2840-8b88lbj0vz4o : starting to Listen
-LOG: 12:53:41 message.go:214: Sending Status Message: 2 to -TR2840-8b88lbj0vz4o
-LOG: 12:53:42 message.go:367: Piece at 31 is downloaded
-LOG: 12:53:42 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 36
-LOG: 12:53:42 message.go:367: Piece at 30 is downloaded
-LOG: 12:53:42 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 37
-LOG: 12:53:42 message.go:367: Piece at 37 is downloaded
-LOG: 12:53:42 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 38
-LOG: 12:53:42 message.go:367: Piece at 36 is downloaded
-LOG: 12:53:42 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 39
-LOG: 12:53:42 message.go:367: Piece at 35 is downloaded
-LOG: 12:53:42 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 40
-LOG: 12:53:42 message.go:367: Piece at 10 is downloaded
-LOG: 12:53:42 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 41
-LOG: 12:53:42 message.go:367: Piece at 12 is downloaded
-LOG: 12:53:42 message.go:323: Asking -UT2210-sbó˙ÏÓﬁÆé for piece 42
-LOG: 12:53:42 message.go:367: Piece at 38 is downloaded
-LOG: 12:53:42 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 43
-LOG: 12:53:42 message.go:367: Piece at 39 is downloaded
-LOG: 12:53:42 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 44
-LOG: 12:53:42 message.go:108: UnChoke -TR2840-87bbdxayabyy
-LOG: 12:53:42 message.go:323: Asking -TR2840-87bbdxayabyy for piece 45
-LOG: 12:53:43 message.go:108: UnChoke -TR2840-uo289lmrdvo5
-LOG: 12:53:43 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 46
-LOG: 12:53:43 message.go:367: Piece at 40 is downloaded
-LOG: 12:53:43 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 47
-LOG: 12:53:43 message.go:119: Bitfield -TR2840-8b88lbj0vz4o
-LOG: 12:53:43 message.go:214: Sending Status Message: 2 to -TR2840-8b88lbj0vz4o
-LOG: 12:53:43 message.go:367: Piece at 43 is downloaded
-LOG: 12:53:43 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 48
-LOG: 12:53:43 message.go:214: Sending Status Message: -1 to -lt0D60-Ç<‰¢ds‰Dí|%
-LOG: 12:53:43 message.go:367: Piece at 29 is downloaded
-LOG: 12:53:43 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 49
-LOG: 12:53:43 message.go:367: Piece at 44 is downloaded
-LOG: 12:53:43 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 50
-LOG: 12:53:43 message.go:367: Piece at 32 is downloaded
-LOG: 12:53:43 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 51
-LOG: 12:53:43 message.go:108: UnChoke -TR2920-u9ofnfexj06s
-LOG: 12:53:43 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 52
-LOG: 12:53:43 message.go:367: Piece at 47 is downloaded
-LOG: 12:53:43 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 53
-LOG: 12:53:43 message.go:367: Piece at 48 is downloaded
-LOG: 12:53:43 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 54
-LOG: 12:53:43 message.go:367: Piece at 50 is downloaded
-LOG: 12:53:43 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 55
-LOG: 12:53:43 message.go:367: Piece at 22 is downloaded
-LOG: 12:53:43 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 56
-LOG: 12:53:43 message.go:108: UnChoke -TR2840-brfog0es4qlu
-LOG: 12:53:43 message.go:323: Asking -TR2840-brfog0es4qlu for piece 57
-LOG: 12:53:44 message.go:367: Piece at 54 is downloaded
-LOG: 12:53:44 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 58
-LOG: 12:53:44 message.go:367: Piece at 55 is downloaded
-LOG: 12:53:44 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 59
-LOG: 12:53:44 message.go:367: Piece at 53 is downloaded
-LOG: 12:53:44 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 60
-LOG: 12:53:44 message.go:108: UnChoke -TR2920-jrvjsnezxj40
-LOG: 12:53:44 message.go:323: Asking -TR2920-jrvjsnezxj40 for piece 61
-LOG: 12:53:44 message.go:367: Piece at 58 is downloaded
-LOG: 12:53:44 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 62
-LOG: 12:53:44 message.go:367: Piece at 17 is downloaded
-LOG: 12:53:44 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 63
-LOG: 12:53:44 message.go:367: Piece at 41 is downloaded
-LOG: 12:53:44 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 64
-LOG: 12:53:44 message.go:367: Piece at 60 is downloaded
-LOG: 12:53:44 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 65
-LOG: 12:53:44 message.go:367: Piece at 59 is downloaded
-LOG: 12:53:44 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 66
-LOG: 12:53:44 message.go:108: UnChoke -TR2840-nkgnf6o3t4b6
-LOG: 12:53:44 message.go:108: UnChoke -TR2840-szozatvacjzk
-LOG: 12:53:44 message.go:323: Asking -TR2840-szozatvacjzk for piece 67
-LOG: 12:53:44 message.go:323: Asking -TR2840-nkgnf6o3t4b6 for piece 68
-LOG: 12:53:44 message.go:367: Piece at 49 is downloaded
-LOG: 12:53:44 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 69
-LOG: 12:53:44 message.go:367: Piece at 51 is downloaded
-LOG: 12:53:44 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 70
-LOG: 12:53:44 message.go:367: Piece at 62 is downloaded
-LOG: 12:53:44 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 71
-LOG: 12:53:44 message.go:367: Piece at 65 is downloaded
-LOG: 12:53:44 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 72
-LOG: 12:53:45 message.go:367: Piece at 66 is downloaded
-LOG: 12:53:45 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 73
-LOG: 12:53:45 message.go:367: Piece at 16 is downloaded
-LOG: 12:53:45 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 74
-LOG: 12:53:45 message.go:367: Piece at 46 is downloaded
-LOG: 12:53:45 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 75
-LOG: 12:53:45 message.go:367: Piece at 71 is downloaded
-LOG: 12:53:45 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 76
-DEBUG: 12:53:45 peer.go:96: Error Reading Length -TR2840-g8l1bu0ntbak, Stopping: EOF
-LOG: 12:53:45 message.go:367: Piece at 73 is downloaded
-LOG: 12:53:45 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 77
-LOG: 12:53:45 message.go:367: Piece at 72 is downloaded
-LOG: 12:53:45 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 78
-LOG: 12:53:45 message.go:367: Piece at 23 is downloaded
-LOG: 12:53:45 message.go:323: Asking -DE13C0-QS~IIjV4bczQ for piece 79
-LOG: 12:53:45 message.go:108: UnChoke -TR2820-2xffpt6n8rr6
-LOG: 12:53:45 message.go:323: Asking -TR2820-2xffpt6n8rr6 for piece 80
-LOG: 12:53:45 message.go:367: Piece at 52 is downloaded
-LOG: 12:53:45 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 81
-LOG: 12:53:45 message.go:108: UnChoke -TR2840-i02z01p0z8ow
-LOG: 12:53:45 message.go:323: Asking -TR2840-i02z01p0z8ow for piece 82
-LOG: 12:53:45 message.go:367: Piece at 63 is downloaded
-LOG: 12:53:45 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 83
-LOG: 12:53:45 message.go:367: Piece at 45 is downloaded
-LOG: 12:53:45 message.go:323: Asking -TR2840-87bbdxayabyy for piece 84
-LOG: 12:53:45 message.go:367: Piece at 76 is downloaded
-LOG: 12:53:45 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 85
-LOG: 12:53:45 message.go:367: Piece at 56 is downloaded
-LOG: 12:53:45 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 86
-LOG: 12:53:45 message.go:367: Piece at 77 is downloaded
-LOG: 12:53:45 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 87
-LOG: 12:53:45 message.go:367: Piece at 78 is downloaded
-LOG: 12:53:45 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 88
-LOG: 12:53:46 message.go:367: Piece at 85 is downloaded
-LOG: 12:53:46 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 89
-LOG: 12:53:46 message.go:367: Piece at 64 is downloaded
-LOG: 12:53:46 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 90
-LOG: 12:53:46 message.go:367: Piece at 33 is downloaded
-LOG: 12:53:46 message.go:323: Asking -TR2820-e7i5p6gcgx2q for piece 91
-LOG: 12:53:46 message.go:367: Piece at 70 is downloaded
-LOG: 12:53:46 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 92
-LOG: 12:53:46 message.go:108: UnChoke -TR2510-ykjzdtg87s8z
-LOG: 12:53:46 message.go:323: Asking -TR2510-ykjzdtg87s8z for piece 93
-LOG: 12:53:46 message.go:367: Piece at 87 is downloaded
-LOG: 12:53:46 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 94
-LOG: 12:53:46 message.go:367: Piece at 69 is downloaded
-LOG: 12:53:46 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 95
-LOG: 12:53:46 message.go:108: UnChoke -TR2820-f7rrkdsftquf
-LOG: 12:53:46 message.go:323: Asking -TR2820-f7rrkdsftquf for piece 96
-LOG: 12:53:46 message.go:367: Piece at 89 is downloaded
-LOG: 12:53:46 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 97
-LOG: 12:53:46 message.go:367: Piece at 88 is downloaded
-LOG: 12:53:46 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 98
-LOG: 12:53:46 message.go:367: Piece at 57 is downloaded
-LOG: 12:53:46 message.go:323: Asking -TR2840-brfog0es4qlu for piece 99
-LOG: 12:53:46 message.go:367: Piece at 34 is downloaded
-LOG: 12:53:46 message.go:323: Asking -TR2920-zwfr0d6xfqnr for piece 100
-LOG: 12:53:46 message.go:367: Piece at 61 is downloaded
-LOG: 12:53:46 message.go:323: Asking -TR2920-jrvjsnezxj40 for piece 101
-LOG: 12:53:46 message.go:367: Piece at 94 is downloaded
-LOG: 12:53:46 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 102
-LOG: 12:53:46 message.go:367: Piece at 97 is downloaded
-LOG: 12:53:46 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 103
-LOG: 12:53:46 message.go:367: Piece at 74 is downloaded
-LOG: 12:53:46 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 104
-LOG: 12:53:47 message.go:367: Piece at 83 is downloaded
-LOG: 12:53:47 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 105
-LOG: 12:53:47 message.go:108: UnChoke -TR2840-edjmvi3qftl5
-LOG: 12:53:47 message.go:323: Asking -TR2840-edjmvi3qftl5 for piece 106
-LOG: 12:53:47 message.go:367: Piece at 67 is downloaded
-LOG: 12:53:47 message.go:323: Asking -TR2840-szozatvacjzk for piece 107
-LOG: 12:53:47 message.go:367: Piece at 98 is downloaded
-LOG: 12:53:47 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 108
-LOG: 12:53:47 message.go:367: Piece at 103 is downloaded
-LOG: 12:53:47 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 109
-LOG: 12:53:47 message.go:367: Piece at 92 is downloaded
-LOG: 12:53:47 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 110
-LOG: 12:53:47 message.go:214: Sending Status Message: -1 to -lt0D60-KúHzˇï≈äß°æ
-LOG: 12:53:47 message.go:367: Piece at 102 is downloaded
-LOG: 12:53:47 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 111
-LOG: 12:53:47 message.go:367: Piece at 109 is downloaded
-LOG: 12:53:47 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 112
-LOG: 12:53:47 message.go:367: Piece at 111 is downloaded
-LOG: 12:53:47 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 113
-LOG: 12:53:47 message.go:367: Piece at 90 is downloaded
-LOG: 12:53:47 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 114
-LOG: 12:53:47 message.go:367: Piece at 86 is downloaded
-LOG: 12:53:47 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 115
-LOG: 12:53:47 message.go:367: Piece at 108 is downloaded
-LOG: 12:53:47 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 116
-LOG: 12:53:47 message.go:367: Piece at 113 is downloaded
-LOG: 12:53:47 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 117
-LOG: 12:53:48 message.go:367: Piece at 104 is downloaded
-LOG: 12:53:48 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 118
-LOG: 12:53:48 message.go:367: Piece at 105 is downloaded
-LOG: 12:53:48 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 119
-LOG: 12:53:48 message.go:367: Piece at 75 is downloaded
-LOG: 12:53:48 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 120
-LOG: 12:53:48 message.go:367: Piece at 110 is downloaded
-LOG: 12:53:48 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 121
-LOG: 12:53:48 message.go:108: UnChoke -TR2840-zb1cym02clzv
-LOG: 12:53:48 message.go:323: Asking -TR2840-zb1cym02clzv for piece 122
-LOG: 12:53:48 message.go:367: Piece at 112 is downloaded
-LOG: 12:53:48 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 123
-LOG: 12:53:48 message.go:367: Piece at 81 is downloaded
-LOG: 12:53:48 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 124
-LOG: 12:53:48 message.go:367: Piece at 95 is downloaded
-LOG: 12:53:48 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 125
-LOG: 12:53:48 message.go:367: Piece at 84 is downloaded
-LOG: 12:53:48 message.go:323: Asking -TR2840-87bbdxayabyy for piece 126
-LOG: 12:53:48 message.go:108: UnChoke -TR2820-wppmx7a3tfpq
-LOG: 12:53:48 message.go:323: Asking -TR2820-wppmx7a3tfpq for piece 127
-LOG: 12:53:48 message.go:108: UnChoke -TR2840-5zkpd4h5veno
-LOG: 12:53:48 message.go:323: Asking -TR2840-5zkpd4h5veno for piece 128
-LOG: 12:53:48 message.go:108: UnChoke -TR2920-8veubtm1rsns
-LOG: 12:53:48 message.go:323: Asking -TR2920-8veubtm1rsns for piece 129
-LOG: 12:53:48 message.go:367: Piece at 117 is downloaded
-LOG: 12:53:48 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 130
-LOG: 12:53:48 message.go:367: Piece at 116 is downloaded
-LOG: 12:53:48 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 131
-LOG: 12:53:48 message.go:108: UnChoke -TR2920-5ip76u7xzpj6
-LOG: 12:53:48 message.go:323: Asking -TR2920-5ip76u7xzpj6 for piece 132
-LOG: 12:53:48 message.go:367: Piece at 123 is downloaded
-LOG: 12:53:48 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 133
-LOG: 12:53:48 message.go:367: Piece at 130 is downloaded
-LOG: 12:53:48 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 134
-LOG: 12:53:49 message.go:367: Piece at 99 is downloaded
-LOG: 12:53:49 message.go:323: Asking -TR2840-brfog0es4qlu for piece 135
-LOG: 12:53:49 message.go:367: Piece at 107 is downloaded
-LOG: 12:53:49 message.go:323: Asking -TR2840-szozatvacjzk for piece 136
-LOG: 12:53:49 message.go:367: Piece at 82 is downloaded
-LOG: 12:53:49 message.go:323: Asking -TR2840-i02z01p0z8ow for piece 137
-LOG: 12:53:49 message.go:367: Piece at 133 is downloaded
-LOG: 12:53:49 message.go:367: Piece at 119 is downloaded
-LOG: 12:53:49 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 139
-LOG: 12:53:49 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 138
-LOG: 12:53:49 message.go:367: Piece at 131 is downloaded
-LOG: 12:53:49 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 140
-LOG: 12:53:49 message.go:108: UnChoke -TR2820-3yrpisemhiug
-LOG: 12:53:49 message.go:323: Asking -TR2820-3yrpisemhiug for piece 141
-LOG: 12:53:49 message.go:367: Piece at 101 is downloaded
-LOG: 12:53:49 message.go:323: Asking -TR2920-jrvjsnezxj40 for piece 142
-LOG: 12:53:49 message.go:367: Piece at 134 is downloaded
-LOG: 12:53:49 message.go:367: Piece at 138 is downloaded
-LOG: 12:53:49 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 144
-LOG: 12:53:49 message.go:367: Piece at 121 is downloaded
-LOG: 12:53:49 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 145
-LOG: 12:53:49 message.go:108: UnChoke -TR2920-hb1rug930be5
-LOG: 12:53:49 message.go:323: Asking -TR2920-hb1rug930be5 for piece 146
-LOG: 12:53:49 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 143
-LOG: 12:53:49 message.go:367: Piece at 118 is downloaded
-LOG: 12:53:49 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 147
-LOG: 12:53:49 message.go:108: UnChoke -DE13C0-qPM51wBHC3m8
-LOG: 12:53:49 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 148
-LOG: 12:53:49 message.go:108: UnChoke -qB3310-AIKaH!q6*S5p
-LOG: 12:53:49 message.go:323: Asking -qB3310-AIKaH!q6*S5p for piece 149
-LOG: 12:53:49 message.go:367: Piece at 140 is downloaded
-LOG: 12:53:49 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 150
-LOG: 12:53:50 message.go:367: Piece at 144 is downloaded
-LOG: 12:53:50 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 151
-LOG: 12:53:50 message.go:367: Piece at 124 is downloaded
-LOG: 12:53:50 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 152
-LOG: 12:53:50 message.go:367: Piece at 115 is downloaded
-LOG: 12:53:50 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 153
-LOG: 12:53:50 message.go:367: Piece at 79 is downloaded
-LOG: 12:53:50 message.go:323: Asking -DE13C0-QS~IIjV4bczQ for piece 154
-LOG: 12:53:50 message.go:367: Piece at 125 is downloaded
-LOG: 12:53:50 message.go:367: Piece at 91 is downloaded
-LOG: 12:53:50 message.go:323: Asking -TR2820-e7i5p6gcgx2q for piece 156
-LOG: 12:53:50 message.go:367: Piece at 143 is downloaded
-LOG: 12:53:50 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 157
-LOG: 12:53:50 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 155
-LOG: 12:53:50 message.go:108: UnChoke -TR2840-z86yg6aqcdms
-LOG: 12:53:50 message.go:323: Asking -TR2840-z86yg6aqcdms for piece 158
-LOG: 12:53:50 message.go:108: UnChoke -TR2840-k9p2k4efjesa
-LOG: 12:53:50 message.go:323: Asking -TR2840-k9p2k4efjesa for piece 159
-LOG: 12:53:50 message.go:367: Piece at 100 is downloaded
-LOG: 12:53:50 message.go:323: Asking -TR2920-zwfr0d6xfqnr for piece 160
-LOG: 12:53:50 message.go:108: UnChoke -TR2820-xll43upbzlnp
-LOG: 12:53:50 message.go:323: Asking -TR2820-xll43upbzlnp for piece 161
-LOG: 12:53:50 message.go:367: Piece at 151 is downloaded
-LOG: 12:53:50 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 162
-LOG: 12:53:50 message.go:367: Piece at 129 is downloaded
-LOG: 12:53:50 message.go:323: Asking -TR2920-8veubtm1rsns for piece 163
-LOG: 12:53:50 message.go:367: Piece at 150 is downloaded
-LOG: 12:53:50 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 164
-LOG: 12:53:50 message.go:367: Piece at 139 is downloaded
-LOG: 12:53:50 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 165
-LOG: 12:53:50 message.go:367: Piece at 157 is downloaded
-LOG: 12:53:50 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 166
-LOG: 12:53:50 message.go:367: Piece at 42 is downloaded
-LOG: 12:53:50 message.go:323: Asking -UT2210-sbó˙ÏÓﬁÆé for piece 167
-LOG: 12:53:50 message.go:367: Piece at 120 is downloaded
-LOG: 12:53:50 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 168
-LOG: 12:53:50 message.go:367: Piece at 126 is downloaded
-LOG: 12:53:50 message.go:323: Asking -TR2840-87bbdxayabyy for piece 169
-LOG: 12:53:50 message.go:367: Piece at 162 is downloaded
-LOG: 12:53:50 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 170
-LOG: 12:53:51 message.go:108: UnChoke -TR2840-8b88lbj0vz4o
-LOG: 12:53:51 message.go:323: Asking -TR2840-8b88lbj0vz4o for piece 171
-LOG: 12:53:51 message.go:367: Piece at 164 is downloaded
-LOG: 12:53:51 message.go:367: Piece at 166 is downloaded
-LOG: 12:53:51 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 173
-LOG: 12:53:51 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 172
-LOG: 12:53:51 message.go:367: Piece at 136 is downloaded
-LOG: 12:53:51 message.go:323: Asking -TR2840-szozatvacjzk for piece 174
-LOG: 12:53:51 message.go:367: Piece at 114 is downloaded
-LOG: 12:53:51 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 175
-LOG: 12:53:51 message.go:367: Piece at 145 is downloaded
-LOG: 12:53:51 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 176
-LOG: 12:53:51 message.go:367: Piece at 165 is downloaded
-LOG: 12:53:51 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 177
-LOG: 12:53:51 message.go:367: Piece at 163 is downloaded
-LOG: 12:53:51 message.go:323: Asking -TR2920-8veubtm1rsns for piece 178
-LOG: 12:53:51 message.go:367: Piece at 146 is downloaded
-LOG: 12:53:51 message.go:323: Asking -TR2920-hb1rug930be5 for piece 179
-LOG: 12:53:51 message.go:367: Piece at 170 is downloaded
-LOG: 12:53:51 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 180
-LOG: 12:53:51 message.go:367: Piece at 152 is downloaded
-LOG: 12:53:51 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 181
-LOG: 12:53:51 message.go:367: Piece at 142 is downloaded
-LOG: 12:53:51 message.go:323: Asking -TR2920-jrvjsnezxj40 for piece 182
-LOG: 12:53:51 message.go:367: Piece at 155 is downloaded
-LOG: 12:53:51 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 183
-LOG: 12:53:51 message.go:367: Piece at 127 is downloaded
-LOG: 12:53:51 message.go:323: Asking -TR2820-wppmx7a3tfpq for piece 184
-LOG: 12:53:51 message.go:367: Piece at 135 is downloaded
-LOG: 12:53:51 message.go:323: Asking -TR2840-brfog0es4qlu for piece 185
-LOG: 12:53:51 message.go:367: Piece at 173 is downloaded
-LOG: 12:53:51 message.go:367: Piece at 122 is downloaded
-LOG: 12:53:51 message.go:367: Piece at 80 is downloaded
-LOG: 12:53:52 message.go:367: Piece at 172 is downloaded
-LOG: 12:53:52 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 189
-LOG: 12:53:52 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 186
-LOG: 12:53:52 message.go:323: Asking -TR2840-zb1cym02clzv for piece 187
-LOG: 12:53:52 message.go:323: Asking -TR2820-2xffpt6n8rr6 for piece 188
-LOG: 12:53:52 message.go:367: Piece at 180 is downloaded
-LOG: 12:53:52 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 190
-LOG: 12:53:52 message.go:367: Piece at 186 is downloaded
-LOG: 12:53:52 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 191
-LOG: 12:53:52 message.go:367: Piece at 128 is downloaded
-LOG: 12:53:52 message.go:323: Asking -TR2840-5zkpd4h5veno for piece 192
-LOG: 12:53:52 message.go:367: Piece at 137 is downloaded
-LOG: 12:53:52 message.go:323: Asking -TR2840-i02z01p0z8ow for piece 193
-LOG: 12:53:52 message.go:367: Piece at 147 is downloaded
-LOG: 12:53:52 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 194
-LOG: 12:53:52 message.go:367: Piece at 153 is downloaded
-LOG: 12:53:52 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 195
-LOG: 12:53:52 message.go:367: Piece at 189 is downloaded
-LOG: 12:53:52 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 196
-LOG: 12:53:52 message.go:367: Piece at 190 is downloaded
-LOG: 12:53:52 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 197
-LOG: 12:53:52 message.go:367: Piece at 177 is downloaded
-LOG: 12:53:52 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 198
-LOG: 12:53:52 message.go:367: Piece at 169 is downloaded
-LOG: 12:53:52 message.go:323: Asking -TR2840-87bbdxayabyy for piece 199
-LOG: 12:53:52 message.go:367: Piece at 176 is downloaded
-LOG: 12:53:52 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 200
-LOG: 12:53:52 message.go:367: Piece at 156 is downloaded
-LOG: 12:53:53 message.go:323: Asking -TR2820-e7i5p6gcgx2q for piece 201
-LOG: 12:53:53 message.go:367: Piece at 181 is downloaded
-LOG: 12:53:53 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 202
-LOG: 12:53:53 message.go:367: Piece at 183 is downloaded
-LOG: 12:53:53 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 203
-LOG: 12:53:53 message.go:367: Piece at 197 is downloaded
-LOG: 12:53:53 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 204
-LOG: 12:53:53 message.go:367: Piece at 196 is downloaded
-LOG: 12:53:53 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 205
-LOG: 12:53:53 message.go:367: Piece at 174 is downloaded
-LOG: 12:53:53 message.go:323: Asking -TR2840-szozatvacjzk for piece 206
-LOG: 12:53:53 message.go:367: Piece at 179 is downloaded
-LOG: 12:53:53 message.go:323: Asking -TR2920-hb1rug930be5 for piece 207
-LOG: 12:53:53 message.go:367: Piece at 148 is downloaded
-LOG: 12:53:53 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 208
-LOG: 12:53:53 message.go:367: Piece at 191 is downloaded
-LOG: 12:53:53 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 209
-LOG: 12:53:53 message.go:367: Piece at 185 is downloaded
-LOG: 12:53:53 message.go:323: Asking -TR2840-brfog0es4qlu for piece 210
-LOG: 12:53:53 message.go:367: Piece at 204 is downloaded
-LOG: 12:53:53 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 211
-LOG: 12:53:53 message.go:367: Piece at 198 is downloaded
-LOG: 12:53:53 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 212
-LOG: 12:53:53 message.go:367: Piece at 160 is downloaded
-LOG: 12:53:53 message.go:323: Asking -TR2920-zwfr0d6xfqnr for piece 213
-LOG: 12:53:53 message.go:367: Piece at 205 is downloaded
-LOG: 12:53:53 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 214
-LOG: 12:53:54 message.go:367: Piece at 211 is downloaded
-LOG: 12:53:54 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 215
-LOG: 12:53:54 message.go:367: Piece at 158 is downloaded
-LOG: 12:53:54 message.go:323: Asking -TR2840-z86yg6aqcdms for piece 216
-LOG: 12:53:54 message.go:367: Piece at 154 is downloaded
-LOG: 12:53:54 message.go:323: Asking -DE13C0-QS~IIjV4bczQ for piece 217
-LOG: 12:53:54 message.go:367: Piece at 168 is downloaded
-LOG: 12:53:54 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 218
-LOG: 12:53:54 message.go:367: Piece at 149 is downloaded
-LOG: 12:53:54 message.go:367: Piece at 202 is downloaded
-LOG: 12:53:54 message.go:367: Piece at 199 is downloaded
-LOG: 12:53:54 message.go:323: Asking -TR2840-87bbdxayabyy for piece 221
-LOG: 12:53:54 message.go:367: Piece at 28 is downloaded
-LOG: 12:53:54 message.go:323: Asking -UT2210-÷bÑq‘ƒwoR for piece 222
-LOG: 12:53:54 message.go:367: Piece at 215 is downloaded
-LOG: 12:53:54 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 223
-LOG: 12:53:54 message.go:367: Piece at 214 is downloaded
-LOG: 12:53:54 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 224
-LOG: 12:53:54 message.go:323: Asking -qB3310-AIKaH!q6*S5p for piece 219
-LOG: 12:53:54 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 220
-LOG: 12:53:54 message.go:367: Piece at 209 is downloaded
-LOG: 12:53:54 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 225
-LOG: 12:53:54 message.go:367: Piece at 182 is downloaded
-LOG: 12:53:54 message.go:323: Asking -TR2920-jrvjsnezxj40 for piece 226
-LOG: 12:53:54 message.go:367: Piece at 203 is downloaded
-LOG: 12:53:54 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 227
-LOG: 12:53:54 message.go:367: Piece at 200 is downloaded
-LOG: 12:53:54 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 228
-LOG: 12:53:54 message.go:367: Piece at 195 is downloaded
-LOG: 12:53:54 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 229
-LOG: 12:53:54 message.go:367: Piece at 212 is downloaded
-LOG: 12:53:54 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 230
-LOG: 12:53:54 message.go:367: Piece at 206 is downloaded
-LOG: 12:53:54 message.go:323: Asking -TR2840-szozatvacjzk for piece 231
-LOG: 12:53:54 message.go:367: Piece at 223 is downloaded
-LOG: 12:53:54 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 232
-LOG: 12:53:54 message.go:367: Piece at 225 is downloaded
-LOG: 12:53:54 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 233
-LOG: 12:53:54 message.go:367: Piece at 175 is downloaded
-LOG: 12:53:54 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 234
-LOG: 12:53:54 message.go:367: Piece at 194 is downloaded
-LOG: 12:53:54 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 235
-LOG: 12:53:55 message.go:367: Piece at 224 is downloaded
-LOG: 12:53:55 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 236
-LOG: 12:53:55 message.go:367: Piece at 207 is downloaded
-LOG: 12:53:55 message.go:323: Asking -TR2920-hb1rug930be5 for piece 237
-LOG: 12:53:55 message.go:367: Piece at 233 is downloaded
-LOG: 12:53:55 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 238
-LOG: 12:53:55 message.go:367: Piece at 187 is downloaded
-LOG: 12:53:55 message.go:323: Asking -TR2840-zb1cym02clzv for piece 239
-LOG: 12:53:55 message.go:367: Piece at 232 is downloaded
-LOG: 12:53:55 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 240
-LOG: 12:53:55 message.go:367: Piece at 236 is downloaded
-LOG: 12:53:55 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 241
-LOG: 12:53:55 message.go:367: Piece at 238 is downloaded
-LOG: 12:53:55 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 242
-LOG: 12:53:55 message.go:367: Piece at 230 is downloaded
-LOG: 12:53:55 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 243
-LOG: 12:53:55 message.go:367: Piece at 201 is downloaded
-LOG: 12:53:55 message.go:323: Asking -TR2820-e7i5p6gcgx2q for piece 244
-LOG: 12:53:55 message.go:367: Piece at 167 is downloaded
-LOG: 12:53:55 message.go:323: Asking -UT2210-sbó˙ÏÓﬁÆé for piece 245
-LOG: 12:53:55 message.go:367: Piece at 221 is downloaded
-LOG: 12:53:55 message.go:323: Asking -TR2840-87bbdxayabyy for piece 246
-LOG: 12:53:55 message.go:367: Piece at 220 is downloaded
-LOG: 12:53:55 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 247
-LOG: 12:53:56 message.go:367: Piece at 240 is downloaded
-LOG: 12:53:56 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 248
-LOG: 12:53:56 message.go:367: Piece at 241 is downloaded
-LOG: 12:53:56 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 249
-LOG: 12:53:56 message.go:367: Piece at 228 is downloaded
-LOG: 12:53:56 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 250
-LOG: 12:53:56 message.go:367: Piece at 227 is downloaded
-LOG: 12:53:56 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 251
-LOG: 12:53:56 message.go:367: Piece at 242 is downloaded
-LOG: 12:53:56 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 252
-LOG: 12:53:56 message.go:367: Piece at 8 is downloaded
-LOG: 12:53:56 message.go:323: Asking -DE13D0-Ej.3Sv8FJ6LG for piece 253
-LOG: 12:53:56 message.go:367: Piece at 192 is downloaded
-LOG: 12:53:56 message.go:323: Asking -TR2840-5zkpd4h5veno for piece 254
-LOG: 12:53:56 message.go:367: Piece at 231 is downloaded
-LOG: 12:53:56 message.go:323: Asking -TR2840-szozatvacjzk for piece 255
-LOG: 12:53:56 message.go:367: Piece at 193 is downloaded
-LOG: 12:53:56 message.go:323: Asking -TR2840-i02z01p0z8ow for piece 256
-LOG: 12:53:56 message.go:367: Piece at 218 is downloaded
-LOG: 12:53:56 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 257
-LOG: 12:53:56 message.go:367: Piece at 208 is downloaded
-LOG: 12:53:56 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 258
-LOG: 12:53:56 message.go:367: Piece at 248 is downloaded
-LOG: 12:53:56 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 259
-LOG: 12:53:56 message.go:367: Piece at 184 is downloaded
-LOG: 12:53:56 message.go:323: Asking -TR2820-wppmx7a3tfpq for piece 260
-LOG: 12:53:56 message.go:367: Piece at 249 is downloaded
-LOG: 12:53:56 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 261
-LOG: 12:53:56 message.go:367: Piece at 259 is downloaded
-LOG: 12:53:56 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 262
-LOG: 12:53:56 message.go:367: Piece at 237 is downloaded
-LOG: 12:53:56 message.go:323: Asking -TR2920-hb1rug930be5 for piece 263
-LOG: 12:53:56 message.go:367: Piece at 235 is downloaded
-LOG: 12:53:56 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 264
-LOG: 12:53:56 message.go:367: Piece at 229 is downloaded
-LOG: 12:53:56 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 265
-LOG: 12:53:56 message.go:367: Piece at 243 is downloaded
-LOG: 12:53:56 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 266
-LOG: 12:53:56 message.go:367: Piece at 252 is downloaded
-LOG: 12:53:56 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 267
-LOG: 12:53:57 message.go:367: Piece at 226 is downloaded
-LOG: 12:53:57 message.go:323: Asking -TR2920-jrvjsnezxj40 for piece 268
-LOG: 12:53:57 message.go:367: Piece at 247 is downloaded
-LOG: 12:53:57 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 269
-LOG: 12:53:57 message.go:367: Piece at 262 is downloaded
-LOG: 12:53:57 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 270
-LOG: 12:53:57 message.go:367: Piece at 234 is downloaded
-LOG: 12:53:57 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 271
-LOG: 12:53:57 message.go:367: Piece at 261 is downloaded
-LOG: 12:53:57 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 272
-LOG: 12:53:57 message.go:367: Piece at 246 is downloaded
-LOG: 12:53:57 message.go:323: Asking -TR2840-87bbdxayabyy for piece 273
-LOG: 12:53:57 message.go:367: Piece at 213 is downloaded
-LOG: 12:53:57 message.go:323: Asking -TR2920-zwfr0d6xfqnr for piece 274
-LOG: 12:53:57 message.go:367: Piece at 250 is downloaded
-LOG: 12:53:57 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 275
-LOG: 12:53:57 message.go:367: Piece at 267 is downloaded
-LOG: 12:53:57 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 276
-LOG: 12:53:57 message.go:367: Piece at 270 is downloaded
-LOG: 12:53:57 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 277
-LOG: 12:53:57 message.go:367: Piece at 251 is downloaded
-LOG: 12:53:57 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 278
-LOG: 12:53:57 message.go:367: Piece at 239 is downloaded
-LOG: 12:53:57 message.go:323: Asking -TR2840-zb1cym02clzv for piece 279
-LOG: 12:53:57 message.go:367: Piece at 272 is downloaded
-LOG: 12:53:57 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 280
-LOG: 12:53:58 message.go:367: Piece at 276 is downloaded
-LOG: 12:53:58 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 281
-LOG: 12:53:58 message.go:367: Piece at 266 is downloaded
-LOG: 12:53:58 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 282
-LOG: 12:53:58 message.go:367: Piece at 216 is downloaded
-LOG: 12:53:58 message.go:323: Asking -TR2840-z86yg6aqcdms for piece 283
-LOG: 12:53:58 message.go:367: Piece at 188 is downloaded
-LOG: 12:53:58 message.go:323: Asking -TR2820-2xffpt6n8rr6 for piece 284
-LOG: 12:53:58 message.go:367: Piece at 269 is downloaded
-LOG: 12:53:58 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 285
-LOG: 12:53:58 message.go:367: Piece at 277 is downloaded
-LOG: 12:53:58 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 286
-LOG: 12:53:58 message.go:367: Piece at 280 is downloaded
-LOG: 12:53:58 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 287
-LOG: 12:53:58 message.go:367: Piece at 281 is downloaded
-LOG: 12:53:58 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 288
-LOG: 12:53:58 message.go:367: Piece at 219 is downloaded
-LOG: 12:53:58 message.go:323: Asking -qB3310-AIKaH!q6*S5p for piece 289
-LOG: 12:53:58 message.go:367: Piece at 258 is downloaded
-LOG: 12:53:58 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 290
-LOG: 12:53:58 message.go:367: Piece at 255 is downloaded
-LOG: 12:53:58 message.go:323: Asking -TR2840-szozatvacjzk for piece 291
-LOG: 12:53:58 message.go:367: Piece at 286 is downloaded
-LOG: 12:53:58 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 292
-LOG: 12:53:58 message.go:367: Piece at 279 is downloaded
-LOG: 12:53:58 message.go:323: Asking -TR2840-zb1cym02clzv for piece 293
-LOG: 12:53:58 message.go:367: Piece at 265 is downloaded
-LOG: 12:53:58 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 294
-LOG: 12:53:58 message.go:367: Piece at 257 is downloaded
-LOG: 12:53:58 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 295
-LOG: 12:53:58 message.go:367: Piece at 263 is downloaded
-LOG: 12:53:58 message.go:323: Asking -TR2920-hb1rug930be5 for piece 296
-LOG: 12:53:59 message.go:367: Piece at 287 is downloaded
-LOG: 12:53:59 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 297
-LOG: 12:53:59 message.go:367: Piece at 264 is downloaded
-LOG: 12:53:59 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 298
-LOG: 12:53:59 message.go:367: Piece at 278 is downloaded
-LOG: 12:53:59 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 299
-LOG: 12:53:59 message.go:367: Piece at 273 is downloaded
-LOG: 12:53:59 message.go:323: Asking -TR2840-87bbdxayabyy for piece 300
-LOG: 12:53:59 message.go:367: Piece at 271 is downloaded
-LOG: 12:53:59 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 301
-LOG: 12:53:59 message.go:367: Piece at 244 is downloaded
-LOG: 12:53:59 message.go:323: Asking -TR2820-e7i5p6gcgx2q for piece 302
-LOG: 12:53:59 message.go:367: Piece at 288 is downloaded
-LOG: 12:53:59 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 303
-LOG: 12:53:59 message.go:108: UnChoke -UT2210-÷bèÚø_™ç!R
-LOG: 12:53:59 message.go:323: Asking -UT2210-÷bèÚø_™ç!R for piece 304
-LOG: 12:53:59 message.go:367: Piece at 282 is downloaded
-LOG: 12:53:59 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 305
-LOG: 12:53:59 message.go:367: Piece at 268 is downloaded
-LOG: 12:53:59 message.go:323: Asking -TR2920-jrvjsnezxj40 for piece 306
-LOG: 12:53:59 message.go:367: Piece at 297 is downloaded
-LOG: 12:53:59 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 307
-LOG: 12:53:59 message.go:367: Piece at 292 is downloaded
-LOG: 12:53:59 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 308
-LOG: 12:53:59 message.go:367: Piece at 303 is downloaded
-LOG: 12:53:59 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 309
-LOG: 12:53:59 message.go:367: Piece at 275 is downloaded
-LOG: 12:53:59 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 310
-LOG: 12:53:59 message.go:367: Piece at 285 is downloaded
-LOG: 12:53:59 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 311
-LOG: 12:53:59 message.go:367: Piece at 217 is downloaded
-LOG: 12:53:59 message.go:323: Asking -DE13C0-QS~IIjV4bczQ for piece 312
-LOG: 12:53:59 message.go:367: Piece at 307 is downloaded
-LOG: 12:53:59 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 313
-LOG: 12:54:00 message.go:367: Piece at 256 is downloaded
-LOG: 12:54:00 message.go:323: Asking -TR2840-i02z01p0z8ow for piece 314
-LOG: 12:54:00 message.go:367: Piece at 290 is downloaded
-LOG: 12:54:00 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 315
-LOG: 12:54:00 message.go:108: UnChoke -UT1820-˝;.i‘D≠ÌóáÚõ
-LOG: 12:54:00 message.go:323: Asking -UT1820-˝;.i‘D≠ÌóáÚõ for piece 316
-LOG: 12:54:00 message.go:367: Piece at 308 is downloaded
-LOG: 12:54:00 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 317
-LOG: 12:54:00 message.go:367: Piece at 296 is downloaded
-LOG: 12:54:00 message.go:323: Asking -TR2920-hb1rug930be5 for piece 318
-LOG: 12:54:00 message.go:367: Piece at 309 is downloaded
-LOG: 12:54:00 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 319
-LOG: 12:54:00 message.go:367: Piece at 141 is downloaded
-LOG: 12:54:00 message.go:323: Asking -TR2820-3yrpisemhiug for piece 320
-LOG: 12:54:00 message.go:367: Piece at 293 is downloaded
-LOG: 12:54:00 message.go:323: Asking -TR2840-zb1cym02clzv for piece 321
-LOG: 12:54:00 message.go:367: Piece at 313 is downloaded
-LOG: 12:54:00 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 322
-LOG: 12:54:00 message.go:367: Piece at 291 is downloaded
-LOG: 12:54:00 message.go:323: Asking -TR2840-szozatvacjzk for piece 323
-LOG: 12:54:00 message.go:367: Piece at 317 is downloaded
-LOG: 12:54:00 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 324
-LOG: 12:54:00 message.go:367: Piece at 254 is downloaded
-LOG: 12:54:00 message.go:323: Asking -TR2840-5zkpd4h5veno for piece 325
-LOG: 12:54:00 message.go:367: Piece at 305 is downloaded
-LOG: 12:54:00 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 326
-LOG: 12:54:00 message.go:367: Piece at 245 is downloaded
-LOG: 12:54:00 message.go:323: Asking -UT2210-sbó˙ÏÓﬁÆé for piece 327
-LOG: 12:54:00 message.go:367: Piece at 299 is downloaded
-LOG: 12:54:00 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 328
-LOG: 12:54:00 message.go:367: Piece at 274 is downloaded
-LOG: 12:54:00 message.go:323: Asking -TR2920-zwfr0d6xfqnr for piece 329
-LOG: 12:54:00 message.go:367: Piece at 319 is downloaded
-LOG: 12:54:00 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 330
-LOG: 12:54:00 message.go:367: Piece at 298 is downloaded
-LOG: 12:54:00 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 331
-LOG: 12:54:01 message.go:367: Piece at 260 is downloaded
-LOG: 12:54:01 message.go:323: Asking -TR2820-wppmx7a3tfpq for piece 332
-LOG: 12:54:01 message.go:367: Piece at 311 is downloaded
-LOG: 12:54:01 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 333
-LOG: 12:54:01 message.go:367: Piece at 324 is downloaded
-LOG: 12:54:01 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 334
-LOG: 12:54:01 message.go:367: Piece at 295 is downloaded
-LOG: 12:54:01 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 335
-LOG: 12:54:01 message.go:367: Piece at 322 is downloaded
-LOG: 12:54:01 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 336
-LOG: 12:54:01 message.go:367: Piece at 330 is downloaded
-LOG: 12:54:01 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 337
-LOG: 12:54:01 message.go:367: Piece at 301 is downloaded
-LOG: 12:54:01 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 338
-LOG: 12:54:01 message.go:367: Piece at 315 is downloaded
-LOG: 12:54:01 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 339
-LOG: 12:54:01 message.go:367: Piece at 310 is downloaded
-LOG: 12:54:01 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 340
-LOG: 12:54:01 message.go:367: Piece at 289 is downloaded
-LOG: 12:54:01 message.go:323: Asking -qB3310-AIKaH!q6*S5p for piece 341
-LOG: 12:54:01 message.go:367: Piece at 337 is downloaded
-LOG: 12:54:01 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 342
-LOG: 12:54:01 message.go:367: Piece at 336 is downloaded
-LOG: 12:54:01 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 343
-LOG: 12:54:01 message.go:367: Piece at 334 is downloaded
-LOG: 12:54:01 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 344
-LOG: 12:54:01 message.go:367: Piece at 323 is downloaded
-LOG: 12:54:01 message.go:323: Asking -TR2840-szozatvacjzk for piece 345
-LOG: 12:54:01 message.go:367: Piece at 326 is downloaded
-LOG: 12:54:01 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 346
-LOG: 12:54:01 message.go:367: Piece at 300 is downloaded
-LOG: 12:54:01 message.go:323: Asking -TR2840-87bbdxayabyy for piece 347
-LOG: 12:54:02 message.go:367: Piece at 344 is downloaded
-LOG: 12:54:02 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 348
-LOG: 12:54:02 message.go:367: Piece at 318 is downloaded
-LOG: 12:54:02 message.go:323: Asking -TR2920-hb1rug930be5 for piece 349
-LOG: 12:54:02 message.go:367: Piece at 328 is downloaded
-LOG: 12:54:02 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 350
-LOG: 12:54:02 message.go:367: Piece at 321 is downloaded
-LOG: 12:54:02 message.go:323: Asking -TR2840-zb1cym02clzv for piece 351
-LOG: 12:54:02 message.go:367: Piece at 342 is downloaded
-LOG: 12:54:02 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 352
-LOG: 12:54:02 message.go:367: Piece at 343 is downloaded
-LOG: 12:54:02 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 353
-LOG: 12:54:02 message.go:367: Piece at 333 is downloaded
-LOG: 12:54:02 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 354
-LOG: 12:54:02 message.go:367: Piece at 306 is downloaded
-LOG: 12:54:02 message.go:323: Asking -TR2920-jrvjsnezxj40 for piece 355
-LOG: 12:54:02 message.go:367: Piece at 294 is downloaded
-LOG: 12:54:02 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 356
-LOG: 12:54:02 message.go:367: Piece at 210 is downloaded
-LOG: 12:54:02 message.go:323: Asking -TR2840-brfog0es4qlu for piece 357
-LOG: 12:54:02 message.go:367: Piece at 348 is downloaded
-LOG: 12:54:02 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 358
-LOG: 12:54:02 message.go:367: Piece at 353 is downloaded
-LOG: 12:54:02 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 359
-LOG: 12:54:02 message.go:367: Piece at 352 is downloaded
-LOG: 12:54:02 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 360
-LOG: 12:54:02 message.go:367: Piece at 345 is downloaded
-LOG: 12:54:02 message.go:323: Asking -TR2840-szozatvacjzk for piece 361
-LOG: 12:54:03 message.go:367: Piece at 302 is downloaded
-LOG: 12:54:03 message.go:323: Asking -TR2820-e7i5p6gcgx2q for piece 362
-LOG: 12:54:03 message.go:367: Piece at 346 is downloaded
-LOG: 12:54:03 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 363
-LOG: 12:54:03 message.go:367: Piece at 283 is downloaded
-LOG: 12:54:03 message.go:323: Asking -TR2840-z86yg6aqcdms for piece 364
-LOG: 12:54:03 message.go:367: Piece at 314 is downloaded
-LOG: 12:54:03 message.go:323: Asking -TR2840-i02z01p0z8ow for piece 365
-LOG: 12:54:03 message.go:367: Piece at 358 is downloaded
-LOG: 12:54:03 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 366
-LOG: 12:54:03 message.go:367: Piece at 340 is downloaded
-LOG: 12:54:03 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 367
-LOG: 12:54:03 message.go:367: Piece at 339 is downloaded
-LOG: 12:54:03 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 368
-LOG: 12:54:03 message.go:367: Piece at 354 is downloaded
-LOG: 12:54:03 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 369
-LOG: 12:54:03 message.go:367: Piece at 350 is downloaded
-LOG: 12:54:03 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 370
-LOG: 12:54:03 message.go:367: Piece at 351 is downloaded
-LOG: 12:54:03 message.go:323: Asking -TR2840-zb1cym02clzv for piece 371
-LOG: 12:54:03 message.go:367: Piece at 366 is downloaded
-LOG: 12:54:03 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 372
-LOG: 12:54:03 message.go:367: Piece at 359 is downloaded
-LOG: 12:54:03 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 373
-LOG: 12:54:03 message.go:367: Piece at 347 is downloaded
-LOG: 12:54:03 message.go:323: Asking -TR2840-87bbdxayabyy for piece 374
-LOG: 12:54:03 message.go:367: Piece at 338 is downloaded
-LOG: 12:54:03 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 375
-LOG: 12:54:03 message.go:367: Piece at 335 is downloaded
-LOG: 12:54:03 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 376
-LOG: 12:54:03 message.go:367: Piece at 360 is downloaded
-LOG: 12:54:03 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 377
-LOG: 12:54:03 message.go:367: Piece at 361 is downloaded
-LOG: 12:54:03 message.go:323: Asking -TR2840-szozatvacjzk for piece 378
-LOG: 12:54:03 message.go:367: Piece at 349 is downloaded
-LOG: 12:54:03 message.go:323: Asking -TR2920-hb1rug930be5 for piece 379
-LOG: 12:54:03 message.go:367: Piece at 329 is downloaded
-LOG: 12:54:03 message.go:323: Asking -TR2920-zwfr0d6xfqnr for piece 380
-LOG: 12:54:04 message.go:367: Piece at 331 is downloaded
-LOG: 12:54:04 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 381
-LOG: 12:54:04 message.go:367: Piece at 372 is downloaded
-LOG: 12:54:04 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 382
-LOG: 12:54:04 message.go:367: Piece at 373 is downloaded
-LOG: 12:54:04 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 383
-LOG: 12:54:04 message.go:367: Piece at 284 is downloaded
-LOG: 12:54:04 message.go:323: Asking -TR2820-2xffpt6n8rr6 for piece 384
-LOG: 12:54:04 message.go:367: Piece at 327 is downloaded
-LOG: 12:54:04 message.go:323: Asking -UT2210-sbó˙ÏÓﬁÆé for piece 385
-LOG: 12:54:04 message.go:367: Piece at 325 is downloaded
-LOG: 12:54:04 message.go:323: Asking -TR2840-5zkpd4h5veno for piece 386
-LOG: 12:54:04 message.go:367: Piece at 341 is downloaded
-LOG: 12:54:04 message.go:367: Piece at 377 is downloaded
-LOG: 12:54:04 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 388
-LOG: 12:54:04 message.go:367: Piece at 357 is downloaded
-LOG: 12:54:04 message.go:323: Asking -TR2840-brfog0es4qlu for piece 389
-LOG: 12:54:04 message.go:323: Asking -qB3310-AIKaH!q6*S5p for piece 387
-LOG: 12:54:04 message.go:367: Piece at 367 is downloaded
-LOG: 12:54:04 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 390
-LOG: 12:54:04 message.go:367: Piece at 369 is downloaded
-LOG: 12:54:04 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 391
-LOG: 12:54:04 message.go:367: Piece at 312 is downloaded
-LOG: 12:54:04 message.go:323: Asking -DE13C0-QS~IIjV4bczQ for piece 392
-LOG: 12:54:04 message.go:367: Piece at 368 is downloaded
-LOG: 12:54:04 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 393
-LOG: 12:54:04 message.go:367: Piece at 371 is downloaded
-LOG: 12:54:04 message.go:323: Asking -TR2840-zb1cym02clzv for piece 394
-LOG: 12:54:04 message.go:367: Piece at 382 is downloaded
-LOG: 12:54:04 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 395
-LOG: 12:54:04 message.go:367: Piece at 370 is downloaded
-LOG: 12:54:04 message.go:367: Piece at 332 is downloaded
-LOG: 12:54:04 message.go:323: Asking -TR2820-wppmx7a3tfpq for piece 397
-LOG: 12:54:04 message.go:367: Piece at 383 is downloaded
-LOG: 12:54:04 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 398
-LOG: 12:54:04 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 396
-LOG: 12:54:04 message.go:367: Piece at 178 is downloaded
-LOG: 12:54:04 message.go:323: Asking -TR2920-8veubtm1rsns for piece 399
-LOG: 12:54:04 message.go:367: Piece at 388 is downloaded
-LOG: 12:54:04 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 400
-LOG: 12:54:04 message.go:367: Piece at 374 is downloaded
-LOG: 12:54:04 message.go:323: Asking -TR2840-87bbdxayabyy for piece 401
-LOG: 12:54:05 message.go:367: Piece at 395 is downloaded
-LOG: 12:54:05 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 402
-LOG: 12:54:05 message.go:367: Piece at 378 is downloaded
-LOG: 12:54:05 message.go:323: Asking -TR2840-szozatvacjzk for piece 403
-LOG: 12:54:05 message.go:367: Piece at 394 is downloaded
-LOG: 12:54:05 message.go:323: Asking -TR2840-zb1cym02clzv for piece 404
-LOG: 12:54:05 message.go:367: Piece at 398 is downloaded
-LOG: 12:54:05 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 405
-LOG: 12:54:05 message.go:367: Piece at 355 is downloaded
-LOG: 12:54:05 message.go:323: Asking -TR2920-jrvjsnezxj40 for piece 406
-LOG: 12:54:05 message.go:367: Piece at 379 is downloaded
-LOG: 12:54:05 message.go:323: Asking -TR2920-hb1rug930be5 for piece 407
-LOG: 12:54:05 message.go:367: Piece at 363 is downloaded
-LOG: 12:54:05 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 408
-DEBUG: 12:54:05 peer.go:96: Error Reading Length -DE13C0-AKSCRg~e*DMg, Stopping: EOF
-LOG: 12:54:05 message.go:367: Piece at 365 is downloaded
-LOG: 12:54:05 message.go:323: Asking -TR2840-i02z01p0z8ow for piece 409
-LOG: 12:54:05 message.go:367: Piece at 390 is downloaded
-LOG: 12:54:05 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 410
-LOG: 12:54:05 message.go:367: Piece at 400 is downloaded
-LOG: 12:54:05 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 411
-LOG: 12:54:05 message.go:367: Piece at 381 is downloaded
-LOG: 12:54:05 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 412
-LOG: 12:54:05 message.go:367: Piece at 389 is downloaded
-LOG: 12:54:05 message.go:323: Asking -TR2840-brfog0es4qlu for piece 413
-LOG: 12:54:05 message.go:367: Piece at 356 is downloaded
-LOG: 12:54:05 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 414
-LOG: 12:54:05 message.go:367: Piece at 375 is downloaded
-LOG: 12:54:05 message.go:367: Piece at 393 is downloaded
-LOG: 12:54:05 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 416
-LOG: 12:54:05 message.go:367: Piece at 391 is downloaded
-LOG: 12:54:05 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 417
-LOG: 12:54:05 message.go:367: Piece at 362 is downloaded
-LOG: 12:54:05 message.go:323: Asking -TR2820-e7i5p6gcgx2q for piece 418
-LOG: 12:54:05 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 415
-LOG: 12:54:06 message.go:367: Piece at 411 is downloaded
-LOG: 12:54:06 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 419
-LOG: 12:54:06 message.go:367: Piece at 405 is downloaded
-LOG: 12:54:06 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 420
-LOG: 12:54:06 message.go:367: Piece at 402 is downloaded
-LOG: 12:54:06 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 421
-LOG: 12:54:06 message.go:367: Piece at 396 is downloaded
-LOG: 12:54:06 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 422
-LOG: 12:54:06 message.go:367: Piece at 376 is downloaded
-LOG: 12:54:06 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 423
-LOG: 12:54:06 message.go:367: Piece at 421 is downloaded
-LOG: 12:54:06 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 424
-LOG: 12:54:06 message.go:367: Piece at 404 is downloaded
-LOG: 12:54:06 message.go:323: Asking -TR2840-zb1cym02clzv for piece 425
-LOG: 12:54:06 message.go:367: Piece at 419 is downloaded
-LOG: 12:54:06 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 426
-LOG: 12:54:06 message.go:367: Piece at 417 is downloaded
-LOG: 12:54:06 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 427
-LOG: 12:54:06 message.go:367: Piece at 420 is downloaded
-LOG: 12:54:06 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 428
-LOG: 12:54:06 message.go:367: Piece at 410 is downloaded
-LOG: 12:54:06 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 429
-LOG: 12:54:06 message.go:367: Piece at 403 is downloaded
-LOG: 12:54:06 message.go:323: Asking -TR2840-szozatvacjzk for piece 430
-LOG: 12:54:07 message.go:367: Piece at 416 is downloaded
-LOG: 12:54:07 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 431
-LOG: 12:54:07 message.go:367: Piece at 424 is downloaded
-LOG: 12:54:07 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 432
-LOG: 12:54:07 message.go:367: Piece at 426 is downloaded
-LOG: 12:54:07 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 433
-LOG: 12:54:07 message.go:367: Piece at 401 is downloaded
-LOG: 12:54:07 message.go:323: Asking -TR2840-87bbdxayabyy for piece 434
-LOG: 12:54:07 message.go:367: Piece at 407 is downloaded
-LOG: 12:54:07 message.go:323: Asking -TR2920-hb1rug930be5 for piece 435
-LOG: 12:54:07 message.go:367: Piece at 413 is downloaded
-LOG: 12:54:07 message.go:323: Asking -TR2840-brfog0es4qlu for piece 436
-LOG: 12:54:07 message.go:367: Piece at 412 is downloaded
-LOG: 12:54:07 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 437
-LOG: 12:54:07 message.go:367: Piece at 414 is downloaded
-LOG: 12:54:07 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 438
-LOG: 12:54:07 message.go:367: Piece at 428 is downloaded
-LOG: 12:54:07 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 439
-LOG: 12:54:07 message.go:367: Piece at 385 is downloaded
-LOG: 12:54:07 message.go:323: Asking -UT2210-sbó˙ÏÓﬁÆé for piece 440
-LOG: 12:54:07 message.go:367: Piece at 427 is downloaded
-LOG: 12:54:07 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 441
-LOG: 12:54:07 message.go:367: Piece at 380 is downloaded
-LOG: 12:54:07 message.go:323: Asking -TR2920-zwfr0d6xfqnr for piece 442
-LOG: 12:54:07 message.go:367: Piece at 432 is downloaded
-LOG: 12:54:07 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 443
-LOG: 12:54:07 message.go:367: Piece at 425 is downloaded
-LOG: 12:54:07 message.go:323: Asking -TR2840-zb1cym02clzv for piece 444
-LOG: 12:54:07 message.go:367: Piece at 408 is downloaded
-LOG: 12:54:07 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 445
-LOG: 12:54:07 message.go:367: Piece at 433 is downloaded
-LOG: 12:54:07 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 446
-LOG: 12:54:07 message.go:367: Piece at 253 is downloaded
-LOG: 12:54:07 message.go:323: Asking -DE13D0-Ej.3Sv8FJ6LG for piece 447
-LOG: 12:54:07 message.go:367: Piece at 364 is downloaded
-LOG: 12:54:07 message.go:323: Asking -TR2840-z86yg6aqcdms for piece 448
-LOG: 12:54:07 message.go:367: Piece at 429 is downloaded
-LOG: 12:54:07 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 449
-LOG: 12:54:07 message.go:367: Piece at 439 is downloaded
-LOG: 12:54:07 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 450
-LOG: 12:54:08 message.go:367: Piece at 397 is downloaded
-LOG: 12:54:08 message.go:323: Asking -TR2820-wppmx7a3tfpq for piece 451
-LOG: 12:54:08 message.go:367: Piece at 443 is downloaded
-LOG: 12:54:08 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 452
-LOG: 12:54:08 message.go:367: Piece at 415 is downloaded
-LOG: 12:54:08 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 453
-LOG: 12:54:08 message.go:367: Piece at 409 is downloaded
-LOG: 12:54:08 message.go:323: Asking -TR2840-i02z01p0z8ow for piece 454
-LOG: 12:54:08 message.go:367: Piece at 387 is downloaded
-LOG: 12:54:08 message.go:323: Asking -qB3310-AIKaH!q6*S5p for piece 455
-LOG: 12:54:08 message.go:367: Piece at 446 is downloaded
-LOG: 12:54:08 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 456
-LOG: 12:54:08 message.go:367: Piece at 423 is downloaded
-LOG: 12:54:08 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 457
-LOG: 12:54:08 message.go:367: Piece at 406 is downloaded
-LOG: 12:54:08 message.go:323: Asking -TR2920-jrvjsnezxj40 for piece 458
-LOG: 12:54:08 message.go:367: Piece at 452 is downloaded
-LOG: 12:54:08 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 459
-LOG: 12:54:08 message.go:367: Piece at 434 is downloaded
-LOG: 12:54:08 message.go:323: Asking -TR2840-87bbdxayabyy for piece 460
-LOG: 12:54:08 message.go:367: Piece at 392 is downloaded
-LOG: 12:54:08 message.go:323: Asking -DE13C0-QS~IIjV4bczQ for piece 461
-LOG: 12:54:08 message.go:367: Piece at 431 is downloaded
-LOG: 12:54:08 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 462
-LOG: 12:54:08 message.go:367: Piece at 320 is downloaded
-LOG: 12:54:08 message.go:323: Asking -TR2820-3yrpisemhiug for piece 463
-LOG: 12:54:08 message.go:367: Piece at 422 is downloaded
-LOG: 12:54:08 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 464
-LOG: 12:54:08 message.go:367: Piece at 450 is downloaded
-LOG: 12:54:08 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 465
-LOG: 12:54:08 message.go:367: Piece at 436 is downloaded
-LOG: 12:54:08 message.go:323: Asking -TR2840-brfog0es4qlu for piece 466
-LOG: 12:54:08 message.go:367: Piece at 430 is downloaded
-LOG: 12:54:08 message.go:323: Asking -TR2840-szozatvacjzk for piece 467
-LOG: 12:54:08 message.go:367: Piece at 444 is downloaded
-LOG: 12:54:08 message.go:323: Asking -TR2840-zb1cym02clzv for piece 468
-LOG: 12:54:08 message.go:367: Piece at 222 is downloaded
-LOG: 12:54:08 message.go:323: Asking -UT2210-÷bÑq‘ƒwoR for piece 469
-LOG: 12:54:08 message.go:367: Piece at 435 is downloaded
-LOG: 12:54:08 message.go:323: Asking -TR2920-hb1rug930be5 for piece 470
-LOG: 12:54:08 message.go:367: Piece at 459 is downloaded
-LOG: 12:54:08 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 471
-LOG: 12:54:08 message.go:367: Piece at 441 is downloaded
-LOG: 12:54:08 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 472
-LOG: 12:54:09 message.go:367: Piece at 445 is downloaded
-LOG: 12:54:09 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 473
-LOG: 12:54:09 message.go:367: Piece at 386 is downloaded
-LOG: 12:54:09 message.go:323: Asking -TR2840-5zkpd4h5veno for piece 474
-LOG: 12:54:09 message.go:367: Piece at 449 is downloaded
-LOG: 12:54:09 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 475
-LOG: 12:54:09 message.go:367: Piece at 465 is downloaded
-LOG: 12:54:09 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 476
-LOG: 12:54:09 message.go:367: Piece at 399 is downloaded
-LOG: 12:54:09 message.go:323: Asking -TR2920-8veubtm1rsns for piece 477
-LOG: 12:54:09 message.go:367: Piece at 438 is downloaded
-LOG: 12:54:09 message.go:367: Piece at 471 is downloaded
-LOG: 12:54:09 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 479
-LOG: 12:54:09 message.go:367: Piece at 437 is downloaded
-LOG: 12:54:09 message.go:323: Asking -UT2210-÷b–|òGËöo%¸ for piece 480
-LOG: 12:54:09 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 478
-LOG: 12:54:09 message.go:367: Piece at 456 is downloaded
-LOG: 12:54:09 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 481
-LOG: 12:54:09 message.go:367: Piece at 460 is downloaded
-LOG: 12:54:09 message.go:323: Asking -TR2840-87bbdxayabyy for piece 482
-LOG: 12:54:09 message.go:367: Piece at 472 is downloaded
-LOG: 12:54:09 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 483
-LOG: 12:54:09 message.go:367: Piece at 476 is downloaded
-LOG: 12:54:09 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 484
-LOG: 12:54:09 message.go:367: Piece at 467 is downloaded
-LOG: 12:54:09 message.go:323: Asking -TR2840-szozatvacjzk for piece 485
-LOG: 12:54:09 message.go:367: Piece at 479 is downloaded
-LOG: 12:54:09 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 486
-LOG: 12:54:10 message.go:367: Piece at 464 is downloaded
-LOG: 12:54:10 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 487
-LOG: 12:54:10 message.go:367: Piece at 486 is downloaded
-LOG: 12:54:10 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 488
-LOG: 12:54:10 message.go:367: Piece at 466 is downloaded
-LOG: 12:54:10 message.go:323: Asking -TR2840-brfog0es4qlu for piece 489
-LOG: 12:54:10 message.go:367: Piece at 470 is downloaded
-LOG: 12:54:10 message.go:323: Asking -TR2920-hb1rug930be5 for piece 490
-LOG: 12:54:10 message.go:367: Piece at 462 is downloaded
-LOG: 12:54:10 message.go:323: Asking -DE13C0-qPM51wBHC3m8 for piece 491
-LOG: 12:54:10 message.go:367: Piece at 384 is downloaded
-LOG: 12:54:10 message.go:323: Asking -TR2820-2xffpt6n8rr6 for piece 492
-LOG: 12:54:10 message.go:367: Piece at 451 is downloaded
-LOG: 12:54:10 message.go:323: Asking -TR2820-wppmx7a3tfpq for piece 493
-LOG: 12:54:10 message.go:367: Piece at 468 is downloaded
-LOG: 12:54:10 message.go:367: Piece at 481 is downloaded
-LOG: 12:54:10 message.go:367: Piece at 475 is downloaded
-LOG: 12:54:10 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 496
-LOG: 12:54:10 message.go:323: Asking -TR2840-zb1cym02clzv for piece 494
-LOG: 12:54:10 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 495
-LOG: 12:54:10 message.go:367: Piece at 442 is downloaded
-LOG: 12:54:10 message.go:323: Asking -TR2920-zwfr0d6xfqnr for piece 497
-LOG: 12:54:10 message.go:367: Piece at 482 is downloaded
-LOG: 12:54:10 message.go:323: Asking -TR2840-87bbdxayabyy for piece 498
-LOG: 12:54:10 message.go:367: Piece at 484 is downloaded
-LOG: 12:54:10 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 499
-LOG: 12:54:10 message.go:367: Piece at 485 is downloaded
-LOG: 12:54:10 message.go:323: Asking -TR2840-szozatvacjzk for piece 500
-LOG: 12:54:10 message.go:367: Piece at 488 is downloaded
-LOG: 12:54:10 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 501
-DEBUG: 12:54:10 message.go:340: One Minute Passed! 14
-LOG: 12:54:10 message.go:367: Piece at 478 is downloaded
-LOG: 12:54:10 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 502
-LOG: 12:54:11 message.go:367: Piece at 495 is downloaded
-LOG: 12:54:11 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 14
-LOG: 12:54:11 message.go:367: Piece at 457 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2840-uo289lmrdvo5 for piece 503
-LOG: 12:54:11 message.go:367: Piece at 499 is downloaded
-LOG: 12:54:11 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 504
-LOG: 12:54:11 message.go:367: Piece at 473 is downloaded
-LOG: 12:54:11 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 505
-LOG: 12:54:11 message.go:367: Piece at 458 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2920-jrvjsnezxj40 for piece 506
-LOG: 12:54:11 message.go:367: Piece at 106 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2840-edjmvi3qftl5 for piece 507
-DEBUG: 12:54:11 message.go:340: One Minute Passed! 21
-LOG: 12:54:11 message.go:367: Piece at 448 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2840-z86yg6aqcdms for piece 508
-LOG: 12:54:11 message.go:367: Piece at 489 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2840-brfog0es4qlu for piece 21
-LOG: 12:54:11 message.go:367: Piece at 501 is downloaded
-LOG: 12:54:11 message.go:323: Asking -lt0D60-ÁãÊB#KÔ‹ for piece 509
-LOG: 12:54:11 message.go:367: Piece at 440 is downloaded
-LOG: 12:54:11 message.go:323: Asking -UT2210-sbó˙ÏÓﬁÆé for piece 510
-LOG: 12:54:11 message.go:367: Piece at 483 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 511
-LOG: 12:54:11 message.go:367: Piece at 14 is downloaded
-LOG: 12:54:11 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 512
-DEBUG: 12:54:11 message.go:340: One Minute Passed! 27
-LOG: 12:54:11 message.go:323: Asking -UT3200-∞k#~åˇÄ~D« for piece 513
-LOG: 12:54:11 message.go:367: Piece at 494 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2840-zb1cym02clzv for piece 27
-LOG: 12:54:11 message.go:367: Piece at 498 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2840-87bbdxayabyy for piece 514
-LOG: 12:54:11 message.go:367: Piece at 490 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2920-hb1rug930be5 for piece 515
-LOG: 12:54:11 message.go:367: Piece at 504 is downloaded
-LOG: 12:54:11 message.go:323: Asking -lt0D30-˘ÄUîe°xñ¯ú for piece 516
-LOG: 12:54:11 message.go:367: Piece at 454 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2840-i02z01p0z8ow for piece 517
-LOG: 12:54:11 message.go:367: Piece at 500 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2840-szozatvacjzk for piece 518
-LOG: 12:54:11 message.go:367: Piece at 496 is downloaded
-LOG: 12:54:11 message.go:323: Asking -lt0D60-Ç<‰¢ds‰Dí|% for piece 519
-LOG: 12:54:11 message.go:367: Piece at 418 is downloaded
-LOG: 12:54:11 message.go:323: Asking -TR2820-e7i5p6gcgx2q for piece 520
-LOG: 12:54:12 message.go:367: Piece at 487 is downloaded
-LOG: 12:54:12 message.go:323: Asking -lt0D60-KúHzˇï≈äß°æ for piece 521
-LOG: 12:54:12 message.go:367: Piece at 505 is downloaded
-LOG: 12:54:12 message.go:323: Asking -UT1820-˝;2£òCFô˘‰·a for piece 522
-LOG: 12:54:12 message.go:367: Piece at 453 is downloaded
-LOG: 12:54:12 message.go:323: Asking -lt0D40-Õ4í—IGlF¬⁄ % for piece 523
+DEBUG: 12:58:15 main.go:65: Length:  1513308160
+DEBUG: 12:58:15 main.go:66: Piece Length:  524288
+DEBUG: 12:58:15 main.go:67: Piece Len:  57740
+DEBUG: 12:58:15 main.go:68: Pieces count:  2887
+LOG: 12:58:15 tracker.go:53: TRACKER REQUEST: http://torrent.ubuntu.com:6969/announce?info_hash=%9f%91e%d9%a2%81%a9%b8%e7%82%cdQv%bb%cc%82V%fd%18q&peer_id=-TR3440-91a24W577461&uploaded=0&downloaded=0&left=1513308160&port=51413&key=60502143&numwant=80&compact=1&supportcrypto=1&event=started
+DEBUG: 12:58:17 manager.go:6: This many peers 50
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  47.198.67.122:1611
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  84.38.65.139:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  173.199.65.3:48103
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  37.59.37.57:52413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  92.99.224.198:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  130.111.182.134:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  185.21.217.74:56502
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  217.224.76.223:53908
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  204.187.100.19:40127
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  93.190.178.103:42577
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  76.77.184.57:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  176.9.86.22:8920
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  175.141.17.22:17885
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  85.67.112.81:27332
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  195.66.137.235:16426
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  185.21.217.33:52937
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  85.67.140.36:56462
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  82.2.174.11:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  31.6.28.188:16881
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  71.237.141.42:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  37.59.40.80:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  192.222.175.112:35033
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  130.180.51.242:6881
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  90.30.207.243:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  90.127.106.32:6881
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  185.21.216.140:56645
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  185.56.20.15:56023
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  192.131.44.84:60158
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  198.27.87.84:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  72.14.186.209:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  178.163.99.113:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  31.6.28.188:16881
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  85.175.217.18:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  185.21.216.186:62087
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  89.252.11.16:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  185.21.217.18:57984
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  176.158.13.182:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  93.74.106.232:29905
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  37.187.107.142:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  89.88.48.149:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  84.245.13.143:32767
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  220.255.119.231:59356
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  198.48.181.66:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  37.187.4.26:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  188.101.93.11:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  92.85.73.100:50719
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  38.88.53.102:51134
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  91.121.84.177:51413
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  100.37.108.22:29686
+LOG: 12:58:17 peer.go:63: Connecting to Peer:  109.254.39.196:61404
+DEBUG: 12:58:17 manager.go:46: Error Connecting to  173.199.65.3: dial tcp 173.199.65.3:48103: getsockopt: connection refused
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -qB3360-rrRbw0F7dbbb
+LOG: 12:58:17 peer.go:88: Peer -qB3360-rrRbw0F7dbbb : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -qB3360-rrRbw0F7dbbb
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -lt0D60-=0áAgŸ˛V2aIT
+LOG: 12:58:17 peer.go:88: Peer -lt0D60-=0áAgŸ˛V2aIT : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-=0áAgŸ˛V2aIT
+LOG: 12:58:17 message.go:119: Bitfield -qB3360-rrRbw0F7dbbb
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -qB3360-rrRbw0F7dbbb
+LOG: 12:58:17 message.go:116: Have [0 0 0 160]
+LOG: 12:58:17 message.go:116: Have [0 0 0 246]
+LOG: 12:58:17 message.go:116: Have [0 0 1 251]
+LOG: 12:58:17 message.go:116: Have [0 0 0 227]
+LOG: 12:58:17 message.go:116: Have [0 0 1 13]
+LOG: 12:58:17 message.go:116: Have [0 0 1 97]
+LOG: 12:58:17 message.go:116: Have [0 0 2 32]
+LOG: 12:58:17 message.go:116: Have [0 0 2 66]
+LOG: 12:58:17 message.go:116: Have [0 0 0 25]
+LOG: 12:58:17 message.go:116: Have [0 0 2 223]
+LOG: 12:58:17 message.go:116: Have [0 0 2 138]
+LOG: 12:58:17 message.go:116: Have [0 0 3 150]
+LOG: 12:58:17 message.go:116: Have [0 0 3 214]
+LOG: 12:58:17 message.go:116: Have [0 0 3 155]
+LOG: 12:58:17 message.go:116: Have [0 0 3 160]
+LOG: 12:58:17 message.go:116: Have [0 0 3 48]
+LOG: 12:58:17 message.go:116: Have [0 0 5 95]
+LOG: 12:58:17 message.go:116: Have [0 0 4 190]
+LOG: 12:58:17 message.go:116: Have [0 0 5 4]
+LOG: 12:58:17 message.go:116: Have [0 0 5 42]
+LOG: 12:58:17 message.go:116: Have [0 0 5 54]
+LOG: 12:58:17 message.go:116: Have [0 0 4 243]
+LOG: 12:58:17 message.go:116: Have [0 0 7 114]
+LOG: 12:58:17 message.go:116: Have [0 0 6 18]
+LOG: 12:58:17 message.go:116: Have [0 0 6 86]
+LOG: 12:58:17 message.go:116: Have [0 0 5 165]
+LOG: 12:58:17 message.go:116: Have [0 0 6 100]
+LOG: 12:58:17 message.go:116: Have [0 0 11 47]
+LOG: 12:58:17 message.go:116: Have [0 0 7 86]
+LOG: 12:58:17 message.go:116: Have [0 0 5 218]
+LOG: 12:58:17 message.go:116: Have [0 0 7 116]
+LOG: 12:58:17 message.go:116: Have [0 0 7 205]
+LOG: 12:58:17 message.go:116: Have [0 0 6 220]
+LOG: 12:58:17 message.go:116: Have [0 0 8 37]
+LOG: 12:58:17 message.go:116: Have [0 0 8 42]
+LOG: 12:58:17 message.go:116: Have [0 0 9 34]
+LOG: 12:58:17 message.go:116: Have [0 0 8 224]
+LOG: 12:58:17 message.go:116: Have [0 0 10 0]
+LOG: 12:58:17 message.go:116: Have [0 0 9 132]
+LOG: 12:58:17 message.go:116: Have [0 0 10 154]
+LOG: 12:58:17 message.go:116: Have [0 0 7 223]
+LOG: 12:58:17 message.go:116: Have [0 0 9 72]
+LOG: 12:58:17 message.go:116: Have [0 0 7 209]
+LOG: 12:58:17 message.go:116: Have [0 0 10 250]
+LOG: 12:58:17 message.go:116: Have [0 0 10 58]
+LOG: 12:58:17 message.go:116: Have [0 0 6 14]
+LOG: 12:58:17 message.go:116: Have [0 0 9 167]
+LOG: 12:58:17 message.go:116: Have [0 0 10 67]
+LOG: 12:58:17 message.go:116: Have [0 0 9 196]
+LOG: 12:58:17 message.go:116: Have [0 0 11 1]
+LOG: 12:58:17 message.go:108: UnChoke -qB3360-rrRbw0F7dbbb
+LOG: 12:58:17 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 0
+LOG: 12:58:17 message.go:119: Bitfield -lt0D60-=0áAgŸ˛V2aIT
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-=0áAgŸ˛V2aIT
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -DE13D0-K424n7K4fVtJ
+LOG: 12:58:17 peer.go:88: Peer -DE13D0-K424n7K4fVtJ : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -DE13D0-K424n7K4fVtJ
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2920-lsice194ce0b
+LOG: 12:58:17 peer.go:88: Peer -TR2920-lsice194ce0b : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-lsice194ce0b
+LOG: 12:58:17 message.go:108: UnChoke -lt0D60-=0áAgŸ˛V2aIT
+LOG: 12:58:17 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 1
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2840-ooz824b80ai0
+LOG: 12:58:17 peer.go:88: Peer -TR2840-ooz824b80ai0 : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2840-ooz824b80ai0
+LOG: 12:58:17 message.go:119: Bitfield -DE13D0-K424n7K4fVtJ
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -DE13D0-K424n7K4fVtJ
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -qB3310-dC9uS6iWe_jB
+LOG: 12:58:17 peer.go:88: Peer -qB3310-dC9uS6iWe_jB : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -qB3310-dC9uS6iWe_jB
+LOG: 12:58:17 message.go:108: UnChoke -DE13D0-K424n7K4fVtJ
+LOG: 12:58:17 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 2
+LOG: 12:58:17 message.go:116: Have [0 0 10 218]
+LOG: 12:58:17 message.go:119: Bitfield -qB3310-dC9uS6iWe_jB
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -qB3310-dC9uS6iWe_jB
+LOG: 12:58:17 message.go:116: Have [0 0 0 44]
+LOG: 12:58:17 message.go:116: Have [0 0 0 53]
+LOG: 12:58:17 message.go:116: Have [0 0 0 62]
+LOG: 12:58:17 message.go:116: Have [0 0 0 140]
+LOG: 12:58:17 message.go:116: Have [0 0 0 179]
+LOG: 12:58:17 message.go:116: Have [0 0 0 200]
+LOG: 12:58:17 message.go:116: Have [0 0 1 78]
+LOG: 12:58:17 message.go:116: Have [0 0 1 136]
+LOG: 12:58:17 message.go:116: Have [0 0 1 218]
+LOG: 12:58:17 message.go:116: Have [0 0 1 233]
+LOG: 12:58:17 message.go:116: Have [0 0 2 108]
+LOG: 12:58:17 message.go:116: Have [0 0 2 251]
+LOG: 12:58:17 message.go:116: Have [0 0 3 113]
+LOG: 12:58:17 message.go:116: Have [0 0 4 7]
+LOG: 12:58:17 message.go:116: Have [0 0 4 71]
+LOG: 12:58:17 message.go:116: Have [0 0 4 95]
+LOG: 12:58:17 message.go:116: Have [0 0 4 174]
+LOG: 12:58:17 message.go:116: Have [0 0 4 213]
+LOG: 12:58:17 message.go:116: Have [0 0 4 239]
+LOG: 12:58:17 message.go:116: Have [0 0 5 77]
+LOG: 12:58:17 message.go:116: Have [0 0 5 246]
+LOG: 12:58:17 message.go:116: Have [0 0 5 255]
+LOG: 12:58:17 message.go:116: Have [0 0 6 23]
+LOG: 12:58:17 message.go:116: Have [0 0 6 52]
+LOG: 12:58:17 message.go:116: Have [0 0 6 67]
+LOG: 12:58:17 message.go:116: Have [0 0 6 87]
+LOG: 12:58:17 message.go:116: Have [0 0 6 129]
+LOG: 12:58:17 message.go:116: Have [0 0 6 214]
+LOG: 12:58:17 message.go:116: Have [0 0 6 219]
+LOG: 12:58:17 message.go:116: Have [0 0 7 22]
+LOG: 12:58:17 message.go:116: Have [0 0 7 226]
+LOG: 12:58:17 message.go:116: Have [0 0 8 61]
+LOG: 12:58:17 message.go:116: Have [0 0 8 154]
+LOG: 12:58:17 message.go:116: Have [0 0 8 171]
+LOG: 12:58:17 message.go:116: Have [0 0 9 70]
+LOG: 12:58:17 message.go:116: Have [0 0 9 89]
+LOG: 12:58:17 message.go:116: Have [0 0 9 112]
+LOG: 12:58:17 message.go:116: Have [0 0 9 123]
+LOG: 12:58:17 message.go:116: Have [0 0 9 144]
+LOG: 12:58:17 message.go:116: Have [0 0 9 154]
+LOG: 12:58:17 message.go:116: Have [0 0 9 169]
+LOG: 12:58:17 message.go:116: Have [0 0 9 199]
+LOG: 12:58:17 message.go:116: Have [0 0 9 211]
+LOG: 12:58:17 message.go:116: Have [0 0 9 229]
+LOG: 12:58:17 message.go:116: Have [0 0 10 69]
+LOG: 12:58:17 message.go:116: Have [0 0 10 84]
+LOG: 12:58:17 message.go:116: Have [0 0 10 150]
+LOG: 12:58:17 message.go:116: Have [0 0 10 183]
+LOG: 12:58:17 message.go:116: Have [0 0 10 216]
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -lt0D60-K)W*Î|V|xêvt
+LOG: 12:58:17 peer.go:88: Peer -lt0D60-K)W*Î|V|xêvt : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-K)W*Î|V|xêvt
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -DE13D0-Z-h(ynBAUp3s
+LOG: 12:58:17 peer.go:88: Peer -DE13D0-Z-h(ynBAUp3s : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -DE13D0-Z-h(ynBAUp3s
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -DE13D0-aj(Jw4m72f2P
+LOG: 12:58:17 peer.go:88: Peer -DE13D0-aj(Jw4m72f2P : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -DE13D0-aj(Jw4m72f2P
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -lt0D60-‘jª»Õ‘TáœiF
+LOG: 12:58:17 peer.go:88: Peer -lt0D60-‘jª»Õ‘TáœiF : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-‘jª»Õ‘TáœiF
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -lt0D60-¿í˜5§ ‹itˇee
+LOG: 12:58:17 peer.go:88: Peer -lt0D60-¿í˜5§ ‹itˇee : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-¿í˜5§ ‹itˇee
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -lt0D60-ÜtJπújÿÊ
+LOG: 12:58:17 peer.go:88: Peer -lt0D60-ÜtJπújÿÊ : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-ÜtJπújÿÊ
+LOG: 12:58:17 message.go:376: Piece at 1 is downloaded
+LOG: 12:58:17 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 3
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -lt0D60-O'[ Ú›g∫d*
+LOG: 12:58:17 peer.go:88: Peer -lt0D60-O'[ Ú›g∫d* : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-O'[ Ú›g∫d*
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2920-8llycvdqm1n4
+LOG: 12:58:17 peer.go:88: Peer -TR2920-8llycvdqm1n4 : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-8llycvdqm1n4
+LOG: 12:58:17 message.go:108: UnChoke -qB3310-dC9uS6iWe_jB
+LOG: 12:58:17 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 4
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2840-ogwvw8alw2iq
+LOG: 12:58:17 peer.go:88: Peer -TR2840-ogwvw8alw2iq : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2840-ogwvw8alw2iq
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2840-y2v7e4qcte70
+LOG: 12:58:17 peer.go:88: Peer -TR2840-y2v7e4qcte70 : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2840-y2v7e4qcte70
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -qB3370-SLaBGsxbhuvf
+LOG: 12:58:17 peer.go:88: Peer -qB3370-SLaBGsxbhuvf : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -qB3370-SLaBGsxbhuvf
+LOG: 12:58:17 message.go:119: Bitfield -DE13D0-Z-h(ynBAUp3s
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -DE13D0-Z-h(ynBAUp3s
+LOG: 12:58:17 message.go:119: Bitfield -lt0D60-K)W*Î|V|xêvt
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-K)W*Î|V|xêvt
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2920-u9ofnfexj06s
+LOG: 12:58:17 message.go:119: Bitfield -DE13D0-aj(Jw4m72f2P
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -DE13D0-aj(Jw4m72f2P
+LOG: 12:58:17 peer.go:88: Peer -TR2920-u9ofnfexj06s : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-u9ofnfexj06s
+LOG: 12:58:17 message.go:119: Bitfield -lt0D60-¿í˜5§ ‹itˇee
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-¿í˜5§ ‹itˇee
+LOG: 12:58:17 message.go:119: Bitfield -lt0D60-‘jª»Õ‘TáœiF
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-‘jª»Õ‘TáœiF
+LOG: 12:58:17 message.go:376: Piece at 3 is downloaded
+LOG: 12:58:17 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 5
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -UT2210-÷b
+˛R{VÔCnNâ
+LOG: 12:58:17 peer.go:88: Peer -UT2210-÷b
+˛R{VÔCnNâ : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -UT2210-÷b
+˛R{VÔCnNâ
+LOG: 12:58:17 message.go:119: Bitfield -lt0D60-O'[ Ú›g∫d*
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-O'[ Ú›g∫d*
+LOG: 12:58:17 message.go:119: Bitfield -lt0D60-ÜtJπújÿÊ
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-ÜtJπújÿÊ
+LOG: 12:58:17 message.go:376: Piece at 0 is downloaded
+LOG: 12:58:17 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 6
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -lt0D60-√q££÷U®ı^G
+LOG: 12:58:17 peer.go:88: Peer -lt0D60-√q££÷U®ı^G : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-√q££÷U®ı^G
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2920-u92jeylh53h9
+LOG: 12:58:17 peer.go:88: Peer -TR2920-u92jeylh53h9 : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-u92jeylh53h9
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2840-txgm68lk7sys
+LOG: 12:58:17 peer.go:88: Peer -TR2840-txgm68lk7sys : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2840-txgm68lk7sys
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2820-wntr1uzwd89d
+LOG: 12:58:17 peer.go:88: Peer -TR2820-wntr1uzwd89d : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2820-wntr1uzwd89d
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2820-xnsbpld583yc
+LOG: 12:58:17 message.go:116: Have [0 0 11 33]
+LOG: 12:58:17 peer.go:88: Peer -TR2820-xnsbpld583yc : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2820-xnsbpld583yc
+LOG: 12:58:17 message.go:119: Bitfield -qB3370-SLaBGsxbhuvf
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -qB3370-SLaBGsxbhuvf
+LOG: 12:58:17 message.go:116: Have [0 0 0 0]
+LOG: 12:58:17 message.go:116: Have [0 0 0 12]
+LOG: 12:58:17 message.go:116: Have [0 0 0 13]
+LOG: 12:58:17 message.go:116: Have [0 0 0 76]
+LOG: 12:58:17 message.go:116: Have [0 0 0 103]
+LOG: 12:58:17 message.go:116: Have [0 0 0 145]
+LOG: 12:58:17 message.go:116: Have [0 0 0 176]
+LOG: 12:58:17 message.go:116: Have [0 0 0 247]
+LOG: 12:58:17 message.go:116: Have [0 0 0 250]
+LOG: 12:58:17 message.go:116: Have [0 0 1 113]
+LOG: 12:58:17 message.go:116: Have [0 0 1 160]
+LOG: 12:58:17 message.go:116: Have [0 0 2 36]
+LOG: 12:58:17 message.go:116: Have [0 0 2 103]
+LOG: 12:58:17 message.go:116: Have [0 0 2 138]
+LOG: 12:58:17 message.go:116: Have [0 0 2 190]
+LOG: 12:58:17 message.go:116: Have [0 0 3 9]
+LOG: 12:58:17 message.go:116: Have [0 0 3 48]
+LOG: 12:58:17 message.go:116: Have [0 0 3 60]
+LOG: 12:58:17 message.go:116: Have [0 0 3 251]
+LOG: 12:58:17 message.go:116: Have [0 0 4 51]
+LOG: 12:58:17 message.go:116: Have [0 0 4 128]
+LOG: 12:58:17 message.go:116: Have [0 0 4 186]
+LOG: 12:58:17 message.go:116: Have [0 0 5 3]
+LOG: 12:58:17 message.go:116: Have [0 0 5 51]
+LOG: 12:58:17 message.go:116: Have [0 0 5 193]
+LOG: 12:58:17 message.go:116: Have [0 0 5 241]
+LOG: 12:58:17 message.go:116: Have [0 0 6 19]
+LOG: 12:58:17 message.go:116: Have [0 0 6 48]
+LOG: 12:58:17 message.go:116: Have [0 0 6 110]
+LOG: 12:58:17 message.go:116: Have [0 0 6 168]
+LOG: 12:58:17 message.go:116: Have [0 0 6 223]
+LOG: 12:58:17 message.go:116: Have [0 0 6 229]
+LOG: 12:58:17 message.go:116: Have [0 0 6 249]
+LOG: 12:58:17 message.go:116: Have [0 0 7 170]
+LOG: 12:58:17 message.go:116: Have [0 0 7 177]
+LOG: 12:58:17 message.go:116: Have [0 0 8 32]
+LOG: 12:58:17 message.go:116: Have [0 0 8 57]
+LOG: 12:58:17 message.go:116: Have [0 0 8 201]
+LOG: 12:58:17 message.go:116: Have [0 0 8 237]
+LOG: 12:58:17 message.go:116: Have [0 0 9 78]
+LOG: 12:58:17 message.go:116: Have [0 0 9 95]
+LOG: 12:58:17 message.go:116: Have [0 0 9 96]
+LOG: 12:58:17 message.go:116: Have [0 0 9 155]
+LOG: 12:58:17 message.go:116: Have [0 0 9 171]
+LOG: 12:58:17 message.go:116: Have [0 0 9 235]
+LOG: 12:58:17 message.go:116: Have [0 0 9 243]
+LOG: 12:58:17 message.go:116: Have [0 0 10 139]
+LOG: 12:58:17 message.go:116: Have [0 0 10 218]
+LOG: 12:58:17 message.go:116: Have [0 0 10 230]
+LOG: 12:58:17 message.go:108: UnChoke -lt0D60-K)W*Î|V|xêvt
+LOG: 12:58:17 message.go:108: UnChoke -DE13D0-Z-h(ynBAUp3s
+LOG: 12:58:17 message.go:323: Asking -DE13D0-Z-h(ynBAUp3s for piece 7
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2840-rhsn72ykzvhb
+LOG: 12:58:17 peer.go:88: Peer -TR2840-rhsn72ykzvhb : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2840-rhsn72ykzvhb
+LOG: 12:58:17 message.go:108: UnChoke -lt0D60-‘jª»Õ‘TáœiF
+LOG: 12:58:17 message.go:323: Asking -lt0D60-‘jª»Õ‘TáœiF for piece 8
+LOG: 12:58:17 message.go:108: UnChoke -lt0D60-¿í˜5§ ‹itˇee
+LOG: 12:58:17 message.go:376: Piece at 5 is downloaded
+LOG: 12:58:17 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 11
+LOG: 12:58:17 message.go:108: UnChoke -DE13D0-aj(Jw4m72f2P
+LOG: 12:58:17 message.go:323: Asking -DE13D0-aj(Jw4m72f2P for piece 12
+LOG: 12:58:17 message.go:108: UnChoke -lt0D60-ÜtJπújÿÊ
+LOG: 12:58:17 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 9
+LOG: 12:58:17 message.go:323: Asking -lt0D60-ÜtJπújÿÊ for piece 13
+LOG: 12:58:17 message.go:108: UnChoke -lt0D60-O'[ Ú›g∫d*
+LOG: 12:58:17 message.go:323: Asking -lt0D60-O'[ Ú›g∫d* for piece 14
+LOG: 12:58:17 message.go:323: Asking -lt0D60-¿í˜5§ ‹itˇee for piece 10
+LOG: 12:58:17 message.go:376: Piece at 6 is downloaded
+LOG: 12:58:17 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 15
+LOG: 12:58:17 message.go:116: Have [0 0 7 29]
+LOG: 12:58:17 message.go:119: Bitfield -UT2210-÷b
+˛R{VÔCnNâ
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -UT2210-÷b
+˛R{VÔCnNâ
+LOG: 12:58:17 message.go:116: Have [0 0 10 50]
+LOG: 12:58:17 message.go:116: Have [0 0 8 87]
+LOG: 12:58:17 message.go:116: Have [0 0 1 105]
+LOG: 12:58:17 message.go:116: Have [0 0 5 242]
+LOG: 12:58:17 message.go:116: Have [0 0 8 73]
+LOG: 12:58:17 message.go:116: Have [0 0 10 161]
+LOG: 12:58:17 message.go:116: Have [0 0 3 108]
+LOG: 12:58:17 message.go:116: Have [0 0 0 121]
+LOG: 12:58:17 message.go:116: Have [0 0 5 25]
+LOG: 12:58:17 message.go:116: Have [0 0 10 138]
+LOG: 12:58:17 message.go:116: Have [0 0 10 169]
+LOG: 12:58:17 message.go:116: Have [0 0 2 86]
+LOG: 12:58:17 message.go:116: Have [0 0 10 74]
+LOG: 12:58:17 message.go:116: Have [0 0 0 194]
+LOG: 12:58:17 message.go:116: Have [0 0 7 161]
+LOG: 12:58:17 message.go:116: Have [0 0 3 39]
+LOG: 12:58:17 message.go:116: Have [0 0 0 115]
+LOG: 12:58:17 message.go:116: Have [0 0 10 97]
+LOG: 12:58:17 message.go:116: Have [0 0 5 73]
+LOG: 12:58:17 message.go:116: Have [0 0 5 222]
+LOG: 12:58:17 message.go:116: Have [0 0 6 44]
+LOG: 12:58:17 message.go:116: Have [0 0 0 67]
+LOG: 12:58:17 message.go:116: Have [0 0 6 35]
+LOG: 12:58:17 message.go:119: Bitfield -lt0D60-√q££÷U®ı^G
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -lt0D60-√q££÷U®ı^G
+LOG: 12:58:17 message.go:108: UnChoke -qB3370-SLaBGsxbhuvf
+LOG: 12:58:17 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 16
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2920-y7a5nkgckr9x
+LOG: 12:58:17 peer.go:88: Peer -TR2920-y7a5nkgckr9x : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-y7a5nkgckr9x
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2920-k7dnfad8bn6v
+LOG: 12:58:17 peer.go:88: Peer -TR2920-k7dnfad8bn6v : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-k7dnfad8bn6v
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -AZ5730-CjPAmOpEL9JH
+LOG: 12:58:17 peer.go:88: Peer -AZ5730-CjPAmOpEL9JH : starting to Listen
+LOG: 12:58:17 message.go:119: Bitfield -AZ5730-CjPAmOpEL9JH
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -AZ5730-CjPAmOpEL9JH
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2920-rcbeatp2byqf
+LOG: 12:58:17 peer.go:88: Peer -TR2920-rcbeatp2byqf : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-rcbeatp2byqf
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -AZ5730-CjPAmOpEL9JH
+LOG: 12:58:17 message.go:119: Bitfield -TR2920-lsice194ce0b
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-lsice194ce0b
+LOG: 12:58:17 message.go:119: Bitfield -TR2840-ooz824b80ai0
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2840-ooz824b80ai0
+LOG: 12:58:17 message.go:376: Piece at 15 is downloaded
+LOG: 12:58:17 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 17
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2840-y6hu9terh7sy
+LOG: 12:58:17 peer.go:88: Peer -TR2840-y6hu9terh7sy : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2840-y6hu9terh7sy
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR1930-1q2ys8mqyxnf
+LOG: 12:58:17 peer.go:88: Peer -TR1930-1q2ys8mqyxnf : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR1930-1q2ys8mqyxnf
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -qB3370-IhOTWTM3-XTq
+LOG: 12:58:17 peer.go:88: Peer -qB3370-IhOTWTM3-XTq : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -qB3370-IhOTWTM3-XTq
+LOG: 12:58:17 message.go:376: Piece at 11 is downloaded
+LOG: 12:58:17 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 18
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2840-5640o1gyvikl
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2920-2ez3g8qiu5zo
+LOG: 12:58:17 peer.go:88: Peer -TR2920-2ez3g8qiu5zo : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-2ez3g8qiu5zo
+LOG: 12:58:17 peer.go:88: Peer -TR2840-5640o1gyvikl : starting to Listen
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2840-5640o1gyvikl
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -qB3250-9VllP1zntkXT
+LOG: 12:58:17 peer.go:88: Peer -qB3250-9VllP1zntkXT : starting to Listen
+LOG: 12:58:17 message.go:116: Have [0 0 11 1]
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2920-n58771nwflqc
+LOG: 12:58:17 message.go:119: Bitfield -qB3250-9VllP1zntkXT
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -qB3250-9VllP1zntkXT
+LOG: 12:58:17 peer.go:88: Peer -TR2920-n58771nwflqc : starting to Listen
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -TR2820-c72cnoty4r06
+LOG: 12:58:17 peer.go:88: Peer -TR2820-c72cnoty4r06 : starting to Listen
+LOG: 12:58:17 message.go:116: Have [0 0 0 197]
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2820-c72cnoty4r06
+LOG: 12:58:17 message.go:116: Have [0 0 0 211]
+LOG: 12:58:17 message.go:116: Have [0 0 1 2]
+LOG: 12:58:17 message.go:116: Have [0 0 1 43]
+LOG: 12:58:17 message.go:116: Have [0 0 1 52]
+LOG: 12:58:17 message.go:119: Bitfield -TR2920-u92jeylh53h9
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-u92jeylh53h9
+LOG: 12:58:17 message.go:116: Have [0 0 1 227]
+LOG: 12:58:17 message.go:116: Have [0 0 1 85]
+LOG: 12:58:17 message.go:116: Have [0 0 2 14]
+LOG: 12:58:17 message.go:116: Have [0 0 2 165]
+LOG: 12:58:17 message.go:116: Have [0 0 2 240]
+LOG: 12:58:17 message.go:116: Have [0 0 3 6]
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -qB3250-9VllP1zntkXT
+LOG: 12:58:17 message.go:116: Have [0 0 3 12]
+LOG: 12:58:17 message.go:116: Have [0 0 3 24]
+LOG: 12:58:17 message.go:116: Have [0 0 3 92]
+LOG: 12:58:17 message.go:116: Have [0 0 3 107]
+LOG: 12:58:17 message.go:116: Have [0 0 3 145]
+LOG: 12:58:17 message.go:116: Have [0 0 3 176]
+LOG: 12:58:17 message.go:108: UnChoke -lt0D60-√q££÷U®ı^G
+LOG: 12:58:17 message.go:323: Asking -lt0D60-√q££÷U®ı^G for piece 19
+LOG: 12:58:17 peer.go:78: Connected to Peer:  -DE13D0-V6l2)tmK_IPf
+LOG: 12:58:17 peer.go:88: Peer -DE13D0-V6l2)tmK_IPf : starting to Listen
+LOG: 12:58:17 message.go:119: Bitfield -TR2920-8llycvdqm1n4
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-8llycvdqm1n4
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -DE13D0-V6l2)tmK_IPf
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-n58771nwflqc
+LOG: 12:58:17 message.go:116: Have [0 0 0 12]
+LOG: 12:58:17 message.go:116: Have [0 0 1 82]
+LOG: 12:58:17 message.go:116: Have [0 0 3 190]
+LOG: 12:58:17 message.go:116: Have [0 0 3 225]
+LOG: 12:58:17 message.go:116: Have [0 0 3 240]
+LOG: 12:58:17 message.go:119: Bitfield -TR2840-ogwvw8alw2iq
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2840-ogwvw8alw2iq
+LOG: 12:58:17 message.go:119: Bitfield -TR2840-y2v7e4qcte70
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2840-y2v7e4qcte70
+LOG: 12:58:17 message.go:116: Have [0 0 4 2]
+LOG: 12:58:17 message.go:116: Have [0 0 4 93]
+LOG: 12:58:17 message.go:116: Have [0 0 4 174]
+LOG: 12:58:17 message.go:116: Have [0 0 4 238]
+LOG: 12:58:17 message.go:116: Have [0 0 5 30]
+LOG: 12:58:17 message.go:116: Have [0 0 5 120]
+LOG: 12:58:17 message.go:116: Have [0 0 5 220]
+LOG: 12:58:17 message.go:116: Have [0 0 5 236]
+LOG: 12:58:17 message.go:116: Have [0 0 6 73]
+LOG: 12:58:17 message.go:116: Have [0 0 6 215]
+LOG: 12:58:17 message.go:116: Have [0 0 6 235]
+LOG: 12:58:17 message.go:116: Have [0 0 7 87]
+LOG: 12:58:17 message.go:116: Have [0 0 7 248]
+LOG: 12:58:17 message.go:116: Have [0 0 8 22]
+LOG: 12:58:17 message.go:108: UnChoke -TR2820-c72cnoty4r06
+LOG: 12:58:17 message.go:323: Asking -TR2820-c72cnoty4r06 for piece 20
+LOG: 12:58:17 message.go:116: Have [0 0 8 143]
+LOG: 12:58:17 message.go:116: Have [0 0 8 209]
+LOG: 12:58:17 message.go:116: Have [0 0 9 21]
+LOG: 12:58:17 message.go:116: Have [0 0 9 79]
+LOG: 12:58:17 message.go:116: Have [0 0 9 101]
+LOG: 12:58:17 message.go:116: Have [0 0 9 162]
+LOG: 12:58:17 message.go:116: Have [0 0 9 201]
+LOG: 12:58:17 message.go:116: Have [0 0 10 156]
+LOG: 12:58:17 message.go:116: Have [0 0 10 211]
+LOG: 12:58:17 message.go:116: Have [0 0 6 104]
+LOG: 12:58:17 message.go:116: Have [0 0 8 230]
+LOG: 12:58:17 message.go:376: Piece at 17 is downloaded
+LOG: 12:58:17 message.go:116: Have [0 0 8 99]
+LOG: 12:58:17 message.go:116: Have [0 0 8 123]
+LOG: 12:58:17 message.go:119: Bitfield -TR2920-u9ofnfexj06s
+LOG: 12:58:17 message.go:214: Sending Status Message: 2 to -TR2920-u9ofnfexj06s
+LOG: 12:58:18 message.go:119: Bitfield -TR2820-c72cnoty4r06
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2820-c72cnoty4r06
+LOG: 12:58:18 peer.go:78: Connected to Peer:  -TR2840-8xdmc2ibx1ux
+LOG: 12:58:18 peer.go:88: Peer -TR2840-8xdmc2ibx1ux : starting to Listen
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-8xdmc2ibx1ux
+LOG: 12:58:18 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 21
+LOG: 12:58:18 message.go:119: Bitfield -TR2840-txgm68lk7sys
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-txgm68lk7sys
+LOG: 12:58:18 message.go:119: Bitfield -TR2820-wntr1uzwd89d
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2820-wntr1uzwd89d
+LOG: 12:58:18 peer.go:78: Connected to Peer:  -TR2840-m122s0yzfwmn
+LOG: 12:58:18 peer.go:88: Peer -TR2840-m122s0yzfwmn : starting to Listen
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-m122s0yzfwmn
+LOG: 12:58:18 message.go:116: Have [0 0 10 201]
+LOG: 12:58:18 message.go:119: Bitfield -qB3370-IhOTWTM3-XTq
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -qB3370-IhOTWTM3-XTq
+LOG: 12:58:18 message.go:116: Have [0 0 0 169]
+LOG: 12:58:18 message.go:116: Have [0 0 0 180]
+LOG: 12:58:18 message.go:116: Have [0 0 0 253]
+LOG: 12:58:18 message.go:116: Have [0 0 1 7]
+LOG: 12:58:18 message.go:116: Have [0 0 1 19]
+LOG: 12:58:18 message.go:116: Have [0 0 1 50]
+LOG: 12:58:18 message.go:116: Have [0 0 1 90]
+LOG: 12:58:18 message.go:116: Have [0 0 1 188]
+LOG: 12:58:18 message.go:116: Have [0 0 1 209]
+LOG: 12:58:18 message.go:116: Have [0 0 1 253]
+LOG: 12:58:18 message.go:116: Have [0 0 2 17]
+LOG: 12:58:18 message.go:116: Have [0 0 2 113]
+LOG: 12:58:18 message.go:116: Have [0 0 3 20]
+LOG: 12:58:18 message.go:116: Have [0 0 3 23]
+LOG: 12:58:18 message.go:116: Have [0 0 3 38]
+LOG: 12:58:18 message.go:116: Have [0 0 3 206]
+LOG: 12:58:18 message.go:116: Have [0 0 4 130]
+LOG: 12:58:18 message.go:116: Have [0 0 4 189]
+LOG: 12:58:18 message.go:116: Have [0 0 5 9]
+LOG: 12:58:18 message.go:116: Have [0 0 5 85]
+LOG: 12:58:18 message.go:116: Have [0 0 5 89]
+LOG: 12:58:18 message.go:116: Have [0 0 5 175]
+LOG: 12:58:18 message.go:116: Have [0 0 6 12]
+LOG: 12:58:18 message.go:116: Have [0 0 6 52]
+LOG: 12:58:18 message.go:116: Have [0 0 6 67]
+LOG: 12:58:18 message.go:116: Have [0 0 6 70]
+LOG: 12:58:18 message.go:116: Have [0 0 6 83]
+LOG: 12:58:18 message.go:116: Have [0 0 6 99]
+LOG: 12:58:18 message.go:116: Have [0 0 6 104]
+LOG: 12:58:18 message.go:116: Have [0 0 6 204]
+LOG: 12:58:18 message.go:116: Have [0 0 7 86]
+LOG: 12:58:18 message.go:116: Have [0 0 7 97]
+LOG: 12:58:18 message.go:116: Have [0 0 7 118]
+LOG: 12:58:18 message.go:116: Have [0 0 7 155]
+LOG: 12:58:18 message.go:116: Have [0 0 7 162]
+LOG: 12:58:18 message.go:116: Have [0 0 7 229]
+LOG: 12:58:18 message.go:116: Have [0 0 7 242]
+LOG: 12:58:18 message.go:116: Have [0 0 8 24]
+LOG: 12:58:18 message.go:116: Have [0 0 8 54]
+LOG: 12:58:18 message.go:116: Have [0 0 8 142]
+LOG: 12:58:18 message.go:116: Have [0 0 8 169]
+LOG: 12:58:18 message.go:116: Have [0 0 8 186]
+LOG: 12:58:18 message.go:116: Have [0 0 9 66]
+LOG: 12:58:18 message.go:116: Have [0 0 9 77]
+LOG: 12:58:18 message.go:116: Have [0 0 9 99]
+LOG: 12:58:18 message.go:116: Have [0 0 9 141]
+LOG: 12:58:18 message.go:116: Have [0 0 9 224]
+LOG: 12:58:18 message.go:116: Have [0 0 10 66]
+LOG: 12:58:18 message.go:116: Have [0 0 10 76]
+LOG: 12:58:18 message.go:119: Bitfield -TR2840-rhsn72ykzvhb
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-rhsn72ykzvhb
+LOG: 12:58:18 message.go:376: Piece at 18 is downloaded
+LOG: 12:58:18 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 22
+LOG: 12:58:18 message.go:119: Bitfield -TR2820-xnsbpld583yc
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2820-xnsbpld583yc
+LOG: 12:58:18 message.go:119: Bitfield -TR2840-5640o1gyvikl
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-5640o1gyvikl
+LOG: 12:58:18 message.go:108: UnChoke -qB3250-9VllP1zntkXT
+LOG: 12:58:18 message.go:323: Asking -qB3250-9VllP1zntkXT for piece 23
+LOG: 12:58:18 message.go:376: Piece at 2 is downloaded
+LOG: 12:58:18 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 24
+LOG: 12:58:18 message.go:119: Bitfield -TR2840-m122s0yzfwmn
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-m122s0yzfwmn
+LOG: 12:58:18 peer.go:78: Connected to Peer:  -TR2840-6f1ahemsr1qd
+LOG: 12:58:18 peer.go:88: Peer -TR2840-6f1ahemsr1qd : starting to Listen
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-6f1ahemsr1qd
+LOG: 12:58:18 message.go:119: Bitfield -TR2920-k7dnfad8bn6v
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2920-k7dnfad8bn6v
+LOG: 12:58:18 message.go:376: Piece at 4 is downloaded
+LOG: 12:58:18 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 25
+LOG: 12:58:18 message.go:119: Bitfield -TR2920-rcbeatp2byqf
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2920-rcbeatp2byqf
+LOG: 12:58:18 message.go:376: Piece at 21 is downloaded
+LOG: 12:58:18 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 26
+LOG: 12:58:18 message.go:119: Bitfield -TR2920-y7a5nkgckr9x
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2920-y7a5nkgckr9x
+LOG: 12:58:18 message.go:116: Have [0 0 3 74]
+LOG: 12:58:18 message.go:108: UnChoke -TR2840-y6hu9terh7sy
+LOG: 12:58:18 message.go:323: Asking -TR2840-y6hu9terh7sy for piece 27
+LOG: 12:58:18 message.go:119: Bitfield -TR1930-1q2ys8mqyxnf
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR1930-1q2ys8mqyxnf
+LOG: 12:58:18 message.go:116: Have [0 0 3 168]
+LOG: 12:58:18 message.go:116: Have [0 0 0 87]
+LOG: 12:58:18 message.go:116: Have [0 0 0 132]
+LOG: 12:58:18 message.go:116: Have [0 0 1 158]
+LOG: 12:58:18 message.go:116: Have [0 0 2 239]
+LOG: 12:58:18 message.go:116: Have [0 0 0 2]
+LOG: 12:58:18 message.go:116: Have [0 0 0 251]
+LOG: 12:58:18 message.go:116: Have [0 0 1 85]
+LOG: 12:58:18 message.go:116: Have [0 0 1 13]
+LOG: 12:58:18 message.go:116: Have [0 0 2 173]
+LOG: 12:58:18 message.go:116: Have [0 0 3 9]
+LOG: 12:58:18 message.go:116: Have [0 0 2 41]
+LOG: 12:58:18 message.go:116: Have [0 0 3 212]
+LOG: 12:58:18 message.go:116: Have [0 0 1 62]
+LOG: 12:58:18 message.go:116: Have [0 0 0 10]
+LOG: 12:58:18 message.go:116: Have [0 0 2 169]
+LOG: 12:58:18 message.go:116: Have [0 0 0 104]
+LOG: 12:58:18 message.go:116: Have [0 0 2 98]
+LOG: 12:58:18 message.go:116: Have [0 0 2 117]
+LOG: 12:58:18 message.go:116: Have [0 0 2 209]
+LOG: 12:58:18 message.go:116: Have [0 0 1 178]
+LOG: 12:58:18 message.go:116: Have [0 0 3 126]
+LOG: 12:58:18 message.go:116: Have [0 0 2 123]
+LOG: 12:58:18 message.go:116: Have [0 0 2 235]
+LOG: 12:58:18 message.go:116: Have [0 0 2 77]
+LOG: 12:58:18 message.go:119: Bitfield -TR2840-y6hu9terh7sy
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-y6hu9terh7sy
+LOG: 12:58:18 message.go:119: Bitfield -TR2920-2ez3g8qiu5zo
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2920-2ez3g8qiu5zo
+LOG: 12:58:18 peer.go:78: Connected to Peer:  -TR2840-mccpz2tezp23
+LOG: 12:58:18 peer.go:88: Peer -TR2840-mccpz2tezp23 : starting to Listen
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-mccpz2tezp23
+LOG: 12:58:18 message.go:108: UnChoke -qB3370-IhOTWTM3-XTq
+LOG: 12:58:18 message.go:119: Bitfield -TR2920-n58771nwflqc
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2920-n58771nwflqc
+LOG: 12:58:18 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 28
+LOG: 12:58:18 message.go:108: UnChoke -TR2840-6f1ahemsr1qd
+LOG: 12:58:18 peer.go:78: Connected to Peer:  -TR2920-r3s4cdrp271v
+LOG: 12:58:18 peer.go:88: Peer -TR2920-r3s4cdrp271v : starting to Listen
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2920-r3s4cdrp271v
+LOG: 12:58:18 message.go:119: Bitfield -TR2840-6f1ahemsr1qd
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-6f1ahemsr1qd
+LOG: 12:58:18 message.go:323: Asking -TR2840-6f1ahemsr1qd for piece 29
+LOG: 12:58:18 message.go:376: Piece at 9 is downloaded
+LOG: 12:58:18 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 30
+LOG: 12:58:18 message.go:119: Bitfield -DE13D0-V6l2)tmK_IPf
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -DE13D0-V6l2)tmK_IPf
+LOG: 12:58:18 message.go:108: UnChoke -UT2210-÷b
+˛R{VÔCnNâ
+LOG: 12:58:18 message.go:323: Asking -UT2210-÷b
+˛R{VÔCnNâ for piece 31
+LOG: 12:58:18 message.go:119: Bitfield -TR2840-8xdmc2ibx1ux
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-8xdmc2ibx1ux
+LOG: 12:58:18 message.go:108: UnChoke -AZ5730-CjPAmOpEL9JH
+LOG: 12:58:18 message.go:323: Asking -AZ5730-CjPAmOpEL9JH for piece 32
+LOG: 12:58:18 message.go:119: Bitfield -TR2840-mccpz2tezp23
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2840-mccpz2tezp23
+LOG: 12:58:18 message.go:376: Piece at 26 is downloaded
+LOG: 12:58:18 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 33
+LOG: 12:58:18 message.go:376: Piece at 22 is downloaded
+LOG: 12:58:18 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 34
+LOG: 12:58:18 message.go:376: Piece at 13 is downloaded
+LOG: 12:58:18 message.go:323: Asking -lt0D60-ÜtJπújÿÊ for piece 35
+LOG: 12:58:18 message.go:119: Bitfield -TR2920-r3s4cdrp271v
+LOG: 12:58:18 message.go:214: Sending Status Message: 2 to -TR2920-r3s4cdrp271v
+LOG: 12:58:18 message.go:376: Piece at 8 is downloaded
+LOG: 12:58:18 message.go:323: Asking -lt0D60-‘jª»Õ‘TáœiF for piece 36
+LOG: 12:58:19 message.go:376: Piece at 33 is downloaded
+LOG: 12:58:19 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 37
+LOG: 12:58:19 message.go:376: Piece at 34 is downloaded
+LOG: 12:58:19 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 38
+LOG: 12:58:19 message.go:376: Piece at 25 is downloaded
+LOG: 12:58:19 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 39
+LOG: 12:58:19 message.go:323: Asking -TR2920-n58771nwflqc for piece 40
+LOG: 12:58:19 message.go:376: Piece at 24 is downloaded
+LOG: 12:58:19 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 41
+LOG: 12:58:19 message.go:108: UnChoke -TR2920-n58771nwflqc
+LOG: 12:58:19 message.go:376: Piece at 12 is downloaded
+LOG: 12:58:19 message.go:323: Asking -DE13D0-aj(Jw4m72f2P for piece 42
+LOG: 12:58:19 message.go:376: Piece at 10 is downloaded
+LOG: 12:58:19 message.go:323: Asking -lt0D60-¿í˜5§ ‹itˇee for piece 43
+LOG: 12:58:19 message.go:108: UnChoke -TR2840-txgm68lk7sys
+LOG: 12:58:19 message.go:323: Asking -TR2840-txgm68lk7sys for piece 44
+LOG: 12:58:19 message.go:376: Piece at 37 is downloaded
+LOG: 12:58:19 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 45
+LOG: 12:58:19 message.go:376: Piece at 30 is downloaded
+LOG: 12:58:19 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 46
+LOG: 12:58:19 message.go:376: Piece at 38 is downloaded
+LOG: 12:58:19 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 47
+LOG: 12:58:19 message.go:376: Piece at 14 is downloaded
+LOG: 12:58:19 message.go:323: Asking -lt0D60-O'[ Ú›g∫d* for piece 48
+LOG: 12:58:19 message.go:376: Piece at 35 is downloaded
+LOG: 12:58:19 message.go:323: Asking -lt0D60-ÜtJπújÿÊ for piece 49
+LOG: 12:58:19 message.go:376: Piece at 45 is downloaded
+LOG: 12:58:19 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 50
+LOG: 12:58:19 message.go:376: Piece at 16 is downloaded
+LOG: 12:58:19 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 51
+LOG: 12:58:19 message.go:108: UnChoke -TR2840-ogwvw8alw2iq
+LOG: 12:58:19 message.go:323: Asking -TR2840-ogwvw8alw2iq for piece 52
+LOG: 12:58:20 message.go:376: Piece at 47 is downloaded
+LOG: 12:58:20 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 53
+LOG: 12:58:20 message.go:108: UnChoke -TR2840-m122s0yzfwmn
+LOG: 12:58:20 message.go:323: Asking -TR2840-m122s0yzfwmn for piece 54
+LOG: 12:58:20 message.go:376: Piece at 50 is downloaded
+LOG: 12:58:20 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 55
+LOG: 12:58:20 message.go:376: Piece at 39 is downloaded
+LOG: 12:58:20 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 56
+LOG: 12:58:20 message.go:376: Piece at 46 is downloaded
+LOG: 12:58:20 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 57
+LOG: 12:58:20 message.go:376: Piece at 41 is downloaded
+LOG: 12:58:20 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 58
+LOG: 12:58:20 message.go:376: Piece at 53 is downloaded
+LOG: 12:58:20 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 59
+LOG: 12:58:20 message.go:376: Piece at 36 is downloaded
+LOG: 12:58:20 message.go:323: Asking -lt0D60-‘jª»Õ‘TáœiF for piece 60
+LOG: 12:58:20 message.go:108: UnChoke -TR2920-8llycvdqm1n4
+LOG: 12:58:20 message.go:323: Asking -TR2920-8llycvdqm1n4 for piece 61
+LOG: 12:58:20 message.go:376: Piece at 55 is downloaded
+LOG: 12:58:20 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 62
+LOG: 12:58:20 message.go:376: Piece at 49 is downloaded
+LOG: 12:58:20 message.go:323: Asking -lt0D60-ÜtJπújÿÊ for piece 63
+LOG: 12:58:20 message.go:376: Piece at 51 is downloaded
+LOG: 12:58:20 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 64
+LOG: 12:58:20 message.go:376: Piece at 57 is downloaded
+LOG: 12:58:20 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 65
+LOG: 12:58:20 message.go:376: Piece at 43 is downloaded
+LOG: 12:58:20 message.go:323: Asking -lt0D60-¿í˜5§ ‹itˇee for piece 66
+LOG: 12:58:20 message.go:376: Piece at 59 is downloaded
+LOG: 12:58:20 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 67
+LOG: 12:58:20 message.go:108: UnChoke -TR2920-k7dnfad8bn6v
+LOG: 12:58:20 message.go:323: Asking -TR2920-k7dnfad8bn6v for piece 68
+LOG: 12:58:20 message.go:376: Piece at 42 is downloaded
+LOG: 12:58:20 message.go:323: Asking -DE13D0-aj(Jw4m72f2P for piece 69
+LOG: 12:58:20 message.go:108: UnChoke -TR2840-ooz824b80ai0
+LOG: 12:58:20 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 70
+LOG: 12:58:20 message.go:376: Piece at 62 is downloaded
+LOG: 12:58:21 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 75
+LOG: 12:58:21 message.go:376: Piece at 58 is downloaded
+LOG: 12:58:21 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 76
+LOG: 12:58:21 message.go:376: Piece at 63 is downloaded
+LOG: 12:58:21 message.go:323: Asking -lt0D60-ÜtJπújÿÊ for piece 77
+LOG: 12:58:20 message.go:376: Piece at 67 is downloaded
+LOG: 12:58:21 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 78
+LOG: 12:58:21 message.go:376: Piece at 56 is downloaded
+LOG: 12:58:21 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 79
+LOG: 12:58:21 message.go:108: UnChoke -TR2820-wntr1uzwd89d
+LOG: 12:58:21 message.go:323: Asking -TR2820-wntr1uzwd89d for piece 71
+LOG: 12:58:21 message.go:376: Piece at 48 is downloaded
+LOG: 12:58:21 message.go:323: Asking -lt0D60-O'[ Ú›g∫d* for piece 80
+LOG: 12:58:21 message.go:376: Piece at 65 is downloaded
+LOG: 12:58:21 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 81
+LOG: 12:58:21 message.go:108: UnChoke -TR2920-r3s4cdrp271v
+LOG: 12:58:21 message.go:323: Asking -TR2920-r3s4cdrp271v for piece 72
+LOG: 12:58:21 message.go:108: UnChoke -TR2920-lsice194ce0b
+LOG: 12:58:21 message.go:323: Asking -TR2920-lsice194ce0b for piece 73
+LOG: 12:58:21 message.go:376: Piece at 44 is downloaded
+LOG: 12:58:21 message.go:323: Asking -TR2840-txgm68lk7sys for piece 82
+LOG: 12:58:21 message.go:376: Piece at 64 is downloaded
+LOG: 12:58:21 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 83
+LOG: 12:58:21 message.go:376: Piece at 66 is downloaded
+LOG: 12:58:21 message.go:323: Asking -lt0D60-¿í˜5§ ‹itˇee for piece 84
+LOG: 12:58:21 message.go:108: UnChoke -TR2840-mccpz2tezp23
+LOG: 12:58:21 message.go:323: Asking -TR2840-mccpz2tezp23 for piece 74
+LOG: 12:58:21 message.go:376: Piece at 60 is downloaded
+LOG: 12:58:21 message.go:323: Asking -lt0D60-‘jª»Õ‘TáœiF for piece 85
+LOG: 12:58:21 message.go:108: UnChoke -TR2920-rcbeatp2byqf
+LOG: 12:58:21 message.go:323: Asking -TR2920-rcbeatp2byqf for piece 86
+LOG: 12:58:21 message.go:376: Piece at 75 is downloaded
+LOG: 12:58:21 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 87
+LOG: 12:58:21 message.go:376: Piece at 78 is downloaded
+LOG: 12:58:21 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 88
+LOG: 12:58:21 message.go:108: UnChoke -TR1930-1q2ys8mqyxnf
+LOG: 12:58:21 message.go:323: Asking -TR1930-1q2ys8mqyxnf for piece 89
+DEBUG: 12:58:22 manager.go:46: Error Connecting to  31.6.28.188: read tcp 10.0.19.133:45138->31.6.28.188:16881: read: connection reset by peer
+LOG: 12:58:22 message.go:376: Piece at 69 is downloaded
+LOG: 12:58:22 message.go:323: Asking -DE13D0-aj(Jw4m72f2P for piece 90
+LOG: 12:58:22 message.go:376: Piece at 7 is downloaded
+LOG: 12:58:22 message.go:323: Asking -DE13D0-Z-h(ynBAUp3s for piece 91
+LOG: 12:58:22 message.go:376: Piece at 61 is downloaded
+LOG: 12:58:22 message.go:323: Asking -TR2920-8llycvdqm1n4 for piece 92
+LOG: 12:58:22 message.go:376: Piece at 83 is downloaded
+LOG: 12:58:22 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 93
+LOG: 12:58:22 message.go:376: Piece at 87 is downloaded
+LOG: 12:58:22 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 94
+LOG: 12:58:22 message.go:376: Piece at 40 is downloaded
+LOG: 12:58:22 message.go:323: Asking -TR2920-n58771nwflqc for piece 95
+LOG: 12:58:22 message.go:376: Piece at 52 is downloaded
+LOG: 12:58:22 message.go:323: Asking -TR2840-ogwvw8alw2iq for piece 96
+LOG: 12:58:22 message.go:108: UnChoke -TR2920-y7a5nkgckr9x
+LOG: 12:58:22 message.go:323: Asking -TR2920-y7a5nkgckr9x for piece 97
+LOG: 12:58:22 message.go:376: Piece at 81 is downloaded
+LOG: 12:58:22 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 98
+LOG: 12:58:22 message.go:376: Piece at 88 is downloaded
+LOG: 12:58:22 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 99
+LOG: 12:58:22 message.go:376: Piece at 77 is downloaded
+LOG: 12:58:22 message.go:323: Asking -lt0D60-ÜtJπújÿÊ for piece 100
+LOG: 12:58:22 message.go:376: Piece at 70 is downloaded
+LOG: 12:58:22 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 101
+LOG: 12:58:22 message.go:376: Piece at 94 is downloaded
+LOG: 12:58:22 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 102
+LOG: 12:58:22 message.go:376: Piece at 93 is downloaded
+LOG: 12:58:22 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 103
+LOG: 12:58:22 message.go:376: Piece at 79 is downloaded
+LOG: 12:58:22 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 104
+LOG: 12:58:22 message.go:376: Piece at 76 is downloaded
+LOG: 12:58:22 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 105
+LOG: 12:58:22 message.go:376: Piece at 98 is downloaded
+LOG: 12:58:22 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 106
+LOG: 12:58:23 message.go:376: Piece at 84 is downloaded
+LOG: 12:58:23 message.go:323: Asking -lt0D60-¿í˜5§ ‹itˇee for piece 107
+LOG: 12:58:23 message.go:376: Piece at 102 is downloaded
+LOG: 12:58:23 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 108
+LOG: 12:58:23 message.go:376: Piece at 28 is downloaded
+LOG: 12:58:23 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 109
+LOG: 12:58:23 message.go:376: Piece at 99 is downloaded
+LOG: 12:58:23 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 110
+LOG: 12:58:23 message.go:214: Sending Status Message: -1 to -lt0D60-=0áAgŸ˛V2aIT
+LOG: 12:58:23 message.go:376: Piece at 103 is downloaded
+LOG: 12:58:23 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 111
+LOG: 12:58:23 message.go:214: Sending Status Message: -1 to -lt0D60-K)W*Î|V|xêvt
+LOG: 12:58:23 message.go:376: Piece at 80 is downloaded
+LOG: 12:58:23 message.go:323: Asking -lt0D60-O'[ Ú›g∫d* for piece 112
+LOG: 12:58:23 message.go:376: Piece at 85 is downloaded
+LOG: 12:58:23 message.go:323: Asking -lt0D60-‘jª»Õ‘TáœiF for piece 113
+LOG: 12:58:23 message.go:376: Piece at 19 is downloaded
+LOG: 12:58:23 message.go:323: Asking -lt0D60-√q££÷U®ı^G for piece 114
+LOG: 12:58:23 message.go:108: UnChoke -TR2920-u9ofnfexj06s
+LOG: 12:58:23 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 115
+LOG: 12:58:23 message.go:376: Piece at 73 is downloaded
+LOG: 12:58:23 message.go:323: Asking -TR2920-lsice194ce0b for piece 116
+LOG: 12:58:23 message.go:376: Piece at 90 is downloaded
+LOG: 12:58:23 message.go:323: Asking -DE13D0-aj(Jw4m72f2P for piece 117
+LOG: 12:58:23 message.go:376: Piece at 110 is downloaded
+LOG: 12:58:23 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 118
+LOG: 12:58:24 peer.go:78: Connected to Peer:  -TR2840-ljix7k2zvmz9
+LOG: 12:58:24 peer.go:88: Peer -TR2840-ljix7k2zvmz9 : starting to Listen
+LOG: 12:58:24 message.go:214: Sending Status Message: 2 to -TR2840-ljix7k2zvmz9
+LOG: 12:58:24 message.go:376: Piece at 111 is downloaded
+LOG: 12:58:24 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 119
+LOG: 12:58:24 message.go:376: Piece at 100 is downloaded
+LOG: 12:58:24 message.go:323: Asking -lt0D60-ÜtJπújÿÊ for piece 120
+LOG: 12:58:24 message.go:119: Bitfield -TR2840-ljix7k2zvmz9
+LOG: 12:58:24 message.go:214: Sending Status Message: 2 to -TR2840-ljix7k2zvmz9
+LOG: 12:58:24 message.go:376: Piece at 104 is downloaded
+LOG: 12:58:24 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 121
+LOG: 12:58:24 message.go:376: Piece at 92 is downloaded
+LOG: 12:58:24 message.go:323: Asking -TR2920-8llycvdqm1n4 for piece 122
+LOG: 12:58:24 message.go:376: Piece at 108 is downloaded
+LOG: 12:58:24 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 123
+LOG: 12:58:24 message.go:376: Piece at 107 is downloaded
+LOG: 12:58:24 message.go:323: Asking -lt0D60-¿í˜5§ ‹itˇee for piece 124
+LOG: 12:58:24 message.go:376: Piece at 106 is downloaded
+LOG: 12:58:24 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 125
+LOG: 12:58:24 message.go:376: Piece at 95 is downloaded
+LOG: 12:58:24 message.go:323: Asking -TR2920-n58771nwflqc for piece 126
+LOG: 12:58:24 message.go:376: Piece at 82 is downloaded
+LOG: 12:58:24 message.go:323: Asking -TR2840-txgm68lk7sys for piece 127
+LOG: 12:58:24 message.go:108: UnChoke -TR2840-y2v7e4qcte70
+LOG: 12:58:24 message.go:323: Asking -TR2840-y2v7e4qcte70 for piece 128
+LOG: 12:58:24 message.go:376: Piece at 71 is downloaded
+LOG: 12:58:24 message.go:323: Asking -TR2820-wntr1uzwd89d for piece 129
+LOG: 12:58:24 message.go:376: Piece at 118 is downloaded
+LOG: 12:58:24 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 130
+LOG: 12:58:24 message.go:376: Piece at 123 is downloaded
+LOG: 12:58:24 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 131
+LOG: 12:58:24 message.go:376: Piece at 105 is downloaded
+LOG: 12:58:24 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 132
+LOG: 12:58:24 message.go:376: Piece at 119 is downloaded
+LOG: 12:58:24 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 133
+LOG: 12:58:24 message.go:376: Piece at 101 is downloaded
+LOG: 12:58:24 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 134
+LOG: 12:58:25 message.go:376: Piece at 86 is downloaded
+LOG: 12:58:25 message.go:323: Asking -TR2920-rcbeatp2byqf for piece 135
+LOG: 12:58:25 message.go:376: Piece at 97 is downloaded
+LOG: 12:58:25 message.go:323: Asking -TR2920-y7a5nkgckr9x for piece 136
+LOG: 12:58:25 message.go:376: Piece at 96 is downloaded
+LOG: 12:58:25 message.go:323: Asking -TR2840-ogwvw8alw2iq for piece 137
+LOG: 12:58:25 message.go:376: Piece at 124 is downloaded
+LOG: 12:58:25 message.go:323: Asking -lt0D60-¿í˜5§ ‹itˇee for piece 138
+LOG: 12:58:25 message.go:376: Piece at 120 is downloaded
+LOG: 12:58:25 message.go:323: Asking -lt0D60-ÜtJπújÿÊ for piece 139
+LOG: 12:58:25 message.go:376: Piece at 131 is downloaded
+LOG: 12:58:25 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 140
+LOG: 12:58:25 message.go:376: Piece at 125 is downloaded
+LOG: 12:58:25 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 141
+LOG: 12:58:25 message.go:376: Piece at 31 is downloaded
+LOG: 12:58:25 message.go:323: Asking -UT2210-÷b
+˛R{VÔCnNâ for piece 142
+LOG: 12:58:25 message.go:376: Piece at 133 is downloaded
+LOG: 12:58:25 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 143
+LOG: 12:58:25 message.go:376: Piece at 121 is downloaded
+LOG: 12:58:25 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 144
+LOG: 12:58:25 message.go:376: Piece at 112 is downloaded
+LOG: 12:58:25 message.go:323: Asking -lt0D60-O'[ Ú›g∫d* for piece 145
+LOG: 12:58:25 message.go:376: Piece at 115 is downloaded
+LOG: 12:58:25 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 146
+LOG: 12:58:25 message.go:376: Piece at 116 is downloaded
+LOG: 12:58:25 message.go:376: Piece at 140 is downloaded
+LOG: 12:58:25 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 148
+LOG: 12:58:25 message.go:376: Piece at 130 is downloaded
+LOG: 12:58:25 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 149
+LOG: 12:58:25 message.go:323: Asking -TR2920-lsice194ce0b for piece 147
+LOG: 12:58:25 message.go:376: Piece at 122 is downloaded
+LOG: 12:58:25 message.go:323: Asking -TR2920-8llycvdqm1n4 for piece 150
+LOG: 12:58:25 message.go:376: Piece at 143 is downloaded
+LOG: 12:58:25 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 151
+LOG: 12:58:25 message.go:376: Piece at 117 is downloaded
+LOG: 12:58:26 message.go:323: Asking -DE13D0-aj(Jw4m72f2P for piece 152
+LOG: 12:58:26 message.go:376: Piece at 148 is downloaded
+LOG: 12:58:26 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 153
+LOG: 12:58:26 message.go:376: Piece at 126 is downloaded
+LOG: 12:58:26 message.go:323: Asking -TR2920-n58771nwflqc for piece 154
+LOG: 12:58:26 message.go:376: Piece at 132 is downloaded
+LOG: 12:58:26 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 155
+LOG: 12:58:26 message.go:376: Piece at 149 is downloaded
+LOG: 12:58:26 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 156
+LOG: 12:58:25 message.go:376: Piece at 109 is downloaded
+LOG: 12:58:26 message.go:376: Piece at 113 is downloaded
+LOG: 12:58:26 message.go:376: Piece at 141 is downloaded
+LOG: 12:58:26 message.go:376: Piece at 138 is downloaded
+LOG: 12:58:26 message.go:376: Piece at 134 is downloaded
+LOG: 12:58:26 message.go:376: Piece at 127 is downloaded
+LOG: 12:58:26 message.go:376: Piece at 139 is downloaded
+LOG: 12:58:26 message.go:376: Piece at 144 is downloaded
+LOG: 12:58:26 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 164
+LOG: 12:58:26 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 157
+LOG: 12:58:26 message.go:323: Asking -lt0D60-‘jª»Õ‘TáœiF for piece 158
+LOG: 12:58:26 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 159
+LOG: 12:58:26 message.go:376: Piece at 151 is downloaded
+LOG: 12:58:26 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 165
+LOG: 12:58:26 message.go:323: Asking -lt0D60-¿í˜5§ ‹itˇee for piece 160
+LOG: 12:58:26 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 161
+LOG: 12:58:26 message.go:323: Asking -TR2840-txgm68lk7sys for piece 162
+LOG: 12:58:26 message.go:323: Asking -lt0D60-ÜtJπújÿÊ for piece 163
+LOG: 12:58:26 message.go:108: UnChoke -TR2840-rhsn72ykzvhb
+LOG: 12:58:26 message.go:323: Asking -TR2840-rhsn72ykzvhb for piece 166
+LOG: 12:58:26 message.go:376: Piece at 156 is downloaded
+LOG: 12:58:26 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 167
+LOG: 12:58:26 message.go:376: Piece at 153 is downloaded
+LOG: 12:58:26 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 168
+LOG: 12:58:26 message.go:376: Piece at 167 is downloaded
+LOG: 12:58:26 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 169
+LOG: 12:58:26 message.go:376: Piece at 129 is downloaded
+LOG: 12:58:26 message.go:323: Asking -TR2820-wntr1uzwd89d for piece 170
+LOG: 12:58:27 message.go:376: Piece at 165 is downloaded
+LOG: 12:58:27 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 171
+LOG: 12:58:27 message.go:376: Piece at 164 is downloaded
+LOG: 12:58:27 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 172
+LOG: 12:58:27 message.go:108: UnChoke -TR2820-xnsbpld583yc
+LOG: 12:58:27 message.go:323: Asking -TR2820-xnsbpld583yc for piece 173
+LOG: 12:58:27 message.go:376: Piece at 89 is downloaded
+LOG: 12:58:27 message.go:323: Asking -TR1930-1q2ys8mqyxnf for piece 174
+LOG: 12:58:27 message.go:376: Piece at 159 is downloaded
+LOG: 12:58:27 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 175
+LOG: 12:58:27 message.go:108: UnChoke -TR2840-8xdmc2ibx1ux
+LOG: 12:58:27 message.go:323: Asking -TR2840-8xdmc2ibx1ux for piece 176
+LOG: 12:58:27 message.go:376: Piece at 169 is downloaded
+LOG: 12:58:27 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 177
+LOG: 12:58:27 message.go:376: Piece at 142 is downloaded
+LOG: 12:58:27 message.go:323: Asking -UT2210-÷b
+˛R{VÔCnNâ for piece 178
+LOG: 12:58:27 message.go:376: Piece at 150 is downloaded
+LOG: 12:58:27 message.go:323: Asking -TR2920-8llycvdqm1n4 for piece 179
+LOG: 12:58:27 message.go:376: Piece at 136 is downloaded
+LOG: 12:58:27 message.go:323: Asking -TR2920-y7a5nkgckr9x for piece 180
+LOG: 12:58:27 message.go:376: Piece at 137 is downloaded
+LOG: 12:58:27 message.go:323: Asking -TR2840-ogwvw8alw2iq for piece 181
+LOG: 12:58:27 message.go:376: Piece at 168 is downloaded
+LOG: 12:58:27 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 182
+LOG: 12:58:28 message.go:376: Piece at 155 is downloaded
+LOG: 12:58:28 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 183
+LOG: 12:58:28 message.go:108: UnChoke -TR2920-u92jeylh53h9
+LOG: 12:58:28 message.go:323: Asking -TR2920-u92jeylh53h9 for piece 184
+LOG: 12:58:28 message.go:376: Piece at 152 is downloaded
+LOG: 12:58:28 message.go:323: Asking -DE13D0-aj(Jw4m72f2P for piece 185
+LOG: 12:58:28 message.go:376: Piece at 147 is downloaded
+LOG: 12:58:28 message.go:323: Asking -TR2920-lsice194ce0b for piece 186
+LOG: 12:58:28 message.go:376: Piece at 161 is downloaded
+LOG: 12:58:28 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 187
+LOG: 12:58:28 message.go:108: UnChoke -TR2920-2ez3g8qiu5zo
+LOG: 12:58:28 message.go:323: Asking -TR2920-2ez3g8qiu5zo for piece 188
+LOG: 12:58:28 message.go:376: Piece at 157 is downloaded
+LOG: 12:58:28 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 189
+LOG: 12:58:28 message.go:376: Piece at 172 is downloaded
+LOG: 12:58:28 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 190
+LOG: 12:58:29 message.go:376: Piece at 177 is downloaded
+LOG: 12:58:29 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 191
+LOG: 12:58:29 message.go:376: Piece at 146 is downloaded
+LOG: 12:58:29 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 192
+LOG: 12:58:29 message.go:376: Piece at 114 is downloaded
+LOG: 12:58:29 message.go:323: Asking -lt0D60-√q££÷U®ı^G for piece 193
+LOG: 12:58:29 message.go:376: Piece at 191 is downloaded
+LOG: 12:58:29 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 194
+LOG: 12:58:29 message.go:376: Piece at 145 is downloaded
+LOG: 12:58:29 message.go:323: Asking -lt0D60-O'[ Ú›g∫d* for piece 195
+LOG: 12:58:29 message.go:376: Piece at 182 is downloaded
+LOG: 12:58:29 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 196
+LOG: 12:58:29 message.go:376: Piece at 178 is downloaded
+LOG: 12:58:29 message.go:323: Asking -UT2210-÷b
+˛R{VÔCnNâ for piece 197
+LOG: 12:58:30 message.go:376: Piece at 162 is downloaded
+LOG: 12:58:30 message.go:323: Asking -TR2840-txgm68lk7sys for piece 198
+LOG: 12:58:30 message.go:376: Piece at 154 is downloaded
+LOG: 12:58:30 message.go:323: Asking -TR2920-n58771nwflqc for piece 199
+LOG: 12:58:30 message.go:376: Piece at 179 is downloaded
+LOG: 12:58:30 message.go:323: Asking -TR2920-8llycvdqm1n4 for piece 200
+LOG: 12:58:30 message.go:376: Piece at 163 is downloaded
+LOG: 12:58:30 message.go:323: Asking -lt0D60-ÜtJπújÿÊ for piece 201
+LOG: 12:58:30 message.go:376: Piece at 194 is downloaded
+LOG: 12:58:30 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 202
+LOG: 12:58:30 message.go:376: Piece at 187 is downloaded
+LOG: 12:58:30 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 203
+LOG: 12:58:30 message.go:376: Piece at 68 is downloaded
+LOG: 12:58:30 message.go:323: Asking -TR2920-k7dnfad8bn6v for piece 204
+LOG: 12:58:30 message.go:376: Piece at 180 is downloaded
+LOG: 12:58:30 message.go:323: Asking -TR2920-y7a5nkgckr9x for piece 205
+LOG: 12:58:30 message.go:376: Piece at 183 is downloaded
+LOG: 12:58:30 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 206
+LOG: 12:58:30 message.go:376: Piece at 74 is downloaded
+LOG: 12:58:30 message.go:323: Asking -TR2840-mccpz2tezp23 for piece 207
+LOG: 12:58:31 message.go:376: Piece at 170 is downloaded
+LOG: 12:58:31 message.go:323: Asking -TR2820-wntr1uzwd89d for piece 208
+LOG: 12:58:31 message.go:376: Piece at 202 is downloaded
+LOG: 12:58:31 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 209
+LOG: 12:58:31 message.go:376: Piece at 189 is downloaded
+LOG: 12:58:31 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 210
+LOG: 12:58:31 message.go:376: Piece at 203 is downloaded
+LOG: 12:58:31 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 211
+LOG: 12:58:31 message.go:376: Piece at 209 is downloaded
+LOG: 12:58:31 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 212
+LOG: 12:58:31 message.go:376: Piece at 192 is downloaded
+LOG: 12:58:31 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 213
+LOG: 12:58:32 message.go:376: Piece at 196 is downloaded
+LOG: 12:58:32 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 214
+LOG: 12:58:32 message.go:376: Piece at 135 is downloaded
+LOG: 12:58:32 message.go:323: Asking -TR2920-rcbeatp2byqf for piece 215
+LOG: 12:58:32 message.go:376: Piece at 185 is downloaded
+LOG: 12:58:32 message.go:323: Asking -DE13D0-aj(Jw4m72f2P for piece 216
+LOG: 12:58:32 message.go:376: Piece at 160 is downloaded
+LOG: 12:58:32 message.go:323: Asking -lt0D60-¿í˜5§ ‹itˇee for piece 217
+LOG: 12:58:32 message.go:376: Piece at 186 is downloaded
+LOG: 12:58:32 message.go:323: Asking -TR2920-lsice194ce0b for piece 218
+LOG: 12:58:32 message.go:376: Piece at 212 is downloaded
+LOG: 12:58:32 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 219
+LOG: 12:58:32 message.go:376: Piece at 181 is downloaded
+LOG: 12:58:32 message.go:323: Asking -TR2840-ogwvw8alw2iq for piece 220
+LOG: 12:58:32 message.go:376: Piece at 210 is downloaded
+LOG: 12:58:32 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 221
+LOG: 12:58:33 message.go:376: Piece at 205 is downloaded
+LOG: 12:58:33 message.go:323: Asking -TR2920-y7a5nkgckr9x for piece 222
+LOG: 12:58:33 message.go:376: Piece at 211 is downloaded
+LOG: 12:58:33 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 223
+LOG: 12:58:33 message.go:376: Piece at 200 is downloaded
+LOG: 12:58:33 message.go:323: Asking -TR2920-8llycvdqm1n4 for piece 224
+LOG: 12:58:33 message.go:376: Piece at 219 is downloaded
+LOG: 12:58:33 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 225
+LOG: 12:58:33 message.go:376: Piece at 213 is downloaded
+LOG: 12:58:33 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 226
+LOG: 12:58:33 message.go:376: Piece at 190 is downloaded
+LOG: 12:58:33 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 227
+LOG: 12:58:33 message.go:376: Piece at 214 is downloaded
+LOG: 12:58:33 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 228
+LOG: 12:58:33 message.go:376: Piece at 206 is downloaded
+LOG: 12:58:33 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 229
+LOG: 12:58:34 message.go:376: Piece at 188 is downloaded
+LOG: 12:58:34 message.go:323: Asking -TR2920-2ez3g8qiu5zo for piece 230
+LOG: 12:58:34 message.go:376: Piece at 222 is downloaded
+LOG: 12:58:34 message.go:323: Asking -TR2920-y7a5nkgckr9x for piece 231
+LOG: 12:58:34 message.go:108: UnChoke -TR2840-ljix7k2zvmz9
+LOG: 12:58:34 message.go:323: Asking -TR2840-ljix7k2zvmz9 for piece 232
+LOG: 12:58:34 message.go:376: Piece at 223 is downloaded
+LOG: 12:58:34 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 233
+LOG: 12:58:34 message.go:376: Piece at 218 is downloaded
+LOG: 12:58:34 message.go:323: Asking -TR2920-lsice194ce0b for piece 234
+LOG: 12:58:34 message.go:376: Piece at 220 is downloaded
+LOG: 12:58:34 message.go:323: Asking -TR2840-ogwvw8alw2iq for piece 235
+LOG: 12:58:34 message.go:376: Piece at 198 is downloaded
+LOG: 12:58:34 message.go:323: Asking -TR2840-txgm68lk7sys for piece 236
+LOG: 12:58:34 message.go:376: Piece at 227 is downloaded
+LOG: 12:58:34 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 237
+LOG: 12:58:34 message.go:376: Piece at 226 is downloaded
+LOG: 12:58:34 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 238
+LOG: 12:58:34 message.go:376: Piece at 228 is downloaded
+LOG: 12:58:34 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 239
+LOG: 12:58:34 message.go:376: Piece at 195 is downloaded
+LOG: 12:58:34 message.go:323: Asking -lt0D60-O'[ Ú›g∫d* for piece 240
+LOG: 12:58:34 message.go:376: Piece at 199 is downloaded
+LOG: 12:58:34 message.go:323: Asking -TR2920-n58771nwflqc for piece 241
+LOG: 12:58:34 message.go:376: Piece at 27 is downloaded
+LOG: 12:58:34 message.go:323: Asking -TR2840-y6hu9terh7sy for piece 242
+LOG: 12:58:34 message.go:376: Piece at 225 is downloaded
+LOG: 12:58:34 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 243
+LOG: 12:58:34 message.go:376: Piece at 229 is downloaded
+LOG: 12:58:34 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 244
+LOG: 12:58:35 message.go:376: Piece at 166 is downloaded
+LOG: 12:58:35 message.go:323: Asking -TR2840-rhsn72ykzvhb for piece 245
+LOG: 12:58:35 message.go:376: Piece at 224 is downloaded
+LOG: 12:58:35 message.go:323: Asking -TR2920-8llycvdqm1n4 for piece 246
+LOG: 12:58:35 message.go:376: Piece at 230 is downloaded
+LOG: 12:58:35 message.go:323: Asking -TR2920-2ez3g8qiu5zo for piece 247
+LOG: 12:58:35 message.go:376: Piece at 221 is downloaded
+LOG: 12:58:35 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 248
+LOG: 12:58:35 message.go:376: Piece at 243 is downloaded
+LOG: 12:58:35 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 249
+LOG: 12:58:35 message.go:376: Piece at 158 is downloaded
+LOG: 12:58:35 message.go:323: Asking -lt0D60-‘jª»Õ‘TáœiF for piece 250
+LOG: 12:58:35 message.go:376: Piece at 217 is downloaded
+LOG: 12:58:35 message.go:323: Asking -lt0D60-¿í˜5§ ‹itˇee for piece 251
+LOG: 12:58:35 message.go:376: Piece at 216 is downloaded
+LOG: 12:58:35 message.go:323: Asking -DE13D0-aj(Jw4m72f2P for piece 252
+LOG: 12:58:35 message.go:376: Piece at 238 is downloaded
+LOG: 12:58:35 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 253
+LOG: 12:58:35 message.go:376: Piece at 208 is downloaded
+LOG: 12:58:35 message.go:323: Asking -TR2820-wntr1uzwd89d for piece 254
+LOG: 12:58:35 message.go:376: Piece at 237 is downloaded
+LOG: 12:58:35 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 255
+LOG: 12:58:35 message.go:376: Piece at 249 is downloaded
+LOG: 12:58:35 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 256
+LOG: 12:58:35 message.go:376: Piece at 231 is downloaded
+LOG: 12:58:35 message.go:323: Asking -TR2920-y7a5nkgckr9x for piece 257
+LOG: 12:58:35 message.go:376: Piece at 239 is downloaded
+LOG: 12:58:35 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 258
+LOG: 12:58:36 message.go:376: Piece at 197 is downloaded
+LOG: 12:58:36 message.go:323: Asking -UT2210-÷b
+˛R{VÔCnNâ for piece 259
+LOG: 12:58:36 message.go:376: Piece at 233 is downloaded
+LOG: 12:58:36 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 260
+LOG: 12:58:36 message.go:376: Piece at 128 is downloaded
+LOG: 12:58:36 message.go:323: Asking -TR2840-y2v7e4qcte70 for piece 261
+LOG: 12:58:36 message.go:376: Piece at 256 is downloaded
+LOG: 12:58:36 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 262
+LOG: 12:58:36 message.go:376: Piece at 193 is downloaded
+LOG: 12:58:36 message.go:323: Asking -lt0D60-√q££÷U®ı^G for piece 263
+LOG: 12:58:36 message.go:376: Piece at 235 is downloaded
+LOG: 12:58:36 message.go:323: Asking -TR2840-ogwvw8alw2iq for piece 264
+LOG: 12:58:36 message.go:376: Piece at 201 is downloaded
+LOG: 12:58:36 message.go:323: Asking -lt0D60-ÜtJπújÿÊ for piece 265
+LOG: 12:58:36 message.go:376: Piece at 253 is downloaded
+LOG: 12:58:36 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 266
+LOG: 12:58:36 message.go:376: Piece at 244 is downloaded
+LOG: 12:58:36 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 267
+LOG: 12:58:36 message.go:376: Piece at 91 is downloaded
+LOG: 12:58:36 message.go:323: Asking -DE13D0-Z-h(ynBAUp3s for piece 268
+LOG: 12:58:36 message.go:376: Piece at 255 is downloaded
+LOG: 12:58:36 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 269
+LOG: 12:58:36 message.go:376: Piece at 262 is downloaded
+LOG: 12:58:36 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 270
+LOG: 12:58:36 message.go:376: Piece at 257 is downloaded
+LOG: 12:58:36 message.go:323: Asking -TR2920-y7a5nkgckr9x for piece 271
+LOG: 12:58:36 message.go:376: Piece at 248 is downloaded
+LOG: 12:58:36 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 272
+LOG: 12:58:36 message.go:376: Piece at 234 is downloaded
+LOG: 12:58:36 message.go:323: Asking -TR2920-lsice194ce0b for piece 273
+LOG: 12:58:36 message.go:376: Piece at 258 is downloaded
+LOG: 12:58:36 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 274
+LOG: 12:58:36 message.go:376: Piece at 184 is downloaded
+LOG: 12:58:36 message.go:323: Asking -TR2920-u92jeylh53h9 for piece 275
+LOG: 12:58:36 message.go:376: Piece at 247 is downloaded
+LOG: 12:58:36 message.go:323: Asking -TR2920-2ez3g8qiu5zo for piece 276
+LOG: 12:58:36 message.go:376: Piece at 270 is downloaded
+LOG: 12:58:36 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 277
+LOG: 12:58:37 message.go:376: Piece at 271 is downloaded
+LOG: 12:58:37 message.go:323: Asking -TR2920-y7a5nkgckr9x for piece 278
+LOG: 12:58:37 message.go:376: Piece at 260 is downloaded
+LOG: 12:58:37 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 279
+LOG: 12:58:37 message.go:376: Piece at 246 is downloaded
+LOG: 12:58:37 message.go:323: Asking -TR2920-8llycvdqm1n4 for piece 280
+LOG: 12:58:37 message.go:376: Piece at 269 is downloaded
+LOG: 12:58:37 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 281
+LOG: 12:58:37 message.go:376: Piece at 277 is downloaded
+LOG: 12:58:37 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 282
+LOG: 12:58:37 message.go:376: Piece at 173 is downloaded
+LOG: 12:58:37 message.go:323: Asking -TR2820-xnsbpld583yc for piece 283
+LOG: 12:58:37 message.go:376: Piece at 236 is downloaded
+LOG: 12:58:37 message.go:323: Asking -TR2840-txgm68lk7sys for piece 284
+LOG: 12:58:37 message.go:376: Piece at 272 is downloaded
+LOG: 12:58:37 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 285
+LOG: 12:58:37 message.go:376: Piece at 274 is downloaded
+LOG: 12:58:37 message.go:376: Piece at 251 is downloaded
+LOG: 12:58:37 message.go:323: Asking -lt0D60-¿í˜5§ ‹itˇee for piece 287
+LOG: 12:58:37 message.go:376: Piece at 252 is downloaded
+LOG: 12:58:37 message.go:323: Asking -DE13D0-aj(Jw4m72f2P for piece 288
+LOG: 12:58:37 message.go:376: Piece at 207 is downloaded
+LOG: 12:58:37 message.go:323: Asking -TR2840-mccpz2tezp23 for piece 289
+LOG: 12:58:37 message.go:376: Piece at 266 is downloaded
+LOG: 12:58:37 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 290
+LOG: 12:58:37 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 286
+LOG: 12:58:37 message.go:376: Piece at 267 is downloaded
+LOG: 12:58:37 message.go:323: Asking -DE13D0-K424n7K4fVtJ for piece 291
+LOG: 12:58:37 message.go:376: Piece at 241 is downloaded
+LOG: 12:58:37 message.go:323: Asking -TR2920-n58771nwflqc for piece 292
+LOG: 12:58:37 message.go:376: Piece at 171 is downloaded
+LOG: 12:58:37 message.go:376: Piece at 240 is downloaded
+LOG: 12:58:37 message.go:323: Asking -lt0D60-O'[ Ú›g∫d* for piece 294
+LOG: 12:58:37 message.go:376: Piece at 282 is downloaded
+LOG: 12:58:37 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 295
+LOG: 12:58:38 message.go:376: Piece at 278 is downloaded
+LOG: 12:58:38 message.go:323: Asking -TR2920-y7a5nkgckr9x for piece 296
+LOG: 12:58:38 message.go:376: Piece at 281 is downloaded
+LOG: 12:58:38 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 297
+LOG: 12:58:38 message.go:323: Asking -qB3370-SLaBGsxbhuvf for piece 293
+LOG: 12:58:38 message.go:376: Piece at 276 is downloaded
+LOG: 12:58:38 message.go:323: Asking -TR2920-2ez3g8qiu5zo for piece 298
+LOG: 12:58:38 message.go:376: Piece at 264 is downloaded
+LOG: 12:58:38 message.go:323: Asking -TR2840-ogwvw8alw2iq for piece 299
+LOG: 12:58:38 message.go:376: Piece at 175 is downloaded
+LOG: 12:58:38 message.go:323: Asking -lt0D60-K)W*Î|V|xêvt for piece 300
+LOG: 12:58:38 message.go:376: Piece at 273 is downloaded
+LOG: 12:58:38 message.go:323: Asking -TR2920-lsice194ce0b for piece 301
+LOG: 12:58:38 message.go:376: Piece at 295 is downloaded
+LOG: 12:58:38 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 302
+LOG: 12:58:38 message.go:376: Piece at 279 is downloaded
+LOG: 12:58:38 message.go:323: Asking -TR2840-ooz824b80ai0 for piece 303
+LOG: 12:58:38 message.go:376: Piece at 215 is downloaded
+LOG: 12:58:38 message.go:323: Asking -TR2920-rcbeatp2byqf for piece 304
+LOG: 12:58:38 message.go:376: Piece at 286 is downloaded
+LOG: 12:58:38 message.go:323: Asking -qB3360-rrRbw0F7dbbb for piece 305
+LOG: 12:58:38 message.go:376: Piece at 285 is downloaded
+LOG: 12:58:38 message.go:323: Asking -qB3370-IhOTWTM3-XTq for piece 306
+LOG: 12:58:38 message.go:376: Piece at 290 is downloaded
+LOG: 12:58:38 message.go:323: Asking -TR2920-u9ofnfexj06s for piece 307
+LOG: 12:58:38 message.go:376: Piece at 302 is downloaded
+LOG: 12:58:38 message.go:323: Asking -lt0D60-=0áAgŸ˛V2aIT for piece 308
+LOG: 12:58:38 message.go:376: Piece at 297 is downloaded
+LOG: 12:58:38 message.go:323: Asking -qB3310-dC9uS6iWe_jB for piece 309
+LOG: 12:58:38 message.go:376: Piece at 259 is downloaded
+LOG: 12:58:38 message.go:323: Asking -UT2210-÷b
+˛R{VÔCnNâ for piece 310

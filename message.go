@@ -355,6 +355,15 @@ func (p *Piece) AskForPiece(peer *Peer) {
 	}
 	var buffer bytes.Buffer
 	for _, block := range p.blocks {
+		if block.data == nil {
+			debugger.Println("Cannot Write Empty Block to Piece", p.index)
+			p.Lock()
+			p.status = Empty
+			p.Unlock()
+			p.Pending.Done()
+			PieceQueue <- p
+			return
+		}
 		buffer.Write(block.data)
 	}
 	if p.hash == sha1.Sum(buffer.Bytes()) {
