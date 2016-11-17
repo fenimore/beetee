@@ -82,14 +82,14 @@ func main() {
 	go Flood()
 	writeSync.Wait()
 	//completionSync.Wait()
-	err = Torrent.Info.WriteData()
-	if err != nil {
-		logger.Printf("Problem writing data %s", err)
-		os.Exit(0)
-	} else {
-		logger.Printf("Wrote Data NP")
-		os.Exit(0)
-	}
+	//err = Torrent.Info.WriteData()
+	//if err != nil {
+	//		logger.Printf("Problem writing data %s", err)
+	//		os.Exit(0)
+	//	} else {
+	//		logger.Printf("Wrote Data NP")
+	//		os.Exit(0)
+	//	}
 
 	/* TODO: Request Blocks */
 
