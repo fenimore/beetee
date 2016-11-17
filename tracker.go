@@ -76,23 +76,7 @@ func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string
 		return response, err
 	}
 
-	var start int
-	for idx, val := range response.Peers {
-		if val == ':' {
-			start = idx + 1
-			break
-		}
-	}
-
-	p := response.Peers[start:]
-	for i := 0; i < len(p); i = i + 6 {
-		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
-		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
-		peer := Peer{Ip: ip.String(), Port: port}
-		peer.meta = m
-		peer.Choked = true
-		Peers = append(Peers, &peer)
-	}
+	response.parsePeers()
 
 	return response, err
 }

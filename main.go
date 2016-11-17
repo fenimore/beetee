@@ -39,30 +39,26 @@ var (
 )
 
 func main() {
+	// Exit Write
 	c := make(chan os.Signal, 1) // SIGINT
 	signal.Notify(c, os.Interrupt)
-
 	go func() {
 		<-c
 		Torrent.Info.WriteData()
 		os.Exit(1)
 	}()
-
+	// Debug and Error variables
 	var err error
-
 	debugger = log.New(os.Stdout, "DEBUG: ", log.Ltime|log.Lshortfile)
 	logger = log.New(os.Stdout, "LOG: ", log.Ltime|log.Lshortfile)
 
+	// My Peer Id, unique...
 	PeerId = GenPeerId()
 
 	/* Parse Torrent*/
-	Torrent, err = ParseTorrent("torrents/tom.torrent")
-
-	//debugger.Println(meta.Info)
-
+	Torrent, err = ParseTorrent("torrents/archlinux.torrent")
 	if err != nil {
 		debugger.Println(err)
-		//fmt.Println(err)
 	}
 	debugger.Println("Length: ", Torrent.Info.Length)
 	debugger.Println("Piece Length: ", Torrent.Info.PieceLength)
@@ -90,7 +86,4 @@ func main() {
 	//		logger.Printf("Wrote Data NP")
 	//		os.Exit(0)
 	//	}
-
-	/* TODO: Request Blocks */
-
 }

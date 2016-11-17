@@ -14,10 +14,8 @@ func Flood() {
 }
 
 func (p *Peer) AskForData() {
-	err := p.ListenToPeer()
-	if err != nil {
-		debugger.Println("Error connection", err)
-	}
+	go p.ListenToPeer() // includes it's own goroutine
+
 	p.sendStatusMessage(InterestedMsg)
 	p.ChokeWg.Wait()
 

@@ -22,6 +22,7 @@ const (
 	PortMsg
 )
 
+// ShakeHands asks another client to accept your connection.
 func (p *Peer) ShakeHands() error {
 	///<pstrlen><pstr><reserved><info_hash><peer_id>
 	// 68 bytes long.
@@ -34,7 +35,7 @@ func (p *Peer) ShakeHands() error {
 		'r', 'e', 'n', 't', ' ', 'p', 'r',
 		'o', 't', 'o', 'c', 'o', 'l'}
 	reserved := make([]byte, 8)
-	info := p.meta.InfoHash[:]
+	info := Torrent.InfoHash[:]
 	id := peerId[:] // my peerId
 	// Send handshake message
 	err = writer.WriteByte(pstrlen)
@@ -299,7 +300,7 @@ func (p *Peer) requestBlock(piece, block int) {
 
 func (p *Peer) requestPiece(piece int) {
 	logger.Printf("Requesting piece %d from peer %s", piece, p.Id)
-	for offset := 0; offset < p.meta.Info.BlocksPerPiece; offset++ {
+	for offset := 0; offset < Torrent.Info.BlocksPerPiece; offset++ {
 		err := p.sendRequestMessage(uint32(piece), offset*BLOCKSIZE)
 		if err != nil {
 			debugger.Println("Error Requesting", err)

@@ -50,3 +50,56 @@ info_hash=%9f%91e%d9%a2%81%a9%b8%e7%82%cdQv%bb%cc%82V%fd%18q
 &peer_id=-TR3440-91a24W577461
 &uploaded=0&download=0
 &left=1513308160&port=51413&key=60502143&numwant=80&compact=1&supportcrypto=1&event=started
+
+
+** Woops should of written to a log:, here's the start of a file
+DEBUG: 08:37:49 main.go:63: Length:  835715072
+DEBUG: 08:37:49 main.go:64: Piece Length:  524288
+DEBUG: 08:37:49 main.go:65: Piece Len:  31880
+DEBUG: 08:37:49 main.go:66: Pieces count:  1594
+LOG: 08:37:49 tracker.go:61: TRACKER REQUEST: http://tracker.archlinux.org:6969/announce?info_hash=%94z%b0%12%bd%1b%f1%1fO%1d%29%f8%fa%1e%abs%a8_%e7%93&peer_id=-TR3440-91a24W577461&uploaded=0&downloaded=0&left=835715072&port=51413&key=60502143&numwant=80&compact=1&supportcrypto=1&event=started
+DEBUG: 08:37:49 manager.go:6: This many peers 80
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  80.162.221.134:51414
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  185.21.216.146:60557
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  109.122.84.140:51413
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  72.14.190.228:51413
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  91.122.14.251:6881
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  192.173.150.226:51413
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  142.255.71.70:21423
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  185.21.216.196:53979
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  67.173.182.193:6992
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  205.144.215.135:6881
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  138.246.2.105:57516
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  50.53.65.33:8999
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  199.102.182.56:51413
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  62.198.43.243:50869
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  185.41.23.180:8999
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  162.210.92.103:51413
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  77.150.218.137:51413
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  188.233.151.220:51413
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  67.160.222.205:63340
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  83.69.106.139:6881
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  80.229.161.124:49742
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  185.41.23.180:0
+LOG: 08:37:49 peer.go:38: Connecting to Peer:  193.190.154.70:8999
+...
+and then
+...
+DEBUG: 08:43:25 io.go:58: Refilling Queue
+LOG: 08:43:25 message.go:192: Piece at 1565 is downloaded
+LOG: 08:43:25 message.go:302: Requesting piece 1593 from peer -TR2840-0moskeiwcp1k
+LOG: 08:43:25 message.go:302: Requesting piece 1593 from peer -TR2920-0w9b7n1afvin
+LOG: 08:43:25 message.go:192: Piece at 1376 is downloaded
+LOG: 08:43:25 message.go:192: Piece at 1589 is downloaded
+LOG: 08:43:25 message.go:192: Piece at 1589 is downloaded
+LOG: 08:43:25 message.go:192: Piece at 1584 is downloaded
+LOG: 08:43:26 message.go:192: Piece at 1590 is downloaded
+LOG: 08:43:26 message.go:192: Piece at 1590 is downloaded
+LOG: 08:43:26 message.go:98: Choked []
+LOG: 08:43:26 message.go:192: Piece at 1592 is downloaded
+LOG: 08:43:26 message.go:192: Piece at 1592 is downloaded
+LOG: 08:43:26 message.go:192: Piece at 1591 is downloaded
+LOG: 08:43:26 message.go:192: Piece at 1587 is downloaded
+LOG: 08:43:26 message.go:192: Piece at 1591 is downloaded
+LOG: 08:43:27 message.go:192: Piece at 1593 is downloaded
+LOG: 08:43:27 io.go:76: Success Writing Data

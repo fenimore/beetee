@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+// WriteData writes the file to disk, if the pieces aren't all there
+// it returns an error message, but rights all the same.
 func (info *TorrentInfo) WriteData() error {
 	//k	buffer := bufio.NewWriter(w io.Write)
 	file, err := os.Create(info.Name)
@@ -33,6 +35,9 @@ func (info *TorrentInfo) WriteData() error {
 	return nil
 }
 
+// ContinuousWrite writes even if pieces are missing.
+// When the lenght matches up, or if all pieces are there,
+// then it terminates and writes to disk.
 func (info *TorrentInfo) ContinuousWrite() error {
 	fullFile := true
 	for {
