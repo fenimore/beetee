@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-type Peer struct {
+type PeerX struct {
 	meta *TorrentMeta // Whence it came
 
 	PeerId string `bencode:"peer id"` // Bencoding not being used
@@ -35,7 +35,7 @@ type Peer struct {
 // parsePeers is a http response gotten from
 // the tracker; parse the peers byte message
 // and put to global Peers slice.
-func (r *TrackerResponse) parsePeers() {
+func (r *TrackerResponse) parsePeersX() {
 	var start int
 	for idx, val := range r.Peers {
 		if val == ':' {

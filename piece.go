@@ -13,7 +13,7 @@ const (
 	Full
 )
 
-type Piece struct {
+type PieceX struct {
 	index      int
 	data       []byte
 	numBlocks  int
@@ -34,17 +34,9 @@ type Piece struct {
 	timeCalled time.Time
 }
 
-type Block struct {
-	piece      *Piece // Not necessary?
-	offset     int
-	length     int  // Not necessary?
-	downloaded bool // Not necessary?
-	data       []byte
-}
-
 // parsePieces parses the big wacky string of sha-1 hashes int
 // the Info list of
-func (info *TorrentInfo) parsePieces() {
+func (info *TorrentInfo) parsePiecesX() {
 	info.cleanPieces()
 	// TODO: set this dynamically
 	numBlocks := info.PieceLength / int64(BLOCKSIZE)
