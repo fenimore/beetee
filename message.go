@@ -158,6 +158,9 @@ func (p *Peer) decodeBlockMessage(msg []byte) {
 	begin := binary.BigEndian.Uint32(msg[4:8])
 	// Blocks...
 	block := new(Block)
+	if len(msg[8:]) < 1 {
+		return
+	}
 	block.data = msg[8:]
 	block.offset = int(begin)
 
@@ -355,7 +358,7 @@ func (p *Piece) AskForPiece(peer *Peer) {
 	}
 	var buffer bytes.Buffer
 	for _, block := range p.blocks {
-		if block.data == nil {
+		if block == nil {
 			debugger.Println("Cannot Write Empty Block to Piece", p.index)
 			p.Lock()
 			p.status = Empty
