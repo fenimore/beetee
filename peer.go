@@ -19,13 +19,14 @@ type Peer struct {
 	conn net.Conn
 	// Status Chan
 	stopping chan bool
+	choking  chan bool
 	// Status
 	sync.Mutex // NOTE: Should be RWMutex?
 	alive      bool
 	interested bool
 	choked     bool
-	choking    bool
-	choke      sync.WaitGroup // NOTE: Use this?
+
+	choke sync.WaitGroup // NOTE: Use this?
 	// Messages
 	//sendChan chan []byte
 	//recvChan chan []byte

@@ -23,6 +23,8 @@ func (peer *Peer) AskPeer() {
 		select {
 		case <-peer.stopping:
 			return
+		case <-peer.choking:
+			peer.choke.Wait()
 		default:
 			// do nothing
 		}
