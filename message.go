@@ -72,8 +72,10 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 			logger.Printf("Recv: %s sends have %b", p.id, msg)
 		case BitFieldMsg:
 			//TODO: Parse Bitfield
-			logger.Printf("Recv: %s sends bitfield %v",
+			logger.Printf("Recv: %s sends bitfield %b",
 				p.id, msg)
+			p.processBitfieldMessage(msg)
+			debugger.Println(p.bitfield, len(p.bitfield))
 		case RequestMsg:
 			logger.Printf("Recv: %s sends request %s",
 				p.id, msg)

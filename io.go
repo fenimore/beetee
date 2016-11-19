@@ -41,6 +41,7 @@ func FileWrite() {
 			Torrent.Info.WriteData()
 			break
 		}
+		// TODO: Timeout requests
 	}
 }
 
