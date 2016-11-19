@@ -20,6 +20,7 @@ type Piece struct {
 	//hex string // NOTE: no need
 	// Timeout
 	timeout time.Time
+	pending sync.WaitGroup
 }
 
 // Block struct will always have constant size, 16KB.
@@ -33,18 +34,17 @@ type Block struct {
 // the torrent file.
 func (info *TorrentInfo) parsePieces() {
 	info.cleanPieces()
-	numberOfBlocks := info.PieceLength / int64(BLOCKSIZE)
-	info.BlocksPerPiece = int(numBlocks)
+	numberOfBlocks := info.PieceLength / int64(blocksize)
 	// NOTE: Pieces are global variable of all pieces
 	Pieces = make([]*Piece, 0, len(info.Pieces)/20)
-	for i := 0; i < piecesLength; i = i + 20 {
+	for i := 0; i < len(info.Pieces); i = i + 20 {
 		j := i + 20 // NOTE: j is hash end
 		piece := Piece{
 			size:       info.PieceLength,
 			chanBlocks: make(chan *Block, numberOfBlocks),
 			data:       make([]byte, info.PieceLength),
 			index:      len(Pieces),
-			confirmed:  false,
+			verified:   false,
 			//hash:       fmt.Sprintf("%x", piece.hash),
 		}
 		// Copy to next 20 into Piece Hash

@@ -1,10 +1,20 @@
 package main
 
+func Flood() {
+	for _, peer := range Peers {
+		err := peer.ConnectPeer()
+		if err != nil {
+			debugger.Printf("Error Connected to %s: %s", peer.addr, err)
+			continue
+		}
+	}
+}
+
 // of pieces, according to the rarest first
 func DecidePieceOrder() []int {
 	order := make([]int, 0, len(Pieces))
 	for i := 0; i < len(Pieces); i++ {
-		if Pieces[i] {
+		if !Pieces[i].verified {
 			order = append(order, i)
 		}
 	}

@@ -7,6 +7,8 @@ import (
 	"sync"
 )
 
+const port = 6881 // TODO
+
 var ( // NOTE Global Important Variables
 	Torrent *TorrentMeta
 	Peers   []*Peer
@@ -20,7 +22,6 @@ var ( // NOTE Global Important Variables
 	Left       int
 	Uploaded   int
 	AliveDelta int // TODO:
-	MaxPeers   int
 	// Loggers
 	debugger *log.Logger
 	logger   *log.Logger
@@ -37,62 +38,54 @@ var (
 	ioChan    chan *Piece
 )
 
-//var continWG sync.WaitGro[up
-
-var (
-	peerId [20]byte
-	blocks map[[20]byte]bool
-
-	wg sync.WaitGroup
-)
-
 func main() {
-	// Exit Write
+	/* Exit on CTRL C */
 	c := make(chan os.Signal, 1) // SIGINT
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		<-c
-		Torrent.Info.WriteData()
+		//Torrent.Info.WriteData()
+		debugger.Println("Good Bye!")
 		os.Exit(1)
 	}()
-	// Debug and Error variables
-	var err error
-	debugger = log.New(os.Stdout, "DEBUG: ", log.Ltime|log.Lshortfile)
-	logger = log.New(os.Stdout, "LOG: ", log.Ltime|log.Lshortfile)
 
-	// My Peer Id, unique...
+	/* TODO: Start server on Port */
+	// server
+
+	/* Debug and Error variables */
+	var err error
+	debugger = log.New(os.Stdout, "DEBUG: ",
+		log.Ltime|log.Lshortfile)
+	logger = log.New(os.Stdout, "LOG: ",
+		log.Ltime|log.Lshortfile)
+
+	/* My Peer Id TODO unique */
 	PeerId = GenPeerId()
 
 	/* Parse Torrent*/
-	Torrent, err = ParseTorrent("torrents/ubuntu.torrent")
+	// NOTE: Sets Piece
+	Torrent, err = ParseTorrent("torrents/tom.torrent")
 	if err != nil {
 		debugger.Println(err)
 	}
 	debugger.Println("Length: ", Torrent.Info.Length)
-	debugger.Println("Piece Length: ", Torrent.Info.PieceLength)
-	debugger.Println("Piece Len: ", len(Torrent.Info.Pieces))
+	debugger.Println("Piece Length: ",
+		Torrent.Info.PieceLength)
+	debugger.Println("Piece Len: ",
+		len(Torrent.Info.Pieces))
 	debugger.Println("Pieces count: ", len(Pieces))
+
 	/*Parse Tracker Response*/
+	// NOTE: Sets Peer
 	_, err = GetTrackerResponse(Torrent)
 	if err != nil {
 		debugger.Println(err)
 	}
-	/* What next? */
+
+	/* Start Client */
 	PieceQueue = make(chan *Piece)
-	PeerQueue = make(chan *Peer, MaxPeers)
-	MaxPeers = len(Peers) / 2
+	PeerQueue = make(chan *Peer)
+	Flood()
 	writeSync.Add(1)
-	queueSync.Add(1)
-	go Flood()
-	go Torrent.Info.ContinuousWrite()
 	writeSync.Wait()
-	//completionSync.Wait()
-	//err = Torrent.Info.WriteData()
-	//if err != nil {
-	//		logger.Printf("Problem writing data %s", err)
-	//		os.Exit(0)
-	//	} else {
-	//		logger.Printf("Wrote Data NP")
-	//		os.Exit(0)
-	//	}
 }

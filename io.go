@@ -17,7 +17,7 @@ func (info *TorrentInfo) WriteData() error {
 	}
 	writer := bufio.NewWriter(file)
 	for idx, val := range Pieces {
-		if !val.have {
+		if !val.verified {
 			fi, err := file.Stat()
 			if err != nil {
 				debugger.Println(err)
@@ -38,7 +38,7 @@ func (info *TorrentInfo) WriteData() error {
 // NOTE DEPRECATED// ContinuousWrite writes even if pieces are missing.
 // When the lenght matches up, or if all pieces are there,
 // then it terminates and writes to disk.
-func (info *TorrentInfo) ContinuousWrite() error {
+/*func (info *TorrentInfo) ContinuousWrite() error {
 	queueSync.Wait() // don't start writing until atleast the queue of requests is made.
 	debugger.Println("Beginning ContinuousWrite")
 	fullFile := true
@@ -82,3 +82,4 @@ func (info *TorrentInfo) ContinuousWrite() error {
 
 // TODO: Write iteratively onto desk
 // TODO: Read the progress of blocks from disk
+*/

@@ -1,8 +1,13 @@
 package main
 
-import "bufio"
-import "encoding/binary"
-import "crypto/sha1"
+import (
+	"bufio"
+	"bytes"
+	"crypto/sha1"
+	"encoding/binary"
+	"errors"
+	"io"
+)
 
 const (
 	ChokeMsg = iota
@@ -21,7 +26,7 @@ const (
 Recieving Messages
 ######################################################*/
 
-func (p *Peer) DecodeMessage() {
+func (p *Peer) DecodeMessages() {
 	for {
 		// FIXME: Non blocking
 		// FIXME  and send a stopping channel
@@ -143,7 +148,7 @@ func (p *Peer) sendHandShake() error {
 		'o', 't', 'o', 'c', 'o', 'l'}
 	reserved := make([]byte, 8)
 	info := Torrent.InfoHash[:]
-	id := peerId[:] // my peerId
+	id := PeerId[:] // my peerId NOTE: Global
 	// Send handshake message
 	err = writer.WriteByte(pstrlen)
 	if err != nil {
@@ -174,6 +179,7 @@ func (p *Peer) sendHandShake() error {
 	// The response handshake
 	shake := make([]byte, 68)
 	// TODO: Does this block?
+	// TODO: Set deadline?
 	n, err = io.ReadFull(p.conn, shake)
 	if err != nil {
 		return err

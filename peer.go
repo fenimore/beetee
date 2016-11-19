@@ -6,6 +6,7 @@ import (
 	"io"
 	"net"
 	"sync"
+	"time"
 )
 
 // Peer is the basic unit of other.
@@ -50,7 +51,7 @@ func (r *TrackerResponse) parsePeers() {
 		peer := Peer{
 			ip:      ip.String(),
 			port:    port,
-			addr:    fmt.Sprintf("%s:%d", p.Ip, p.Port),
+			addr:    fmt.Sprintf("%s:%d", ip.String(), port),
 			choking: true,
 			choked:  true,
 		}
@@ -59,14 +60,15 @@ func (r *TrackerResponse) parsePeers() {
 }
 
 func (p *Peer) ConnectPeer() error {
-	log.Printf("Connecting to %s", p.addr)
+	logger.Printf("Connecting to %s", p.addr)
 	// Connect to address
-	conn, err := net.Dial("tcp", p.addr)
+	// TODO: Set deadline
+	conn, err := net.DialTimeout("tcp", p.addr,
+		time.Second*10)
 	if err != nil {
 		return err
 	}
 	p.conn = conn
-
 	// NOTE: Does io.Readfull Block?
 	err = p.sendHandShake()
 	if err != nil {
@@ -74,6 +76,8 @@ func (p *Peer) ConnectPeer() error {
 	}
 	p.alive = true
 	logger.Printf("Connected to %s at %s", p.id, p.addr)
+	go p.ListenPeer()
+	go p.DecodeMessages()
 	return nil
 }
 
