@@ -47,14 +47,18 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 		switch payload[0] {
 		case ChokeMsg:
 			if !p.choking {
+				p.Lock()
 				p.choking = true
 				p.choke.Add(1)
+				p.Unlock()
 			}
 			logger.Printf("Recv: %s sends choke", p.id)
 		case UnchokeMsg:
 			if p.choking {
+				p.Lock()
 				p.choking = false
 				p.choke.Done()
+				p.Unlock()
 			}
 			logger.Printf("Recv: %s sends unchoke", p.id)
 		case InterestedMsg:

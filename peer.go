@@ -20,6 +20,7 @@ type Peer struct {
 	// Status Chan
 	stopping chan bool
 	// Status
+	sync.Mutex // NOTE: Should be RWMutex?
 	alive      bool
 	interested bool
 	choked     bool
@@ -76,9 +77,11 @@ func (p *Peer) ConnectPeer() error {
 	if err != nil {
 		return err
 	}
-	p.alive = true
 	logger.Printf("Connected to %s at %s", p.id, p.addr)
+	p.Lock()
+	p.alive = true
 	p.choke.Add(1)
+	p.Unlock()
 	recv := make(chan []byte)
 	go p.ListenPeer(recv)
 	go p.DecodeMessages(recv)
