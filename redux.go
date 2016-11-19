@@ -49,7 +49,6 @@ type Peer struct {
 	conn net.Conn
 	// Status
 	//	stopping   chan struct{}
-	choking    chan struct{}
 	alive      bool
 	interested bool
 	choked     bool
@@ -74,8 +73,8 @@ type Piece struct {
 
 // Block struct will always have constant size, 16KB.
 type Block struct {
-	index  int32 // NOTE: piece index
-	offset int32
+	index  uint32 // NOTE: piece index
+	offset uint32
 	data   []byte
 }
 
@@ -129,50 +128,6 @@ func (info *TorrentInfo) parsePieces() {
 		copy(piece.hash[:], info.Pieces[i:j])
 		Pieces = append(Pieces, &piece)
 	}
-}
-
-func (p *Peer) decodePieceMessage(msg []byte) {
-	if len(msg[8:]) < 1 {
-		return
-	}
-	index := binary.BigEndian.Uint32(msg[:4])
-	begin := binary.BigEndian.Uint32(msg[4:8])
-	data := msg[8:]
-	// Blocks...
-	block := &Block{index: index, offset: begin, data: data}
-	Pieces[index].chanBlocks <- block
-
-	if len(Pieces[index].chanBlocks) == cap(Pieces[index].chanBlocks) {
-		Pieces[index].writeBlocks()
-	}
-}
-
-func (p *Piece) writeBlocks() {
-	if len(p.chanBlocks) < cap(p.chanBlocks) {
-		logger.Println("The block channel is not full")
-		return
-	}
-	for {
-		b := <-p.chanBlocks // NOTE: b for block
-		// Copy block data to p
-		// NOTE: If this doesn't work,
-		// Go back to old manner of using a indexed in
-		// block array
-		copy(p.data[b.offset:b.offset+blocksize],
-			b.data)
-		if len(p.chanBlocks) < 1 {
-			break
-		}
-	}
-	if p.hash != sha1.Sum(p.data) {
-		p.data = nil
-		p.data = make([]byte, p.size)
-		log.Println("Unable to Write Blocks to Piece")
-		return
-	}
-	p.verified = true
-	logger.Printf("Piece at %d is successfully written", p.index)
-	ioChan <- p
 }
 
 func (p *Peer) ConnectPeer() error {

@@ -35,8 +35,7 @@ func (info *TorrentInfo) WriteData() error {
 	return nil
 }
 
-// NOTE DEPRECATED
-// ContinuousWrite writes even if pieces are missing.
+// NOTE DEPRECATED// ContinuousWrite writes even if pieces are missing.
 // When the lenght matches up, or if all pieces are there,
 // then it terminates and writes to disk.
 func (info *TorrentInfo) ContinuousWrite() error {

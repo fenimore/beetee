@@ -1,129 +1,57 @@
 package main
 
 import "bufio"
-import "errors"
-import "io"
-import "bytes"
 import "encoding/binary"
 import "crypto/sha1"
-import "time"
 
-// 19 bytes
-
-// ShakeHands asks another client to accept your connection.
-func (p *Peer) ShakeHands() error {
-	///<pstrlen><pstr><reserved><info_hash><peer_id>
-	// 68 bytes long.
-	var n int
-	var err error
-	writer := bufio.NewWriter(p.Conn)
-	// Handshake message:
-	pstrlen := byte(19) // or len(pstr)
-	pstr := []byte{'B', 'i', 't', 'T', 'o', 'r',
-		'r', 'e', 'n', 't', ' ', 'p', 'r',
-		'o', 't', 'o', 'c', 'o', 'l'}
-	reserved := make([]byte, 8)
-	info := Torrent.InfoHash[:]
-	id := peerId[:] // my peerId
-	// Send handshake message
-	err = writer.WriteByte(pstrlen)
-	if err != nil {
-		return err
-	}
-	n, err = writer.Write(pstr)
-	if err != nil || n != len(pstr) {
-		return err
-	}
-	n, err = writer.Write(reserved)
-	if err != nil || n != len(reserved) {
-		return err
-	}
-	n, err = writer.Write(info)
-	if err != nil || n != len(info) {
-		return err
-	}
-	n, err = writer.Write(id)
-	if err != nil || n != len(id) {
-		return err
-	}
-	err = writer.Flush()
-	if err != nil {
-		return err
-	}
-	// receive confirmation
-
-	// The response handshake
-	shake := make([]byte, 68)
-	n, err = io.ReadFull(p.Conn, shake)
-	if err != nil {
-		return err
-	}
-	// TODO: Check for Length
-	if !bytes.Equal(shake[1:20], pstr) {
-		return errors.New("Protocol does not match")
-	}
-	if !bytes.Equal(shake[28:48], info) {
-		return errors.New("InfoHash Does not match")
-	}
-	p.Id = string(shake[48:68])
-	p.Shaken = true
-	return nil
-}
-
-// decodeMessage is the overall decoder, send payloads here.
-// TODO: pass in a channel, and constantly be decoding for the peer
-// using the switch statement
-func (p *Peer) decodeMessage(payload []byte) {
-	// first byte is msg type
-	if len(payload) < 1 {
-		p.sendStatusMessage(-1)
+/*###################################################
+Recieving Messages
+######################################################*/
+func (p *Peer) decodePieceMessage(msg []byte) {
+	if len(msg[8:]) < 1 {
 		return
 	}
-	msg := payload[1:]
-	//logger.Println("recieved a Message:", payload[0])
-	switch payload[0] {
-	case ChokeMsg:
-		p.Choked = true
-		//p.ChokeWg.Done() // Does this go into the Negative nUmbers?
-		p.ChokeWg.Add(1)
-		logger.Println("Choked", msg)
-	case UnchokeMsg:
-		if p.Choked {
-			p.ChokeWg.Done()
-			p.Choked = false
-		}
-		logger.Println("UnChoke", p.Id)
-	case InterestedMsg:
-		p.Interested = true
-		logger.Println("Interested", msg)
-	case NotInterestedMsg:
-		p.Interested = false
-		logger.Println("NotInterested", msg)
-	case HaveMsg:
-		logger.Println("Have", msg)
-		//p.has[binary.BigEndian.Uint32(msg)] = true
-	case BitFieldMsg:
-		logger.Println("Bitfield", p.Id) //, msg)
-		//TODO: Parse Bitfield
-		// debugger.Println(len(msg))
-		// Bitfield comes right after handshake
-		err := p.sendStatusMessage(InterestedMsg)
-		if err != nil {
-			debugger.Println("Status Error: ", err)
-		}
-	case RequestMsg:
-		logger.Println("Request", msg)
-	case BlockMsg:
-		//logger.Println("Piece Message Received")
-		p.decodeBlockMessage(msg)
-	case CancelMsg:
-		logger.Println("Cancel", msg)
-	case PortMsg:
-		logger.Println("Port", msg)
+	index := binary.BigEndian.Uint32(msg[:4])
+	begin := binary.BigEndian.Uint32(msg[4:8])
+	data := msg[8:]
+	// Blocks...
+	block := &Block{index: index, offset: begin, data: data}
+	Pieces[index].chanBlocks <- block
 
+	if len(Pieces[index].chanBlocks) == cap(Pieces[index].chanBlocks) {
+		Pieces[index].writeBlocks()
 	}
 }
 
+func (p *Piece) writeBlocks() {
+	if len(p.chanBlocks) < cap(p.chanBlocks) {
+		logger.Printf("The block channel for %d is not full", p.index)
+		return
+	}
+	for {
+		b := <-p.chanBlocks // NOTE: b for block
+		// Copy block data to p
+		// NOTE: If this doesn't work,
+		// Go back to old manner of using a indexed in
+		// block array
+		copy(p.data[int(b.offset):int(b.offset)+blocksize],
+			b.data)
+		if len(p.chanBlocks) < 1 {
+			break
+		}
+	}
+	if p.hash != sha1.Sum(p.data) {
+		p.data = nil
+		p.data = make([]byte, p.size)
+		logger.Printf("Unable to Write Blocks to Piece %d", p.index)
+		return
+	}
+	p.verified = true
+	logger.Printf("Piece at %d is successfully written", p.index)
+	ioChan <- p
+}
+
+// 19 bytes
 func (p *Peer) decodeHaveMessage(msg []byte) {
 }
 
@@ -139,72 +67,17 @@ func (p *Peer) decodeCancelMessage(msg []byte) {
 func (p *Peer) decodePortMessage(msg []byte) {
 }
 
-/* Block and Piece Messages */
-func (p *Peer) decodeBlockMessage(msg []byte) {
-	index := binary.BigEndian.Uint32(msg[:4])
-	begin := binary.BigEndian.Uint32(msg[4:8])
-	// Blocks...
-	block := new(Block)
-	if len(msg[8:]) < 1 {
-		return
-	}
-	block.data = msg[8:]
-	block.offset = int(begin)
-
-	// Send to channel
-	if len(block.data) < 1 {
-		return
-	}
-	Pieces[index].chanBlocks <- block
-}
-
-// DEPRECATED
-// checkPieceCompletion this is the loop which
-// is constantly checking whether a piece has been
-// downloaded.
-// Should call one time for every piece
-func (p *Piece) checkPieceCompletion() {
-BlockLoop:
-	for {
-		b := <-p.chanBlocks
-		p.blocks[b.offset/BLOCKSIZE] = b
-		for _, val := range p.blocks {
-			if val == nil {
-				continue BlockLoop
-			}
-		}
-		break BlockLoop
-	}
-	var buffer bytes.Buffer
-	for _, block := range p.blocks {
-		buffer.Write(block.data)
-	}
-	if p.hash == sha1.Sum(buffer.Bytes()) {
-		p.data = buffer.Bytes()
-		p.have = true
-		//completionSync.Done()
-		p.status = Full
-		p.Pending.Done()
-		logger.Printf("Piece at %d is downloaded", p.index)
-		return
-	}
-	p.status = Empty
-	p.Pending.Done()
-
-	// TODO: This part is not making much sense
-	debugger.Println(p.hash, sha1.Sum(buffer.Bytes()))
-	logger.Println("Failure to sha1 hash")
-	// NOTE: Call again method if fail... ?
-	go p.checkPieceCompletion() // In goroutine?
-}
+/*###################################################
+Sending Messages
+######################################################*/
 
 // sendStatusMessage sends the status message to peer.
 // If sent -1 then a Keep alive message is sent.
 func (p *Peer) sendStatusMessage(msg int) error {
-	logger.Printf("Sending Status Message: %d to %s", msg, p.Id)
+	logger.Printf("Sending Status Message: %d to %s", msg, p.id)
 	var err error
 	buf := make([]byte, 4)
-	writer := bufio.NewWriter(p.Conn)
+	writer := bufio.NewWriter(p.conn)
 	if msg == -1 { // keep alive, do nothing TODO: add ot iota
 		binary.BigEndian.PutUint32(buf, 0)
 	} else {
@@ -239,7 +112,7 @@ func (p *Peer) sendRequestMessage(idx uint32, offset int) error {
 	// NOTE: being offset the offset by byte:
 	// that is  0, 16K, 13K, etc
 	var err error
-	writer := bufio.NewWriter(p.Conn)
+	writer := bufio.NewWriter(p.conn)
 	len := make([]byte, 4)
 	binary.BigEndian.PutUint32(len, 13)
 	id := byte(RequestMsg)
@@ -249,7 +122,7 @@ func (p *Peer) sendRequestMessage(idx uint32, offset int) error {
 	begin := make([]byte, 4)
 	binary.BigEndian.PutUint32(begin, uint32(offset))
 	length := make([]byte, 4)
-	binary.BigEndian.PutUint32(length, uint32(BLOCKSIZE))
+	binary.BigEndian.PutUint32(length, uint32(blocksize))
 	_, err = writer.Write(len)
 	if err != nil {
 		return err
@@ -284,95 +157,12 @@ func (p *Peer) requestAllPieces() {
 	}
 }
 
-// requestBlock takes in the block index, not the offset
-func (p *Peer) requestBlock(piece, block int) {
-	logger.Printf("Requesting piece %d at offset: %d", piece, block)
-	offset := block * BLOCKSIZE
-	err := p.sendRequestMessage(uint32(piece), offset)
-	if err != nil {
-		debugger.Println("Problem Requesting BLock")
-	}
-}
-
 func (p *Peer) requestPiece(piece int) {
-	logger.Printf("Requesting piece %d from peer %s", piece, p.Id)
+	logger.Printf("Requesting piece %d from peer %s", piece, p.id)
 	for offset := 0; offset < Torrent.Info.BlocksPerPiece; offset++ {
-		err := p.sendRequestMessage(uint32(piece), offset*BLOCKSIZE)
+		err := p.sendRequestMessage(uint32(piece), offset*blocksize)
 		if err != nil {
 			debugger.Println("Error Requesting", err)
 		}
 	}
-	// Make sure to check for it's completion
-	Pieces[piece].Pending.Add(1)
-	Pieces[piece].status = Pending
-	go Pieces[piece].checkPieceCompletion()
-}
-
-// AskForPiece takes in a peer and asks for that piece from them.
-func (p *Piece) AskForPiece(peer *Peer) {
-	logger.Printf("Asking %s for piece %d", peer.Id, p.index)
-	//p.Lock() // Lock locks for writing, not reading
-	// Calculate how many blocks, there will be.
-	p.Lock() // Write lock // NOTE: Are these necessary?
-	p.timeCalled = time.Now()
-	p.status = Pending
-	p.Unlock()
-	for offset := 0; offset < Torrent.Info.BlocksPerPiece; offset++ {
-		err := peer.sendRequestMessage(uint32(p.index), offset*BLOCKSIZE)
-		if err != nil {
-			debugger.Println("Error Requesting", err)
-		}
-	}
-	for len(p.chanBlocks) < cap(p.chanBlocks) {
-		// TODO: Set  Timeout
-		// Wait
-		if 30*time.Second < time.Since(p.timeCalled) {
-			debugger.Println("One Minute Passed!", p.index)
-			p.Lock()
-			p.status = Empty
-			p.Unlock()
-			p.Pending.Done()
-			PieceQueue <- p
-			return
-		}
-	}
-	for {
-		b := <-p.chanBlocks
-		p.blocks[b.offset/BLOCKSIZE] = b
-		if len(p.chanBlocks) < 1 {
-			break
-		}
-	}
-	var buffer bytes.Buffer
-	for _, block := range p.blocks {
-		if block == nil {
-			debugger.Println("Cannot Write Empty Block to Piece", p.index)
-			p.Lock()
-			p.status = Empty
-			p.Unlock()
-			p.Pending.Done()
-			PieceQueue <- p
-			return
-		}
-		buffer.Write(block.data)
-	}
-	if p.hash == sha1.Sum(buffer.Bytes()) {
-		p.data = buffer.Bytes()
-		p.have = true
-		p.Lock()
-		p.status = Full
-		p.Unlock()
-		p.Pending.Done()
-		logger.Printf("Piece at %d is downloaded", p.index)
-		return
-	}
-	//p.Unlock()
-	p.Lock()
-	p.status = Empty
-	p.Unlock()
-	p.Pending.Done()
-
-	// TODO: This part is not making much sense
-	debugger.Println(p.hash, sha1.Sum(buffer.Bytes()))
-	logger.Println("Failure to sha1 hash")
 }
