@@ -122,7 +122,7 @@ func (p *Piece) writeBlocks() {
 	}
 	p.verified = true
 	logger.Printf("Piece at %d is successfully written", p.index)
-	ioChan <- p
+	//ioChan <- p
 }
 
 // 19 bytes
