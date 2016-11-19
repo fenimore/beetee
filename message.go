@@ -47,14 +47,18 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 		switch payload[0] {
 		case ChokeMsg:
 			if !p.choking {
-				p.choking = true
+				p.Lock()
+				p.choking = true // TODO: do channel
 				p.choke.Add(1)
+				p.Unlock()
 			}
 			logger.Printf("Recv: %s sends choke", p.id)
 		case UnchokeMsg:
 			if p.choking {
+				p.Lock()
 				p.choking = false
 				p.choke.Done()
+				p.Unlock()
 			}
 			logger.Printf("Recv: %s sends unchoke", p.id)
 		case InterestedMsg:
@@ -65,11 +69,13 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 			logger.Printf("Recv: %s sends uninterested", p.id)
 		case HaveMsg:
 			// TODO: Set bitfield
+			p.decodeHaveMessage(msg)
 			logger.Printf("Recv: %s sends have %b", p.id, msg)
 		case BitFieldMsg:
 			//TODO: Parse Bitfield
-			logger.Printf("Recv: %s sends bitfield %v",
-				p.id, msg)
+			p.decodeBitfieldMessage(msg)
+			logger.Printf("Recv: %s sends bitfield",
+				p.id)
 		case RequestMsg:
 			logger.Printf("Recv: %s sends request %s",
 				p.id, msg)
@@ -136,9 +142,30 @@ func (p *Piece) writeBlocks() {
 
 // 19 bytes
 func (p *Peer) decodeHaveMessage(msg []byte) {
+	index := binary.BigEndian.Uint32(msg)
+	p.bitfield[index] = true
 }
 
-func (p *Peer) decodeBitfieldMessage(msg []byte) {
+// NOTE: The bitfield will be sent with padding if the size is
+// not divisible by eight.
+// Thank you Tulva RC bittorent client for this algorithm
+// github.com/jtakkala/tulva/
+func (p *Peer) decodeBitfieldMessage(bitfield []byte) {
+	p.bitfield = make([]bool, len(Pieces))
+	// For each byte, look at the bits
+	// NOTE: that is 8 * 8
+	for i := 0; i < len(p.bitfield); i++ {
+		for j := 0; j < 8; j++ {
+			index := i*8 + j
+			if index >= len(Pieces) {
+				break // Hit padding bits
+			}
+
+			byte := bitfield[i]              // Within bytes
+			bit := (byte >> uint32(7-j)) & 1 // some shifting
+			p.bitfield[index] = bit == 1     // if bit is true
+		}
+	}
 }
 
 func (p *Peer) decodeRequestMessage(msg []byte) {

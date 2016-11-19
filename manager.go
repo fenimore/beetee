@@ -2,7 +2,7 @@ package main
 
 func Flood() {
 	// TODO: add queue for peers
-	for _, peer := range Peers[:15] {
+	for _, peer := range Peers[:] {
 		err := peer.ConnectPeer()
 		if err != nil {
 			debugger.Printf("Error Connected to %s: %s", peer.addr, err)
@@ -18,10 +18,22 @@ func Flood() {
 
 func (peer *Peer) AskPeer() {
 	peer.sendStatusMessage(InterestedMsg)
-	peer.choke.Wait()
 	//peer.se
 	for {
+		select {
+		case <-peer.stopping:
+			return
+		case <-peer.choking:
+			peer.choke.Wait()
+		default:
+			// do nothing
+		}
+		peer.choke.Wait() // if Choked, then Wait
 		piece := <-PieceQueue
+		if !peer.bitfield[piece.index] {
+			PieceQueue <- piece
+			continue
+		}
 		piece.pending.Add(1)
 		peer.requestPiece(piece.index)
 		piece.pending.Wait()
