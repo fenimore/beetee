@@ -22,6 +22,10 @@ func (peer *Peer) AskPeer() {
 	//peer.se
 	for {
 		piece := <-PieceQueue
+		if !peer.bitfield[piece.index] {
+			PieceQueue <- piece
+			continue
+		}
 		piece.pending.Add(1)
 		peer.requestPiece(piece.index)
 		piece.pending.Wait()
