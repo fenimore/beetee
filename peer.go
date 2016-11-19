@@ -110,25 +110,3 @@ func (p *Peer) ListenPeer(recv chan<- []byte) {
 		//p.recvChan <- payload
 	}
 }
-
-// NOTE: The bitfield will be sent with padding if the size is
-// not divisible by eight.
-// Thank you Tulva RC bittorent client for this algorithm
-// github.com/jtakkala/tulva/
-func (p *Peer) processBitfieldMessage(bitfield []byte) {
-	p.bitfield = make([]bool, len(Pieces))
-	// For each byte, look at the bits
-	// NOTE: that is 8 * 8
-	for i := 0; i < len(p.bitfield); i++ {
-		for j := 0; j < 8; j++ {
-			index := i*8 + j
-			if index >= len(Pieces) {
-				break // Hit padding bits
-			}
-
-			byte := bitfield[i]              // Within bytes
-			bit := (byte >> uint32(7-j)) & 1 // some shifting
-			p.bitfield[index] = bit == 1     // if bit is true
-		}
-	}
-}
