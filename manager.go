@@ -1,6 +1,7 @@
 package main
 
 func Flood() {
+	ioChan = make(chan *Piece)
 	for _, peer := range Peers {
 		err := peer.ConnectPeer()
 		if err != nil {

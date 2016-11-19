@@ -44,7 +44,7 @@ func main() {
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		<-c
-		//Torrent.Info.WriteData()
+		Torrent.Info.WriteData()
 		debugger.Println("Good Bye!")
 		os.Exit(1)
 	}()
@@ -85,6 +85,7 @@ func main() {
 	/* Start Client */
 	PieceQueue = make(chan *Piece)
 	PeerQueue = make(chan *Peer)
+	ioChan = make(chan *Piece)
 	Flood()
 	writeSync.Add(1)
 	writeSync.Wait()

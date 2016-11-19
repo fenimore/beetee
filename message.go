@@ -26,7 +26,7 @@ const (
 Recieving Messages
 ######################################################*/
 
-func (p *Peer) DecodeMessages(recv chan []byte) {
+func (p *Peer) DecodeMessages(recv <-chan []byte) {
 	for {
 		// FIXME: Non blocking
 		// FIXME  and send a stopping channel
@@ -96,6 +96,7 @@ func (p *Peer) decodePieceMessage(msg []byte) {
 }
 
 func (p *Piece) writeBlocks() {
+	p.pending.Done() // not waiting on any more blocks
 	if len(p.chanBlocks) < cap(p.chanBlocks) {
 		logger.Printf("The block channel for %d is not full", p.index)
 		return
@@ -112,7 +113,6 @@ func (p *Piece) writeBlocks() {
 			break
 		}
 	}
-	p.pending.Done()
 	if p.hash != sha1.Sum(p.data) {
 		p.data = nil
 		p.data = make([]byte, p.size)
@@ -122,7 +122,7 @@ func (p *Piece) writeBlocks() {
 	}
 	p.verified = true
 	logger.Printf("Piece at %d is successfully written", p.index)
-	//ioChan <- p
+	//ioChan <- p //FIXME this blocks?
 }
 
 // 19 bytes

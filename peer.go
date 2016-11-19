@@ -25,8 +25,8 @@ type Peer struct {
 	choking    bool
 	choke      sync.WaitGroup // NOTE: Use this?
 	// Messages
-	sendChan chan []byte
-	recvChan chan []byte
+	//sendChan chan []byte
+	//recvChan chan []byte
 	// Piece Data
 	bitfield map[int]bool
 }
@@ -84,8 +84,7 @@ func (p *Peer) ConnectPeer() error {
 }
 
 // ListenPeer reads from socket.
-func (p *Peer) ListenPeer(recv chan []byte) {
-	debugger.Println("Listening to Peer")
+func (p *Peer) ListenPeer(recv chan<- []byte) {
 	for {
 		length := make([]byte, 4)
 		_, err := io.ReadFull(p.conn, length)
