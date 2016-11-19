@@ -28,11 +28,17 @@ Recieving Messages
 
 func (p *Peer) DecodeMessages(recv <-chan []byte) {
 	for {
-		// FIXME: Non blocking
-		// FIXME  and send a stopping channel
-		// FIXME: and then return
-		//payload := <-p.recvChan
-		payload := <-recv
+		var payload []byte
+		select {
+		case <-p.stopping:
+			debugger.Printf("Peer %s is closing", p.id)
+			p.conn.Close()
+			p.alive = false
+			return
+		case payload = <-recv:
+			//debugger.Println("Received")
+		}
+		//payload := <-recv
 		if len(payload) < 1 {
 			continue
 		}

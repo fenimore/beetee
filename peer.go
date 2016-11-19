@@ -17,8 +17,9 @@ type Peer struct {
 	addr string
 	// Connection
 	conn net.Conn
+	// Status Chan
+	stopping chan bool
 	// Status
-	//	stopping   chan struct{}
 	alive      bool
 	interested bool
 	choked     bool
@@ -91,16 +92,14 @@ func (p *Peer) ListenPeer(recv chan<- []byte) {
 		if err != nil {
 			// EOF
 			debugger.Printf("Error %s with %s", err, p.id)
-			p.alive = false
-			p.conn.Close()
+			p.stopping <- true
 			return
 		}
 		payload := make([]byte, binary.BigEndian.Uint32(length))
 		_, err = io.ReadFull(p.conn, payload)
 		if err != nil {
 			debugger.Printf("Error %s with %s", err, p.id)
-			p.alive = false
-			p.conn.Close()
+			p.stopping <- true
 			return
 		}
 		recv <- payload

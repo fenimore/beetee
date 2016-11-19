@@ -36,7 +36,7 @@ func (info *TorrentInfo) WriteData() error {
 
 func FileWrite() {
 	for {
-		if len(ioChan) == cap(ioChan)-1 {
+		if len(ioChan) == cap(ioChan) {
 			debugger.Println("Going to write now")
 			Torrent.Info.WriteData()
 			break
