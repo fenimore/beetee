@@ -36,7 +36,7 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 			p.alive = false
 			return
 		case payload = <-recv:
-			//debugger.Println("Received")
+			// No nothing
 		}
 		//payload := <-recv
 		if len(payload) < 1 {

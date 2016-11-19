@@ -50,11 +50,12 @@ func (r *TrackerResponse) parsePeers() {
 		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
 		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
 		peer := Peer{
-			ip:      ip.String(),
-			port:    port,
-			addr:    fmt.Sprintf("%s:%d", ip.String(), port),
-			choking: true,
-			choked:  true,
+			ip:       ip.String(),
+			port:     port,
+			addr:     fmt.Sprintf("%s:%d", ip.String(), port),
+			choking:  true,
+			choked:   true,
+			stopping: make(chan bool),
 		}
 		Peers = append(Peers, &peer)
 	}
