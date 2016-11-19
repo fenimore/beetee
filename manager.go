@@ -18,9 +18,15 @@ func Flood() {
 
 func (peer *Peer) AskPeer() {
 	peer.sendStatusMessage(InterestedMsg)
-	peer.choke.Wait()
 	//peer.se
 	for {
+		select {
+		case <-peer.stopping:
+			return
+		default:
+			// do nothing
+		}
+		peer.choke.Wait() // if Choked, then Wait
 		piece := <-PieceQueue
 		if !peer.bitfield[piece.index] {
 			PieceQueue <- piece

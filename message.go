@@ -48,7 +48,7 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 		case ChokeMsg:
 			if !p.choking {
 				p.Lock()
-				p.choking = true
+				p.choking = true // TODO: do channel
 				p.choke.Add(1)
 				p.Unlock()
 			}
