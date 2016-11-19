@@ -35,6 +35,7 @@ func (info *TorrentInfo) WriteData() error {
 	return nil
 }
 
+// NOTE DEPRECATED
 // ContinuousWrite writes even if pieces are missing.
 // When the lenght matches up, or if all pieces are there,
 // then it terminates and writes to disk.
@@ -49,7 +50,7 @@ func (info *TorrentInfo) ContinuousWrite() error {
 		}
 		writer := bufio.NewWriter(file)
 		for _, val := range Pieces {
-			if val.have {
+			if val.verified {
 				//blank := make([]byte, info.PieceLength)
 				//writer.Write(blank)
 				//fullFile = false
@@ -57,7 +58,7 @@ func (info *TorrentInfo) ContinuousWrite() error {
 			} else {
 				fullFile = false
 				//ndebugger.Println(len(PieceQueue), val.status, val.index)
-				//if len(PieceQueue) < 1 && val.status != Full {
+				if len(PieceQueue) < 1 && val.verified {
 					PieceQueue <- val
 				}
 

@@ -10,19 +10,6 @@ import "time"
 
 // 19 bytes
 
-const (
-	ChokeMsg = iota
-	UnchokeMsg
-	InterestedMsg
-	NotInterestedMsg
-	HaveMsg
-	BitFieldMsg
-	RequestMsg
-	BlockMsg // rather than PieceMsg
-	CancelMsg
-	PortMsg
-)
-
 // ShakeHands asks another client to accept your connection.
 func (p *Peer) ShakeHands() error {
 	///<pstrlen><pstr><reserved><info_hash><peer_id>
