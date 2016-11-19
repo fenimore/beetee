@@ -23,8 +23,7 @@ func (info *TorrentInfo) WriteData() error {
 				debugger.Println(err)
 			}
 			debugger.Printf("File is %d bytes, out of Length: %d", fi.Size(), Torrent.Info.Length)
-			debugger.Println("WHy Doesn't I have?", val)
-			debugger.Println(idx)
+			debugger.Println("WHy Doesn't I have?", val.index)
 			msg := string(idx) + " Is not had"
 			return errors.New(msg)
 		}
@@ -33,6 +32,16 @@ func (info *TorrentInfo) WriteData() error {
 	writer.Flush()
 	logger.Println("Success Writing Data") // Not working?
 	return nil
+}
+
+func FileWrite() {
+	for {
+		if len(ioChan) == cap(ioChan)-1 {
+			debugger.Println("Going to write now")
+			Torrent.Info.WriteData()
+			break
+		}
+	}
 }
 
 // NOTE DEPRECATED// ContinuousWrite writes even if pieces are missing.

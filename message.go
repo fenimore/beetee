@@ -66,7 +66,8 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 		case RequestMsg:
 			logger.Printf("Recv: %s sends request %s", p.id, msg)
 		case BlockMsg: // Officially "Piece" message
-			logger.Printf("Recv: %s sends piece", p.id)
+			// TODO: Remove this message, as they are toomuch
+			logger.Printf("Recv: %s sends block", p.id)
 			p.decodePieceMessage(msg)
 		case CancelMsg:
 			logger.Printf("Recv: %s sends cancel %s", p.id, msg)
@@ -122,7 +123,7 @@ func (p *Piece) writeBlocks() {
 	}
 	p.verified = true
 	logger.Printf("Piece at %d is successfully written", p.index)
-	//ioChan <- p //FIXME this blocks?
+	ioChan <- p
 }
 
 // 19 bytes

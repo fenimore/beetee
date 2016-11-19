@@ -1,8 +1,8 @@
 package main
 
 func Flood() {
-	ioChan = make(chan *Piece)
-	for _, peer := range Peers {
+	// TODO: add queue for peers
+	for _, peer := range Peers[:4] {
 		err := peer.ConnectPeer()
 		if err != nil {
 			debugger.Printf("Error Connected to %s: %s", peer.addr, err)

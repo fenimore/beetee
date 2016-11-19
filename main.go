@@ -64,7 +64,7 @@ func main() {
 
 	/* Parse Torrent*/
 	// NOTE: Sets Piece
-	Torrent, err = ParseTorrent("torrents/tom.torrent")
+	Torrent, err = ParseTorrent("torrents/ubuntu.torrent")
 	if err != nil {
 		debugger.Println(err)
 	}
@@ -85,7 +85,8 @@ func main() {
 	/* Start Client */
 	PieceQueue = make(chan *Piece)
 	PeerQueue = make(chan *Peer)
-	ioChan = make(chan *Piece)
+	ioChan = make(chan *Piece, len(Pieces))
+	//go FileWrite()
 	Flood()
 	writeSync.Add(1)
 	writeSync.Wait()
