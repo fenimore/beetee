@@ -5,61 +5,50 @@ import (
 	"time"
 )
 
-const BLOCKSIZE int = 16384 //32768
-
 const (
-	Empty = iota
-	Pending
-	Full
+	blocksize int = 16384
 )
 
-type PieceX struct {
+// Piece is the general unit that files are divided into.
+type Piece struct {
 	index      int
 	data       []byte
-	numBlocks  int
-	blocks     []*Block //map[int]*Block
-	chanBlocks chan *Block
-	peer       *Peer
+	size       int64
 	hash       [20]byte
-	// Mutex
-	sync.RWMutex     /// Reading is OK
-	status       int // Empty Pending or Full
-	//hex        string // Not used
-	size   int64
-	have   bool
-	length int
-	// WaitGroup
-	Pending sync.WaitGroup
-	// TODO: Request Timeout
-	timeCalled time.Time
+	chanBlocks chan *Block
+	verified   bool
+	//hex string // NOTE: no need
+	// Timeout
+	timeout time.Time
 }
 
-// parsePieces parses the big wacky string of sha-1 hashes int
-// the Info list of
-func (info *TorrentInfo) parsePiecesX() {
-	info.cleanPieces()
-	// TODO: set this dynamically
-	numBlocks := info.PieceLength / int64(BLOCKSIZE)
-	info.BlocksPerPiece = int(numBlocks)
+// Block struct will always have constant size, 16KB.
+type Block struct {
+	index  uint32 // NOTE: piece index
+	offset uint32
+	data   []byte
+}
 
-	piecesLength := len(info.Pieces)
-	Pieces = make([]*Piece, 0, piecesLength/20)
+// parsePieces constructs the Piece list from
+// the torrent file.
+func (info *TorrentInfo) parsePieces() {
+	info.cleanPieces()
+	numberOfBlocks := info.PieceLength / int64(BLOCKSIZE)
+	info.BlocksPerPiece = int(numBlocks)
+	// NOTE: Pieces are global variable of all pieces
+	Pieces = make([]*Piece, 0, len(info.Pieces)/20)
 	for i := 0; i < piecesLength; i = i + 20 {
-		j := i + 20
-		//debugger.Println(info.Pieces[i:j])
-		piece := Piece{size: info.PieceLength, numBlocks: int(numBlocks)}
-		piece.chanBlocks = make(chan *Block, numBlocks)
-		//piece.blocks = make(map[int]*Block)
-		piece.blocks = make([]*Block, numBlocks)
+		j := i + 20 // NOTE: j is hash end
+		piece := Piece{
+			size:       info.PieceLength,
+			chanBlocks: make(chan *Block, numberOfBlocks),
+			data:       make([]byte, info.PieceLength),
+			index:      len(Pieces),
+			confirmed:  false,
+			//hash:       fmt.Sprintf("%x", piece.hash),
+		}
 		// Copy to next 20 into Piece Hash
 		copy(piece.hash[:], info.Pieces[i:j])
-		piece.length = int(info.PieceLength)
-		piece.index = len(Pieces)
-		//piece.hex = fmt.Sprintf("%x", piece.hash)
 		Pieces = append(Pieces, &piece)
 	}
-}
-
-func (b *Block) String() string {
-	return (string(b.offset) + " ")
 }

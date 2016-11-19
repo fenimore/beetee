@@ -4,9 +4,67 @@ import "bufio"
 import "encoding/binary"
 import "crypto/sha1"
 
+const (
+	ChokeMsg = iota
+	UnchokeMsg
+	InterestedMsg
+	NotInterestedMsg
+	HaveMsg
+	BitFieldMsg
+	RequestMsg
+	BlockMsg // rather than PieceMsg
+	CancelMsg
+	PortMsg
+)
+
 /*###################################################
 Recieving Messages
 ######################################################*/
+
+func (p *Peer) DecodeMessage() {
+	for {
+		// FIXME: Non blocking
+		// FIXME  and send a stopping channel
+		// FIXME: and then return
+		payload := <-p.recvChan
+		msg := payload[1:]
+		switch payload[0] {
+		case ChokeMsg:
+			p.choking = true
+			// TODO: waitgroup
+			logger.Printf("Recv: %s sends choke", p.id)
+		case UnchokeMsg:
+			p.choking = false
+			logger.Printf("Recv: %s sends unchoke", p.id)
+		case InterestedMsg:
+			p.interested = true
+			logger.Printf("Recv: %s sends interested", p.id)
+		case NotInterestedMsg:
+			p.interested = false
+			logger.Printf("Recv: %s sends uninterested", p.id)
+		case HaveMsg:
+			// TODO: Set bitfield
+			logger.Printf("Recv: %s sends have %s", p.id, msg)
+		case BitFieldMsg:
+			//TODO: Parse Bitfield
+			logger.Printf("Recv: %s sends bitfield %s",
+				p.id, msg)
+		case RequestMsg:
+			logger.Printf("Recv: %s sends request %s", p.id, msg)
+		case BlockMsg: // Officially "Piece" message
+			logger.Printf("Recv: %s sends piece", p.id)
+			p.decodePieceMessage(msg)
+		case CancelMsg:
+			logger.Printf("Recv: %s sends cancel %s", p.id, msg)
+		case PortMsg:
+			logger.Printf("Recv: %s sends port %s", p.id, msg)
+		default:
+			continue
+
+		}
+	}
+}
+
 func (p *Peer) decodePieceMessage(msg []byte) {
 	if len(msg[8:]) < 1 {
 		return
@@ -70,6 +128,66 @@ func (p *Peer) decodePortMessage(msg []byte) {
 /*###################################################
 Sending Messages
 ######################################################*/
+
+// sendHandShake asks another client to accept your connection.
+func (p *Peer) sendHandShake() error {
+	///<pstrlen><pstr><reserved><info_hash><peer_id>
+	// 68 bytes long.
+	var n int
+	var err error
+	writer := bufio.NewWriter(p.conn)
+	// Handshake message:
+	pstrlen := byte(19) // or len(pstr)
+	pstr := []byte{'B', 'i', 't', 'T', 'o', 'r',
+		'r', 'e', 'n', 't', ' ', 'p', 'r',
+		'o', 't', 'o', 'c', 'o', 'l'}
+	reserved := make([]byte, 8)
+	info := Torrent.InfoHash[:]
+	id := peerId[:] // my peerId
+	// Send handshake message
+	err = writer.WriteByte(pstrlen)
+	if err != nil {
+		return err
+	}
+	n, err = writer.Write(pstr)
+	if err != nil || n != len(pstr) {
+		return err
+	}
+	n, err = writer.Write(reserved)
+	if err != nil || n != len(reserved) {
+		return err
+	}
+	n, err = writer.Write(info)
+	if err != nil || n != len(info) {
+		return err
+	}
+	n, err = writer.Write(id)
+	if err != nil || n != len(id) {
+		return err
+	}
+	err = writer.Flush() // TODO: Do I need to Flush?
+	if err != nil {
+		return err
+	}
+	// receive confirmation
+
+	// The response handshake
+	shake := make([]byte, 68)
+	// TODO: Does this block?
+	n, err = io.ReadFull(p.conn, shake)
+	if err != nil {
+		return err
+	}
+	// TODO: Check for Length
+	if !bytes.Equal(shake[1:20], pstr) {
+		return errors.New("Protocol does not match")
+	}
+	if !bytes.Equal(shake[28:48], info) {
+		return errors.New("InfoHash Does not match")
+	}
+	p.id = string(shake[48:68])
+	return nil
+}
 
 // sendStatusMessage sends the status message to peer.
 // If sent -1 then a Keep alive message is sent.

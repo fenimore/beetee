@@ -31,6 +31,12 @@ var ( // NOTE Global Important Variables
 	// Mutex
 )
 
+var (
+	pieceChan chan *Piece
+	peerChan  chan *Peer
+	ioChan    chan *Piece
+)
+
 //var continWG sync.WaitGro[up
 
 var (
