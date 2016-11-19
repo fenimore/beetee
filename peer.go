@@ -76,13 +76,16 @@ func (p *Peer) ConnectPeer() error {
 	}
 	p.alive = true
 	logger.Printf("Connected to %s at %s", p.id, p.addr)
-	go p.ListenPeer()
-	go p.DecodeMessages()
+	p.choke.Add(1)
+	recv := make(chan []byte)
+	go p.ListenPeer(recv)
+	go p.DecodeMessages(recv)
 	return nil
 }
 
 // ListenPeer reads from socket.
-func (p *Peer) ListenPeer() {
+func (p *Peer) ListenPeer(recv chan []byte) {
+	debugger.Println("Listening to Peer")
 	for {
 		length := make([]byte, 4)
 		_, err := io.ReadFull(p.conn, length)
@@ -101,7 +104,7 @@ func (p *Peer) ListenPeer() {
 			p.conn.Close()
 			return
 		}
-		debugger.Println("payload received")
-		p.recvChan <- payload
+		recv <- payload
+		//p.recvChan <- payload
 	}
 }

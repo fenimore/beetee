@@ -16,11 +16,14 @@ func Flood() {
 }
 
 func (peer *Peer) AskPeer() {
+	peer.sendStatusMessage(InterestedMsg)
+	peer.choke.Wait()
 	//peer.se
 	for {
 		piece := <-PieceQueue
 		piece.pending.Add(1)
 		peer.requestPiece(piece.index)
+		piece.pending.Wait()
 	}
 
 }

@@ -26,20 +26,29 @@ const (
 Recieving Messages
 ######################################################*/
 
-func (p *Peer) DecodeMessages() {
+func (p *Peer) DecodeMessages(recv chan []byte) {
 	for {
 		// FIXME: Non blocking
 		// FIXME  and send a stopping channel
 		// FIXME: and then return
-		payload := <-p.recvChan
+		//payload := <-p.recvChan
+		payload := <-recv
+		if len(payload) < 1 {
+			continue
+		}
 		msg := payload[1:]
 		switch payload[0] {
 		case ChokeMsg:
-			p.choking = true
-			// TODO: waitgroup
+			if !p.choking {
+				p.choking = true
+				p.choke.Add(1)
+			}
 			logger.Printf("Recv: %s sends choke", p.id)
 		case UnchokeMsg:
-			p.choking = false
+			if p.choking {
+				p.choking = false
+				p.choke.Done()
+			}
 			logger.Printf("Recv: %s sends unchoke", p.id)
 		case InterestedMsg:
 			p.interested = true
@@ -49,10 +58,10 @@ func (p *Peer) DecodeMessages() {
 			logger.Printf("Recv: %s sends uninterested", p.id)
 		case HaveMsg:
 			// TODO: Set bitfield
-			logger.Printf("Recv: %s sends have %s", p.id, msg)
+			logger.Printf("Recv: %s sends have %b", p.id, msg)
 		case BitFieldMsg:
 			//TODO: Parse Bitfield
-			logger.Printf("Recv: %s sends bitfield %s",
+			logger.Printf("Recv: %s sends bitfield %v",
 				p.id, msg)
 		case RequestMsg:
 			logger.Printf("Recv: %s sends request %s", p.id, msg)
@@ -103,10 +112,12 @@ func (p *Piece) writeBlocks() {
 			break
 		}
 	}
+	p.pending.Done()
 	if p.hash != sha1.Sum(p.data) {
 		p.data = nil
 		p.data = make([]byte, p.size)
-		logger.Printf("Unable to Write Blocks to Piece %d", p.index)
+		logger.Printf("Unable to Write Blocks to Piece %d",
+			p.index)
 		return
 	}
 	p.verified = true
@@ -283,7 +294,8 @@ func (p *Peer) requestAllPieces() {
 
 func (p *Peer) requestPiece(piece int) {
 	logger.Printf("Requesting piece %d from peer %s", piece, p.id)
-	for offset := 0; offset < Torrent.Info.BlocksPerPiece; offset++ {
+	blocksPerPiece := int(Torrent.Info.PieceLength) / blocksize
+	for offset := 0; offset < blocksPerPiece; offset++ {
 		err := p.sendRequestMessage(uint32(piece), offset*blocksize)
 		if err != nil {
 			debugger.Println("Error Requesting", err)
