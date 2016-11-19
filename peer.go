@@ -55,8 +55,8 @@ func (r *TrackerResponse) parsePeers() {
 			ip:       ip.String(),
 			port:     port,
 			addr:     fmt.Sprintf("%s:%d", ip.String(), port),
-			choking:  true,
 			choked:   true,
+			choking:  make(chan bool),
 			stopping: make(chan bool),
 		}
 		Peers = append(Peers, &peer)
