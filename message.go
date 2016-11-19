@@ -29,6 +29,7 @@ Recieving Messages
 func (p *Peer) DecodeMessages(recv <-chan []byte) {
 	for {
 		var payload []byte
+		var msg []byte
 		select {
 		case <-p.stopping:
 			debugger.Printf("Peer %s is closing", p.id)
@@ -36,13 +37,13 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 			p.alive = false
 			return
 		case payload = <-recv:
-			// No nothing
-		}
-		//payload := <-recv
-		if len(payload) < 1 {
+			if len(payload) < 1 {
+				continue
+			}
+			msg = payload[1:]
+		default:
 			continue
 		}
-		msg := payload[1:]
 		switch payload[0] {
 		case ChokeMsg:
 			if !p.choking {
@@ -70,10 +71,11 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 			logger.Printf("Recv: %s sends bitfield %v",
 				p.id, msg)
 		case RequestMsg:
-			logger.Printf("Recv: %s sends request %s", p.id, msg)
+			logger.Printf("Recv: %s sends request %s",
+				p.id, msg)
 		case BlockMsg: // Officially "Piece" message
 			// TODO: Remove this message, as they are toomuch
-			logger.Printf("Recv: %s sends block", p.id)
+			//logger.Printf("Recv: %s sends block", p.id)
 			p.decodePieceMessage(msg)
 		case CancelMsg:
 			logger.Printf("Recv: %s sends cancel %s", p.id, msg)

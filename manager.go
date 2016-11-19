@@ -2,7 +2,7 @@ package main
 
 func Flood() {
 	// TODO: add queue for peers
-	for _, peer := range Peers[:] {
+	for _, peer := range Peers[:15] {
 		err := peer.ConnectPeer()
 		if err != nil {
 			debugger.Printf("Error Connected to %s: %s", peer.addr, err)
