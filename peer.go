@@ -101,6 +101,7 @@ func (p *Peer) ListenPeer() {
 			p.conn.Close()
 			return
 		}
+		debugger.Println("payload received")
 		p.recvChan <- payload
 	}
 }

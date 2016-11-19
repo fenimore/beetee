@@ -7,7 +7,22 @@ func Flood() {
 			debugger.Printf("Error Connected to %s: %s", peer.addr, err)
 			continue
 		}
+		go peer.AskPeer()
 	}
+	order := DecidePieceOrder() // TODO: Rarest first?
+	for _, idx := range order {
+		PieceQueue <- Pieces[idx]
+	}
+}
+
+func (peer *Peer) AskPeer() {
+	//peer.se
+	for {
+		piece := <-PieceQueue
+		piece.pending.Add(1)
+		peer.requestPiece(piece.index)
+	}
+
 }
 
 // of pieces, according to the rarest first
