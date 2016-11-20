@@ -2,7 +2,6 @@ package main
 
 import (
 	"sync"
-	"time"
 )
 
 const (
@@ -18,8 +17,6 @@ type Piece struct {
 	chanBlocks chan *Block
 	verified   bool
 	//hex string // NOTE: no need
-	// Timeout
-	timeout time.Time
 	pending sync.WaitGroup
 }
 

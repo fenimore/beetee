@@ -53,12 +53,12 @@ func (peer *Peer) AskPeer() {
 			PieceQueue <- piece
 			continue
 		}
-		piece.pending.Add(1)
+		//piece.pending.Add(1)
 		peer.requestPiece(piece.index)
-		piece.timeout = time.Now()
-		piece.PieceManager()
+		//piece.timeout = time.Now()
+		piece.PieceManager(peer)
 		// Don't ask the same peer for too many pieces
-		piece.pending.Wait()
+		//piece.pending.Wait()
 	}
 
 }
@@ -67,7 +67,7 @@ func (peer *Peer) AskPeer() {
 // NOTE: Should I request pieces here?
 // TODO: add pending here.
 // FIXME: hash duplicates?
-func (piece *Piece) PieceManager() {
+func (piece *Piece) PieceManager(peer *Peer) {
 	// TODO: Set as global?
 	numberOfBlocks := int(Torrent.Info.PieceLength) / blocksize
 	var blockCount int
@@ -86,29 +86,45 @@ func (piece *Piece) PieceManager() {
 						piece.size)
 					debugger.Println("Invalid Hash of  Piece %d",
 						piece.index)
-					PieceQueue <- piece
+					PieceQueue <- piece // NOTE Return to queue
 					return
 				}
 				break
 			} else if piece.index == len(Pieces)-1 {
-				// Last Piece could have fewer blocks
+				// Last Piece could have fewer blocks // FIXME REally??
 				if piece.hash == sha1.Sum(piece.data) {
 					break
 				}
-			} else { // NOTE Not enough block
-				continue
 			}
+			continue // NOTE Not enough block
+		case <-peer.stopping:
+			piece.data = nil
+			piece.data = make([]byte,
+				piece.size)
+			debugger.Println(
+				"Peer %s Stops: Download incompletes %d",
+				peer.id, piece.index)
+			PieceQueue <- piece // NOTE Return
+			return
+		case <-peer.choking:
+			piece.data = nil
+			piece.data = make([]byte,
+				piece.size)
+			debugger.Println(
+				"Peer %s Chokes: Download incompletes %d",
+				peer.id, piece.index)
+			PieceQueue <- piece // NOTE Return
+			return
 		case <-time.After(time.Second * 30):
 			debugger.Println("Piece %d timeout", piece.index)
 			PieceQueue <- piece
 			return
 		}
-		//logger.Println("Begin Writing Block")
 		piece.verified = true
 		logger.Printf("Piece at %d is successfully written",
 			piece.index)
 		ioChan <- piece
-
+		return
 	}
 }
 
