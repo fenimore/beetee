@@ -30,11 +30,11 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 	for {
 		var payload []byte
 		var msg []byte
+
 		select {
 		case <-p.stopping:
-			debugger.Printf("Peer %s is closing", p.id)
-			p.conn.Close()
-			p.alive = false
+			debugger.Printf("Peer %s is closing Decoder",
+				p.id)
 			return
 		case payload = <-recv:
 			if len(payload) < 1 {
@@ -44,15 +44,10 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 		default:
 			continue
 		}
+
 		switch payload[0] {
 		case ChokeMsg:
-			// TODO: Make choke into a channel
-			if !p.choked {
-				p.Lock()
-				p.choked = true // TODO: do channel
-				p.choke.Add(1)
-				p.Unlock()
-			}
+			p.choking <- true
 			logger.Printf("Recv: %s sends choke", p.id)
 		case UnchokeMsg:
 			if p.choked {

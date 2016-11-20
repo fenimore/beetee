@@ -1,5 +1,6 @@
 package main
 
+// Flood is the run() of beetee.
 func Flood() {
 	// TODO: add queue for peers
 	for _, peer := range Peers[:] {
@@ -13,6 +14,29 @@ func Flood() {
 	order := DecidePieceOrder() // TODO: Rarest first?
 	for _, idx := range order {
 		PieceQueue <- Pieces[idx]
+	}
+}
+
+func (peer *Peer) PeerManager() {
+	for {
+		select {
+		case <-peer.stopping:
+			debugger.Printf("Peer %s is closing", peer.id)
+			peer.Lock()
+			peer.conn.Close()
+			peer.alive = false
+			peer.Unlock()
+			return
+		case <-peer.choking:
+			if !peer.choked {
+				peer.Lock()
+				peer.choked = true // TODO: do channel
+				peer.choke.Add(1)
+				peer.Unlock()
+			}
+		default:
+			peer.choke.Wait()
+		}
 	}
 }
 
