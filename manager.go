@@ -63,6 +63,10 @@ func (peer *Peer) AskPeer() {
 
 }
 
+// PieceManager must be run for every piece..
+// NOTE: Should I request pieces here?
+// TODO: add pending here.
+// FIXME: hash duplicates?
 func (piece *Piece) PieceManager() {
 	// TODO: Set as global?
 	numberOfBlocks := int(Torrent.Info.PieceLength) / blocksize
@@ -75,7 +79,16 @@ func (piece *Piece) PieceManager() {
 				block.offset)+blocksize],
 				block.data)
 			if blockCount == numberOfBlocks {
-
+				// TODO: Check for hash here or elsewhere?
+				if piece.hash != sha1.Sum(piece.data) {
+					piece.data = nil
+					piece.data = make([]byte,
+						piece.size)
+					debugger.Println("Invalid Hash of  Piece %d",
+						piece.index)
+					PieceQueue <- piece
+					return
+				}
 				break
 			} else if piece.index == len(Pieces)-1 {
 				// Last Piece could have fewer blocks
@@ -94,6 +107,7 @@ func (piece *Piece) PieceManager() {
 		piece.verified = true
 		logger.Printf("Piece at %d is successfully written",
 			piece.index)
+		ioChan <- piece
 
 	}
 }
