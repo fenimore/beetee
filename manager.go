@@ -7,6 +7,12 @@ import (
 
 // Flood is the run() of beetee.
 func Flood() {
+	order := DecidePieceOrder() // TODO: Rarest first?
+	debugger.Println("Filling up QUeue")
+	for _, idx := range order {
+		PieceQueue <- Pieces[idx]
+	}
+	debugger.Println("QUeue Filled")
 	// TODO: add queue for peers
 	for _, peer := range Peers[:16] {
 		err := peer.ConnectPeer()
@@ -16,11 +22,7 @@ func Flood() {
 		}
 		go peer.AskPeer()
 	}
-	order := DecidePieceOrder() // TODO: Rarest first?
-	debugger.Println("Filling up QUeue")
-	for _, idx := range order {
-		PieceQueue <- Pieces[idx]
-	}
+
 }
 
 func (peer *Peer) PeerManager() {
@@ -56,12 +58,12 @@ func (peer *Peer) AskPeer() {
 			PieceQueue <- piece
 			continue
 		}
-		//piece.pending.Add(1)
-		peer.requestPiece(piece.index)
+		piece.pending.Add(1)
+		//peer.requestPiece(piece.index)
 		//piece.timeout = time.Now()
-		piece.PieceManager(peer)
+		go piece.PieceManager(peer)
 		// Don't ask the same peer for too many pieces
-		//piece.pending.Wait()
+		piece.pending.Wait()
 	}
 
 }
@@ -73,8 +75,10 @@ func (peer *Peer) AskPeer() {
 func (piece *Piece) PieceManager(peer *Peer) {
 	// TODO: Set as global?
 	debugger.Printf("From %s downloading %d", peer.id, piece.index)
+	peer.requestPiece(piece.index)
 	numberOfBlocks := int(Torrent.Info.PieceLength) / blocksize
 	var blockCount int
+ForLoop:
 	for {
 		select {
 		case block := <-piece.chanBlocks:
@@ -91,16 +95,17 @@ func (piece *Piece) PieceManager(peer *Peer) {
 					debugger.Printf("Invalid Hash of  Piece %d",
 						piece.index)
 					PieceQueue <- piece // NOTE Return to queue
+					piece.pending.Done()
 					return
 				}
-				break
+				break ForLoop
 			} else if piece.index == len(Pieces)-1 {
 				// Last Piece could have fewer blocks // FIXME REally??
 				if piece.hash == sha1.Sum(piece.data) {
-					break
+					break ForLoop
 				}
 			}
-			continue // NOTE Not enough block
+			continue ForLoop // NOTE Not enough block
 		case <-peer.stopping:
 			piece.data = nil
 			piece.data = make([]byte,
@@ -109,6 +114,7 @@ func (piece *Piece) PieceManager(peer *Peer) {
 				"Peer %s Stops: Download incompletes %d",
 				peer.id, piece.index)
 			PieceQueue <- piece // NOTE Return
+			piece.pending.Done()
 			return
 		case <-peer.choking:
 			piece.data = nil
@@ -118,18 +124,24 @@ func (piece *Piece) PieceManager(peer *Peer) {
 				"Peer %s Chokes: Download incompletes %d",
 				peer.id, piece.index)
 			PieceQueue <- piece // NOTE Return
+			piece.pending.Done()
 			return
 		case <-time.After(time.Second * 30):
 			debugger.Printf("Piece %d timeout", piece.index)
 			PieceQueue <- piece
+			piece.pending.Done()
 			return
+		default:
+			continue ForLoop
 		}
-		piece.verified = true
-		logger.Printf("Piece at %d is successfully written",
-			piece.index)
-		ioChan <- piece
-		return
 	}
+	piece.verified = true
+	logger.Printf("Piece at %d is successfully written",
+		piece.index)
+	ioChan <- piece
+	piece.pending.Done()
+	return
+
 }
 
 // of pieces, according to the rarest first

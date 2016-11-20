@@ -31,14 +31,14 @@ type Block struct {
 // the torrent file.
 func (info *TorrentInfo) parsePieces() {
 	info.cleanPieces()
-	numberOfBlocks := info.PieceLength / int64(blocksize)
+	//numberOfBlocks := info.PieceLength / int64(blocksize)
 	// NOTE: Pieces are global variable of all pieces
 	Pieces = make([]*Piece, 0, len(info.Pieces)/20)
 	for i := 0; i < len(info.Pieces); i = i + 20 {
 		j := i + 20 // NOTE: j is hash end
 		piece := Piece{
 			size:       info.PieceLength,
-			chanBlocks: make(chan *Block, numberOfBlocks),
+			chanBlocks: make(chan *Block), // numberOfBlocks
 			data:       make([]byte, info.PieceLength),
 			index:      len(Pieces),
 			verified:   false,
