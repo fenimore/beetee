@@ -1,5 +1,9 @@
 package main
 
+import (
+	"time"
+)
+
 // Flood is the run() of beetee.
 func Flood() {
 	// TODO: add queue for peers
@@ -36,15 +40,13 @@ func (peer *Peer) AskPeer() {
 	peer.sendStatusMessage(InterestedMsg)
 	//peer.se
 	for {
-		select {
-		case <-peer.stopping:
+		if !peer.alive {
 			return
-		case <-peer.choking:
-			peer.choke.Wait()
-		default:
-			// do nothing
 		}
-		peer.choke.Wait() // if Choked, then Wait
+		if peer.choked {
+			continue
+		}
+		//peer.choke.Wait() // if Choked, then Wait
 		piece := <-PieceQueue
 		if !peer.bitfield[piece.index] {
 			PieceQueue <- piece
@@ -52,9 +54,37 @@ func (peer *Peer) AskPeer() {
 		}
 		piece.pending.Add(1)
 		peer.requestPiece(piece.index)
+		piece.timeout = time.Now()
+		piece.PieceManager()
+		// Don't ask the same peer for too many pieces
 		piece.pending.Wait()
 	}
 
+}
+
+func (piece *Piece) PieceManager() {
+	// TODO: Set as global?
+	numberOfBlocks := Torrent.Info.PieceLength / int64(blocksize)
+ManageBlocks:
+	for {
+		var blocks []*Block
+	WaitBlocks:
+		select {
+		case block := <-piece.chanBlocks:
+			blocks[int(block.offset)/blocksize] = block
+			if len(blocks) == int(numberOfBlocks) {
+				break WaitBlocks
+			} else {
+				continue ManageBlocks
+			}
+		case <-time.After(time.Second * 30):
+			// Shit got fucked up
+			return
+		default:
+			continue ManageBlocks
+		}
+
+	}
 }
 
 // of pieces, according to the rarest first

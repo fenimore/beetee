@@ -107,10 +107,9 @@ func (p *Peer) decodePieceMessage(msg []byte) {
 	// Blocks...
 	block := &Block{index: index, offset: begin, data: data}
 	Pieces[index].chanBlocks <- block
-
-	if len(Pieces[index].chanBlocks) == cap(Pieces[index].chanBlocks) {
-		Pieces[index].writeBlocks()
-	}
+	// if len(Pieces[index].chanBlocks) == cap(Pieces[index].chanBlocks) {
+	//	Pieces[index].writeBlocks()
+	// }
 }
 
 func (p *Piece) writeBlocks() {
