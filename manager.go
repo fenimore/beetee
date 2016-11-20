@@ -17,6 +17,7 @@ func Flood() {
 		go peer.AskPeer()
 	}
 	order := DecidePieceOrder() // TODO: Rarest first?
+	debugger.Println("Filling up QUeue")
 	for _, idx := range order {
 		PieceQueue <- Pieces[idx]
 	}

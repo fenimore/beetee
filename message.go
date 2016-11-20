@@ -7,6 +7,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"io"
+	"time"
 )
 
 const (
@@ -229,6 +230,10 @@ func (p *Peer) sendHandShake() error {
 	shake := make([]byte, 68)
 	// TODO: Does this block?
 	// TODO: Set deadline?
+	err = p.conn.SetReadDeadline(time.Now().Add(time.Second * 30))
+	if err != nil {
+		return err
+	}
 	n, err = io.ReadFull(p.conn, shake)
 	if err != nil {
 		return err
