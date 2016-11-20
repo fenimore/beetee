@@ -107,6 +107,7 @@ func (p *Peer) ListenPeer(recv chan<- []byte) {
 			p.stopping <- true
 			return
 		}
+		//debugger.Println(payload)
 		recv <- payload
 		//p.recvChan <- payload
 	}

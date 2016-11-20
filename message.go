@@ -28,9 +28,13 @@ Recieving Messages
 
 func (p *Peer) DecodeMessages(recv <-chan []byte) {
 	for {
-		var payload []byte
-		var msg []byte
-
+		//var payload []byte
+		//var msg []byte
+		payload := <-recv
+		if len(payload) < 1 {
+			continue
+		}
+		msg := payload[1:]
 		select {
 		case <-p.stopping:
 			debugger.Printf("Peer %s is closing", p.id)
@@ -39,13 +43,8 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 			p.alive = false
 			p.Unlock()
 			return
-		case payload = <-recv:
-			if len(payload) < 1 {
-				continue
-			}
-			msg = payload[1:]
 		default:
-			continue
+			// do nothing
 		}
 
 		switch payload[0] {

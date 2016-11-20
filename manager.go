@@ -8,7 +8,7 @@ import (
 // Flood is the run() of beetee.
 func Flood() {
 	// TODO: add queue for peers
-	for _, peer := range Peers[:] {
+	for _, peer := range Peers[:6] {
 		err := peer.ConnectPeer()
 		if err != nil {
 			debugger.Printf("Error Connected to %s: %s", peer.addr, err)
@@ -39,6 +39,7 @@ func (peer *Peer) PeerManager() {
 
 func (peer *Peer) AskPeer() {
 	peer.sendStatusMessage(InterestedMsg)
+	debugger.Printf("Peer %s Gets message?", peer.id)
 	//peer.se
 	for {
 		if !peer.alive {
@@ -47,7 +48,7 @@ func (peer *Peer) AskPeer() {
 		if peer.choked {
 			continue
 		}
-		//peer.choke.Wait() // if Choked, then Wait
+		peer.choke.Wait() // if Choked, then Wait
 		piece := <-PieceQueue
 		if !peer.bitfield[piece.index] {
 			PieceQueue <- piece
@@ -69,6 +70,7 @@ func (peer *Peer) AskPeer() {
 // FIXME: hash duplicates?
 func (piece *Piece) PieceManager(peer *Peer) {
 	// TODO: Set as global?
+	debugger.Printf("From %s downloading %d", peer.id, piece.index)
 	numberOfBlocks := int(Torrent.Info.PieceLength) / blocksize
 	var blockCount int
 	for {
@@ -84,7 +86,7 @@ func (piece *Piece) PieceManager(peer *Peer) {
 					piece.data = nil
 					piece.data = make([]byte,
 						piece.size)
-					debugger.Println("Invalid Hash of  Piece %d",
+					debugger.Printf("Invalid Hash of  Piece %d",
 						piece.index)
 					PieceQueue <- piece // NOTE Return to queue
 					return
@@ -101,7 +103,7 @@ func (piece *Piece) PieceManager(peer *Peer) {
 			piece.data = nil
 			piece.data = make([]byte,
 				piece.size)
-			debugger.Println(
+			debugger.Printf(
 				"Peer %s Stops: Download incompletes %d",
 				peer.id, piece.index)
 			PieceQueue <- piece // NOTE Return
@@ -110,13 +112,13 @@ func (piece *Piece) PieceManager(peer *Peer) {
 			piece.data = nil
 			piece.data = make([]byte,
 				piece.size)
-			debugger.Println(
+			debugger.Printf(
 				"Peer %s Chokes: Download incompletes %d",
 				peer.id, piece.index)
 			PieceQueue <- piece // NOTE Return
 			return
 		case <-time.After(time.Second * 30):
-			debugger.Println("Piece %d timeout", piece.index)
+			debugger.Printf("Piece %d timeout", piece.index)
 			PieceQueue <- piece
 			return
 		}
