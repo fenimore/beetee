@@ -33,8 +33,11 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 
 		select {
 		case <-p.stopping:
-			debugger.Printf("Peer %s is closing Decoder",
-				p.id)
+			debugger.Printf("Peer %s is closing", p.id)
+			p.Lock()
+			p.conn.Close()
+			p.alive = false
+			p.Unlock()
 			return
 		case payload = <-recv:
 			if len(payload) < 1 {
@@ -48,6 +51,10 @@ func (p *Peer) DecodeMessages(recv <-chan []byte) {
 		switch payload[0] {
 		case ChokeMsg:
 			p.choking <- true
+			p.Lock()
+			p.choked = true
+			p.choke.Add(1)
+			p.Unlock()
 			logger.Printf("Recv: %s sends choke", p.id)
 		case UnchokeMsg:
 			if p.choked {

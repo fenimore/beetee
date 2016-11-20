@@ -22,17 +22,9 @@ func (peer *Peer) PeerManager() {
 		select {
 		case <-peer.stopping:
 			debugger.Printf("Peer %s is closing", peer.id)
-			peer.Lock()
-			peer.conn.Close()
-			peer.alive = false
-			peer.Unlock()
 			return
 		case <-peer.choking:
 			if !peer.choked {
-				peer.Lock()
-				peer.choked = true // TODO: do channel
-				peer.choke.Add(1)
-				peer.Unlock()
 			}
 		default:
 			peer.choke.Wait()
