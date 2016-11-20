@@ -229,8 +229,8 @@ func (p *Peer) sendHandShake() error {
 	// The response handshake
 	shake := make([]byte, 68)
 	// TODO: Does this block?
-	// TODO: Set deadline?
-	err = p.conn.SetReadDeadline(time.Now().Add(time.Second * 30))
+	// NOTE: Does this work?
+	err = p.conn.SetDeadline(time.Now().Add(time.Second * 10))
 	if err != nil {
 		return err
 	}

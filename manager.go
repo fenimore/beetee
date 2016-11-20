@@ -8,7 +8,7 @@ import (
 // Flood is the run() of beetee.
 func Flood() {
 	// TODO: add queue for peers
-	for _, peer := range Peers[:6] {
+	for _, peer := range Peers[:16] {
 		err := peer.ConnectPeer()
 		if err != nil {
 			debugger.Printf("Error Connected to %s: %s", peer.addr, err)
@@ -40,7 +40,6 @@ func (peer *Peer) PeerManager() {
 
 func (peer *Peer) AskPeer() {
 	peer.sendStatusMessage(InterestedMsg)
-	debugger.Printf("Peer %s Gets message?", peer.id)
 	//peer.se
 	for {
 		if !peer.alive {
@@ -49,7 +48,9 @@ func (peer *Peer) AskPeer() {
 		if peer.choked {
 			continue
 		}
+		//debugger.Printf("Peer %s Choked?", peer.id)
 		peer.choke.Wait() // if Choked, then Wait
+		//debugger.Printf("Peer %s Unchoke", peer.id)
 		piece := <-PieceQueue
 		if !peer.bitfield[piece.index] {
 			PieceQueue <- piece
