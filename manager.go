@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/sha1"
 	"time"
 )
 
@@ -64,25 +65,35 @@ func (peer *Peer) AskPeer() {
 
 func (piece *Piece) PieceManager() {
 	// TODO: Set as global?
-	numberOfBlocks := Torrent.Info.PieceLength / int64(blocksize)
-ManageBlocks:
+	numberOfBlocks := int(Torrent.Info.PieceLength) / blocksize
+	var blockCount int
 	for {
-		var blocks []*Block
-	WaitBlocks:
 		select {
 		case block := <-piece.chanBlocks:
-			blocks[int(block.offset)/blocksize] = block
-			if len(blocks) == int(numberOfBlocks) {
-				break WaitBlocks
-			} else {
-				continue ManageBlocks
+			// NOTE: copy block to piece data
+			copy(piece.data[int(block.offset):int(
+				block.offset)+blocksize],
+				block.data)
+			if blockCount == numberOfBlocks {
+
+				break
+			} else if piece.index == len(Pieces)-1 {
+				// Last Piece could have fewer blocks
+				if piece.hash == sha1.Sum(piece.data) {
+					break
+				}
+			} else { // NOTE Not enough block
+				continue
 			}
 		case <-time.After(time.Second * 30):
-			// Shit got fucked up
+			debugger.Println("Piece %d timeout", piece.index)
+			PieceQueue <- piece
 			return
-		default:
-			continue ManageBlocks
 		}
+		//logger.Println("Begin Writing Block")
+		piece.verified = true
+		logger.Printf("Piece at %d is successfully written",
+			piece.index)
 
 	}
 }
