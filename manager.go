@@ -21,6 +21,7 @@ func Deluge() {
 	for {
 		select {
 		case recycle := <-recycleChan:
+			debugger.Printf("Recycling Piece %d", recycle.index)
 			pieceChan <- recycle
 		}
 	}

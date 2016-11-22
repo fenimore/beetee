@@ -18,20 +18,22 @@ func (info *TorrentInfo) WriteData() error {
 	writer := bufio.NewWriter(file)
 	for idx, val := range Pieces {
 		if !val.verified {
-			fi, err := file.Stat()
 			if err != nil {
 				debugger.Println(err)
 			}
-			debugger.Printf("File is %d bytes, out of Length: %d", fi.Size(), Torrent.Info.Length)
-			debugger.Println("WHy Doesn't I have?", val.index)
+			debugger.Printf("WHy Don't I have Piece %d?", val.index)
 			msg := string(idx) + " Is not had"
-			return errors.New(msg)
+			err = errors.New(msg)
+			break
 		}
 		writer.Write(val.data)
 	}
-	writer.Flush()
-	logger.Println("Success Writing Data") // Not working?
-	return nil
+	writer.Flush() // NOTE: DO I need to flush?
+	fi, err := file.Stat()
+	debugger.Printf("File is %d bytes, out of Length: %d",
+		fi.Size(), Torrent.Info.Length)
+	logger.Println("Wrote Data") // Not working?
+	return err
 }
 
 func FileWrite() {
