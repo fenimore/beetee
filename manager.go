@@ -6,6 +6,64 @@ import (
 )
 
 func Delugue() {
+	pieceChan := make(chan *Piece)
+	recycleChan := make(chan *Piece)
+	order := DecidePieceOrder()
+	for _, idx := range order {
+		pieceChan <- Pieces[idx]
+	}
+	debugger.Printf("Queue Filled")
+	for _, peer := range Peers {
+		go HandlePeer(peer, pieceChan, recycleChan)
+
+	}
+	for {
+		select {
+		case recycle := <-recycleChan:
+			pieceChan <- recycle
+		}
+	}
+}
+
+func HandlePeer(peer *Peer, pieces <-chan *Piece, recycle chan<- *Piece) {
+	err := peer.ConnectPeer()
+	if err != nil {
+		debugger.Printf("Error Connected %s", err)
+	}
+PeerLoop:
+	for {
+		select {
+		case <-peer.stopping:
+			return
+		default:
+			// move along
+		}
+		piece := <-pieces
+		if !peer.bitfield[piece.index] {
+			debugger.Printf("Peer %s doesn't have piece %d",
+				peer.id, piece.index)
+			recycle <- piece
+			continue PeerLoop
+		}
+		//piece.pending.Add(1)
+		peer.requestPiece(piece.index)
+
+		for {
+			select {
+			case <-piece.success:
+				piece.writeBlocks()
+				continue PeerLoop
+			case <-time.After(time.Second * 30):
+				recycle <- piece
+				debugger.Printf("Peer %s Loop Restarts", peer.id)
+				continue PeerLoop
+			}
+		}
+	}
+
+}
+
+func WaitForPieceToFill() {
 
 }
 

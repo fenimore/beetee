@@ -7,7 +7,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"io"
-	//"time"
+	"time"
 )
 
 const (
@@ -38,12 +38,13 @@ func (p *Peer) decodePieceMessage(msg []byte) {
 	block := &Block{index: index, offset: begin, data: data}
 	Pieces[index].chanBlocks <- block
 	if len(Pieces[index].chanBlocks) == cap(Pieces[index].chanBlocks) {
-		Pieces[index].writeBlocks()
+		//Pieces[index].writeBlocks()
+		Pieces[index].success <- true
 	}
 }
 
 func (p *Piece) writeBlocks() {
-	p.pending.Done() // not waiting on any more blocks
+	//p.pending.Done() // not waiting on any more blocks
 	if len(p.chanBlocks) < cap(p.chanBlocks) {
 		logger.Printf("The block channel for %d is not full", p.index)
 		return
@@ -69,7 +70,7 @@ func (p *Piece) writeBlocks() {
 	}
 	p.verified = true
 	logger.Printf("Piece at %d is successfully written", p.index)
-	ioChan <- p
+	//TODO: ioChan <- p
 }
 
 // 19 bytes
@@ -157,12 +158,12 @@ func (p *Peer) sendHandShake() error {
 
 	// The response handshake
 	shake := make([]byte, 68)
-	// TODO: Does this block?
-	// NOTE: Does this work?
-	// err = p.conn.SetDeadline(time.Now().Add(time.Second * 10))
-	// if err != nil {
-	//	return err
-	// }
+	// Deadlines are set forever
+	// https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/
+	err = p.conn.SetDeadline(time.Now().Add(time.Second * 30))
+	if err != nil {
+		return err
+	}
 	n, err = io.ReadFull(p.conn, shake)
 	if err != nil {
 		return err

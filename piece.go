@@ -18,6 +18,7 @@ type Piece struct {
 	verified   bool
 	//hex string // NOTE: no need
 	pending sync.WaitGroup
+	success chan bool // For when all blocks are there
 }
 
 // Block struct will always have constant size, 16KB.

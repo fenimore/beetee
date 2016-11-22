@@ -154,17 +154,13 @@ func (p *Peer) DecodeMessages(payload []byte) {
 		p.interested = false
 		logger.Printf("Recv: %s sends uninterested", p.id)
 	case HaveMsg:
-		// TODO: Set bitfield
 		p.decodeHaveMessage(msg)
-		logger.Printf("Recv: %s sends have %b", p.id, msg)
+		logger.Printf("Recv: %s sends have %v", p.id, msg)
 	case BitFieldMsg:
-		//TODO: Parse Bitfield
 		p.decodeBitfieldMessage(msg)
-		logger.Printf("Recv: %s sends bitfield",
-			p.id)
+		logger.Printf("Recv: %s sends bitfield", p.id)
 	case RequestMsg:
-		logger.Printf("Recv: %s sends request %s",
-			p.id, msg)
+		logger.Printf("Recv: %s sends request %s", p.id, msg)
 	case BlockMsg: // Officially "Piece" message
 		// TODO: Remove this message, as they are toomuch
 		//logger.Printf("Recv: %s sends block", p.id)
