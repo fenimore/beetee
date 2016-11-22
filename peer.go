@@ -83,15 +83,26 @@ func (p *Peer) ConnectPeer() error {
 	p.alive = true
 	p.choke.Add(1)
 	p.Unlock()
-	recv := make(chan []byte)
-	go p.ListenPeer(recv)
-	go p.DecodeMessages(recv)
+	//recv := make(chan []byte)
+	go p.ListenPeer() //recv)
+	//go p.DecodeMessages(recv)
 	return nil
 }
 
 // ListenPeer reads from socket.
-func (p *Peer) ListenPeer(recv chan<- []byte) {
+func (p *Peer) ListenPeer() {
 	for {
+		select {
+		case <-p.stopping:
+			debugger.Printf("Peer %s is closing", p.id)
+			p.Lock()
+			p.conn.Close()
+			p.alive = false
+			p.Unlock()
+			return
+		default:
+			// do nothing
+		}
 		length := make([]byte, 4)
 		_, err := io.ReadFull(p.conn, length)
 		if err != nil {
@@ -107,8 +118,64 @@ func (p *Peer) ListenPeer(recv chan<- []byte) {
 			p.stopping <- true
 			return
 		}
-		//debugger.Println(payload)
-		recv <- payload
-		//p.recvChan <- payload
+		//recv <- payload
+		go p.DecodeMessages(payload)
 	}
+}
+
+func (p *Peer) DecodeMessages(payload []byte) {
+
+	//var payload []byte
+	//var msg []byte
+	if len(payload) < 1 {
+		return
+	}
+	msg := payload[1:]
+	switch payload[0] {
+	case ChokeMsg:
+		p.choking <- true
+		p.Lock()
+		p.choked = true
+		p.choke.Add(1)
+		p.Unlock()
+		logger.Printf("Recv: %s sends choke", p.id)
+	case UnchokeMsg:
+		if p.choked {
+			p.Lock()
+			p.choked = false
+			p.choke.Done()
+			p.Unlock()
+		}
+		logger.Printf("Recv: %s sends unchoke", p.id)
+	case InterestedMsg:
+		p.interested = true
+		logger.Printf("Recv: %s sends interested", p.id)
+	case NotInterestedMsg:
+		p.interested = false
+		logger.Printf("Recv: %s sends uninterested", p.id)
+	case HaveMsg:
+		// TODO: Set bitfield
+		p.decodeHaveMessage(msg)
+		logger.Printf("Recv: %s sends have %b", p.id, msg)
+	case BitFieldMsg:
+		//TODO: Parse Bitfield
+		p.decodeBitfieldMessage(msg)
+		logger.Printf("Recv: %s sends bitfield",
+			p.id)
+	case RequestMsg:
+		logger.Printf("Recv: %s sends request %s",
+			p.id, msg)
+	case BlockMsg: // Officially "Piece" message
+		// TODO: Remove this message, as they are toomuch
+		//logger.Printf("Recv: %s sends block", p.id)
+		p.decodePieceMessage(msg)
+	case CancelMsg:
+		logger.Printf("Recv: %s sends cancel %s", p.id, msg)
+	case PortMsg:
+		logger.Printf("Recv: %s sends port %s", p.id, msg)
+	default:
+		break
+
+	}
+
 }
