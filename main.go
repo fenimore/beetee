@@ -62,6 +62,11 @@ func main() {
 	/* My Peer Id TODO unique */
 	PeerId = GenPeerId()
 
+	/* Start Listening */
+	server := NewServer()
+	defer server.listener.Close()
+	go server.Listen()
+
 	/* Parse Torrent*/
 	// NOTE: Sets Piece
 	Torrent, err = ParseTorrent("torrents/ubuntu.torrent")

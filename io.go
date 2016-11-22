@@ -24,7 +24,7 @@ func (info *TorrentInfo) WriteData() error {
 			debugger.Printf("WHy Don't I have Piece %d?", val.index)
 			msg := string(idx) + " Is not had"
 			err = errors.New(msg)
-			break
+			break // NOTE: Don't break?
 		}
 		writer.Write(val.data)
 	}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net"
 )
 
@@ -27,7 +28,32 @@ func NewServer() *Server {
 	var err error
 	server.listener, err = net.Listen("tcp", server.laddr)
 	if err != nil {
-		debugger.Println("FATAL, Server Fails")
+		debugger.Fatal("FATAL, Server Fails")
 	}
 
+	return server
+}
+
+// Listen will listen for connections and say HI!
+func (sv *Server) Listen() {
+	for {
+		// Wait for a connection.
+		conn, err := sv.listener.Accept()
+		if err != nil {
+			debugger.Println(err)
+		}
+		// Handle the connection in a new goroutine.
+		// The loop then returns to accepting, so that
+		// multiple connections may be served concurrently.
+		go func(c net.Conn) {
+			// Echo all incoming data.
+			handshake := make([]byte, 68)
+			_, err := io.ReadFull(c, handshake)
+			if err != nil {
+				debugger.Printf("Error Listening: %s" err)
+			}
+			debugger.Println(handshake)
+			c.Close()
+		}(conn)
+	}
 }
