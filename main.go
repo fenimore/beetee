@@ -64,7 +64,7 @@ func main() {
 
 	/* Parse Torrent*/
 	// NOTE: Sets Piece
-	Torrent, err = ParseTorrent("torrents/tom.torrent")
+	Torrent, err = ParseTorrent("torrents/archlinux.torrent")
 	if err != nil {
 		debugger.Println(err)
 	}

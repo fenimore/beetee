@@ -13,7 +13,7 @@ func Deluge() {
 		pieceChan <- Pieces[idx]
 	}
 	debugger.Printf("Queue Filled")
-	for _, peer := range Peers[:] {
+	for _, peer := range Peers[:20] {
 		debugger.Printf("Launch goroutine for peer")
 		go HandlePeer(peer, pieceChan, recycleChan)
 
@@ -71,7 +71,7 @@ PeerLoop:
 				continue PeerLoop
 			case <-time.After(time.Second * 30):
 				recycle <- piece
-				debugger.Printf("Peer %s Loop Timeout", peer.id)
+				debugger.Printf("Peer %s Loop Timeout Piece %d", peer.id, piece.index)
 				continue PeerLoop
 			}
 		}

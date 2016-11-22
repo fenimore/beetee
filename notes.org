@@ -52,7 +52,7 @@ info_hash=%9f%91e%d9%a2%81%a9%b8%e7%82%cdQv%bb%cc%82V%fd%18q
 &left=1513308160&port=51413&key=60502143&numwant=80&compact=1&supportcrypto=1&event=started
 
 
-** Woops should of written to a log:, here's the start of a file
+* Woops should of written to a log:, here's the start of a file
 DEBUG: 08:37:49 main.go:63: Length:  835715072
 DEBUG: 08:37:49 main.go:64: Piece Length:  524288
 DEBUG: 08:37:49 main.go:65: Piece Len:  31880
@@ -103,3 +103,5 @@ LOG: 08:43:26 message.go:192: Piece at 1587 is downloaded
 LOG: 08:43:26 message.go:192: Piece at 1591 is downloaded
 LOG: 08:43:27 message.go:192: Piece at 1593 is downloaded
 LOG: 08:43:27 io.go:76: Success Writing Data
+
+Arch md5 checksum 47672450bcda8acf0c8512bd5b543cc0
