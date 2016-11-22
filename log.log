@@ -1,8 +1,0 @@
-DEBUG: 12:58:06 main.go:71: Length:  1513308160
-DEBUG: 12:58:06 main.go:73: Piece Length:  524288
-DEBUG: 12:58:06 main.go:75: Piece Len:  57740
-DEBUG: 12:58:06 main.go:76: Pieces count:  2887
-LOG: 12:58:06 tracker.go:53: TRACKER REQUEST: http://torrent.ubuntu.com:6969/announce?info_hash=%9f%91e%d9%a2%81%a9%b8%e7%82%cdQv%bb%cc%82V%fd%18q&peer_id=-TR3440-91a24W577461&uploaded=0&downloaded=0&left=1513308160&port=51413&key=60502143&numwant=80&compact=1&supportcrypto=1&event=started
-DEBUG: 12:58:06 io.go:25: File is 0 bytes, out of Length: 1513308160
-DEBUG: 12:58:06 io.go:26: WHy Doesn't I have? 0
-DEBUG: 12:58:06 main.go:48: Good Bye!
