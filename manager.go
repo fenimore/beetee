@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+func Delugue() {
+
+}
+
 // Flood is the run() of beetee.
 func Flood() {
 	order := DecidePieceOrder() // TODO: Rarest first?
