@@ -1,6 +1,6 @@
 # beetee
 
-Bittorrent Client implemented in Go **Work in Progress**
+Bittorrent Client implemented in Go **Work in Progress**. I have a blog post outlining the protocol in dialog format [here](http://another.workingagenda.com/blog/post/d1alog/).
 
 File Organisation:
 
@@ -38,13 +38,13 @@ manage peer and piece threads/channels/lists
 
 - [x] parse pieces
 - [x] put into pieces struct
-- [ ] Parse Have and BitField
+- [x] Parse Have and BitField
 
 ## Downloading
 
 - [x] ask peer for index // not a big deal
 - [ ] find rarest blocks
-- [ ] only ask peer if they have it
+- [x] only ask peer if they have it
 
 ### blocks
 
