@@ -58,6 +58,7 @@ func (r *TrackerResponse) parsePeers() {
 			choked:   true,
 			choking:  make(chan bool),
 			stopping: make(chan bool),
+			bitfield: make([]bool, len(Pieces)),
 		}
 		Peers = append(Peers, &peer)
 	}
@@ -119,6 +120,9 @@ func (p *Peer) ListenPeer() {
 			return
 		}
 		//recv <- payload
+		if len(payload) < 1 {
+			continue
+		}
 		go p.DecodeMessages(payload)
 	}
 }

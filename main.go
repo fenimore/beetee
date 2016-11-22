@@ -64,7 +64,7 @@ func main() {
 
 	/* Parse Torrent*/
 	// NOTE: Sets Piece
-	Torrent, err = ParseTorrent("torrents/ubuntu.torrent")
+	Torrent, err = ParseTorrent("torrents/archlinux.torrent")
 	if err != nil {
 		debugger.Println(err)
 	}
@@ -88,7 +88,7 @@ func main() {
 	ioChan = make(chan *Piece, len(Pieces))
 	//pieces := make(chan *Piece, len(Pieces))
 	//peers := make(chan *Peer)
-
+	Deluge()
 	//go FileWrite()
 	//Flood() //pieces, peers)
 	writeSync.Add(1)

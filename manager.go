@@ -5,15 +5,16 @@ import (
 	"time"
 )
 
-func Delugue() {
-	pieceChan := make(chan *Piece)
+func Deluge() {
+	pieceChan := make(chan *Piece, len(Pieces))
 	recycleChan := make(chan *Piece)
 	order := DecidePieceOrder()
 	for _, idx := range order {
 		pieceChan <- Pieces[idx]
 	}
 	debugger.Printf("Queue Filled")
-	for _, peer := range Peers {
+	for _, peer := range Peers[:4] {
+		debugger.Printf("Launch goroutine for peer")
 		go HandlePeer(peer, pieceChan, recycleChan)
 
 	}
@@ -29,9 +30,18 @@ func HandlePeer(peer *Peer, pieces <-chan *Piece, recycle chan<- *Piece) {
 	err := peer.ConnectPeer()
 	if err != nil {
 		debugger.Printf("Error Connected %s", err)
+		return
 	}
 PeerLoop:
 	for {
+		if peer.choked {
+			peer.sendStatusMessage(InterestedMsg)
+		} else {
+			peer.sendStatusMessage(-1) // keep alive
+		}
+
+		peer.choke.Wait() // if Choked, then Wait
+
 		select {
 		case <-peer.stopping:
 			return
@@ -39,6 +49,9 @@ PeerLoop:
 			// move along
 		}
 		piece := <-pieces
+		if peer.bitfield == nil {
+			continue
+		}
 		if !peer.bitfield[piece.index] {
 			debugger.Printf("Peer %s doesn't have piece %d",
 				peer.id, piece.index)
