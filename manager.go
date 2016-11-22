@@ -52,7 +52,7 @@ PeerLoop:
 		select {
 		case <-peer.stopping:
 			break PeerLoop
-		case piece := <-pieces:
+		case piece = <-pieces:
 			// move allong
 		case <-time.After(time.Second * 100):
 			break PeerLoop

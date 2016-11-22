@@ -75,7 +75,7 @@ func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string
 
 func GenPeerId() [20]byte {
 	// TODO: Make random
-	b := [20]byte{'-', 'T', 'R', '3', '4', '4', '0', '-',
+	b := [20]byte{'-', 'F', 'L', '1', '0', '0', '1', '-',
 		'9', '1', 'a', '2', '4', 'W', '5', '7', '7', '4', '6', '1'}
 	return b
 }
