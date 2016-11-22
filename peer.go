@@ -89,6 +89,39 @@ func (p *Peer) ConnectPeer() error {
 	return nil
 }
 
+func HardConnectPeer() error {
+	p := Peer{
+		port:     90,
+		addr:     "127.0.0.1:6882",
+		choked:   true,
+		choking:  make(chan bool),
+		stopping: make(chan bool),
+		bitfield: make([]bool, len(Pieces)),
+	}
+	logger.Printf("Connecting to %s", "ther")
+	// Connect to address
+	conn, err := net.DialTimeout("tcp", "127.0.0.1:6882",
+		time.Second*10)
+	if err != nil {
+		return err
+	}
+	p.conn = conn
+	// NOTE: Does io.Readfull Block?
+	err = p.sendHandShake()
+	if err != nil {
+		return err
+	}
+	logger.Printf("Connected to %s at %s", p.id, p.addr)
+	p.Lock()
+	p.alive = true
+	p.choke.Add(1)
+	p.Unlock()
+	//recv := make(chan []byte)
+	go p.ListenPeer() //recv)
+	//go p.DecodeMessages(recv)
+	return nil
+}
+
 // ListenPeer reads from socket.
 func (p *Peer) ListenPeer() {
 	for {

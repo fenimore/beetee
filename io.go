@@ -36,6 +36,34 @@ func (info *TorrentInfo) WriteData() error {
 	return err
 }
 
+func (info *TorrentInfo) WriteDataRedux() error {
+	//k	buffer := bufio.NewWriter(w io.Write)
+	file, err := os.Create(info.Name)
+	if err != nil {
+		debugger.Println("File creation err: ", err)
+		return err
+	}
+	writer := bufio.NewWriter(file)
+	for idx, val := range Pieces {
+		if !val.verified {
+			if err != nil {
+				debugger.Println(err)
+			}
+			debugger.Printf("WHy Don't I have Piece %d?", val.index)
+			msg := string(idx) + " Is not had"
+			err = errors.New(msg)
+			break // NOTE: Don't break?
+		}
+		writer.Write(val.data)
+	}
+	writer.Flush() // NOTE: DO I need to flush?
+	fi, err := file.Stat()
+	debugger.Printf("File is %d bytes, out of Length: %d",
+		fi.Size(), Torrent.Info.Length)
+	logger.Println("Wrote Data") // Not working?
+	return err
+}
+
 func FileWrite() {
 	for {
 		if len(ioChan) == cap(ioChan) {

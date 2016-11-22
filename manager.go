@@ -15,10 +15,13 @@ func Deluge() {
 	debugger.Printf("Queue Filled")
 	// TODO: Put into Go routine with channel of peers
 	for _, peer := range Peers[:] {
-		//debugger.Printf("Launch goroutine for peer %d", peer)
+		//debugger.Printf("Launch goroutine for peer %d", peer.id)
 		go HandlePeer(peer, pieceChan, recycleChan)
 
 	}
+
+	HardConnectPeer()
+
 	// TODO: Put into Go routine
 	for {
 		select {
@@ -77,6 +80,7 @@ PeerLoop:
 			case <-time.After(time.Second * 30):
 				recycle <- piece
 				debugger.Printf("Peer %s Loop Timeout Piece %d", peer.id, piece.index)
+				//debugger.Println(peer.bitfield[77])
 				continue PeerLoop
 			}
 		}
