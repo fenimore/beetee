@@ -13,7 +13,7 @@ func Deluge() {
 		pieceChan <- Pieces[idx]
 	}
 	debugger.Printf("Queue Filled")
-	for _, peer := range Peers[:4] {
+	for _, peer := range Peers[:] {
 		debugger.Printf("Launch goroutine for peer")
 		go HandlePeer(peer, pieceChan, recycleChan)
 
@@ -34,17 +34,20 @@ func HandlePeer(peer *Peer, pieces <-chan *Piece, recycle chan<- *Piece) {
 	}
 PeerLoop:
 	for {
+		//debugger.Println("New Loop")
+		peer.Lock()
 		if peer.choked {
 			peer.sendStatusMessage(InterestedMsg)
 		} else {
 			peer.sendStatusMessage(-1) // keep alive
 		}
+		peer.Unlock()
 
 		peer.choke.Wait() // if Choked, then Wait
 
 		select {
 		case <-peer.stopping:
-			return
+			break PeerLoop
 		default:
 			// move along
 		}
@@ -56,29 +59,47 @@ PeerLoop:
 			debugger.Printf("Peer %s doesn't have piece %d",
 				peer.id, piece.index)
 			recycle <- piece
-			continue PeerLoop
+			continue
 		}
 		//piece.pending.Add(1)
 		peer.requestPiece(piece.index)
-
 		for {
 			select {
 			case <-piece.success:
-				piece.writeBlocks()
+				debugger.Printf("Break from loop %s", peer.id)
 				continue PeerLoop
 			case <-time.After(time.Second * 30):
 				recycle <- piece
-				debugger.Printf("Peer %s Loop Restarts", peer.id)
+				debugger.Printf("Peer %s Loop Timeout", peer.id)
 				continue PeerLoop
 			}
 		}
 	}
+	debugger.Printf("Leaving Peer %s loop", peer.id)
 
 }
 
 func WaitForPieceToFill() {
 
 }
+
+// case b := <-piece.chanBlocks:
+//	copy(piece.data[int(b.offset):int(b.offset)+blocksize],
+//		b.data)
+//	blockCount++
+//	if blockCount != len(piece.data)/blocksize {
+//		continue
+//	}
+//	if piece.hash == sha1.Sum(piece.data) {
+//		logger.Printf("Success Writing Piece %d", piece.index)
+//		piece.verified = true
+//		break
+//	}
+//	piece.data = nil
+//	piece.data = make([]byte, piece.size)
+//	logger.Printf("Failure Writing Piece %d", piece.index)
+//	recycle <- piece
+//	break
 
 // Flood is the run() of beetee.
 func Flood() {

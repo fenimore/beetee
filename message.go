@@ -7,7 +7,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"io"
-	"time"
+	//"time"
 )
 
 const (
@@ -37,10 +37,10 @@ func (p *Peer) decodePieceMessage(msg []byte) {
 	// Blocks...
 	block := &Block{index: index, offset: begin, data: data}
 	Pieces[index].chanBlocks <- block
-	// if len(Pieces[index].chanBlocks) == cap(Pieces[index].chanBlocks) {
-	//	//Pieces[index].writeBlocks()
-	//	Pieces[index].success <- true
-	// }
+	if len(Pieces[index].chanBlocks) == cap(Pieces[index].chanBlocks) {
+		Pieces[index].writeBlocks()
+		//Pieces[index].success <- true
+	}
 }
 
 func (p *Piece) writeBlocks() {
@@ -51,10 +51,6 @@ func (p *Piece) writeBlocks() {
 	}
 	for {
 		b := <-p.chanBlocks // NOTE: b for block
-		// Copy block data to p
-		// NOTE: If this doesn't work,
-		// Go back to old manner of using a indexed in
-		// block array
 		copy(p.data[int(b.offset):int(b.offset)+blocksize],
 			b.data)
 		if len(p.chanBlocks) < 1 {
@@ -71,6 +67,7 @@ func (p *Piece) writeBlocks() {
 	p.verified = true
 	logger.Printf("Piece at %d is successfully written", p.index)
 	//TODO: ioChan <- p
+	p.success <- true
 }
 
 // 19 bytes
@@ -159,11 +156,11 @@ func (p *Peer) sendHandShake() error {
 	// The response handshake
 	shake := make([]byte, 68)
 	// Deadlines are set forever
-	// https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/
-	err = p.conn.SetDeadline(time.Now().Add(time.Second * 30))
-	if err != nil {
-		return err
-	}
+	// // https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/
+	// err = p.conn.SetDeadline(time.Now().Add(time.Second * 30))
+	// if err != nil {
+	//	return err
+	// }
 	n, err = io.ReadFull(p.conn, shake)
 	if err != nil {
 		return err
