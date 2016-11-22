@@ -83,14 +83,14 @@ func main() {
 	}
 
 	/* Start Client */
-	PieceQueue = make(chan *Piece, len(Pieces))
+	//PieceQueue = make(chan *Piece, len(Pieces))
 	PeerQueue = make(chan *Peer)
 	ioChan = make(chan *Piece, len(Pieces))
 	//pieces := make(chan *Piece, len(Pieces))
 	//peers := make(chan *Peer)
 
 	//go FileWrite()
-	Flood() //pieces, peers)
+	//Flood() //pieces, peers)
 	writeSync.Add(1)
 	writeSync.Wait()
 }

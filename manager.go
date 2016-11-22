@@ -20,7 +20,8 @@ func Flood() {
 			debugger.Printf("Error Connected to %s: %s", peer.addr, err)
 			continue
 		}
-		go peer.AskPeer()
+		//go peer.AskPeer()
+		go peer.AskForDataFromPeer()
 	}
 
 }
@@ -40,6 +41,29 @@ func (peer *Peer) PeerManager() {
 	}
 }
 
+func (peer *Peer) AskForDataFromPeer() {
+	peer.sendStatusMessage(InterestedMsg)
+	//peer.se
+	for {
+		if !peer.alive {
+			return
+		}
+		//debugger.Printf("Peer %s Choked?", peer.id)
+		peer.choke.Wait() // if Choked, then Wait
+		//debugger.Printf("Peer %s Unchoke", peer.id)
+		piece := <-PieceQueue
+		if !peer.bitfield[piece.index] {
+			PieceQueue <- piece
+			continue
+		}
+		piece.pending.Add(1)
+		peer.requestPiece(piece.index)
+		//piece.timeout = time.Now()
+		// Don't ask the same peer for too many pieces
+		piece.pending.Wait()
+	}
+}
+
 func (peer *Peer) AskPeer() {
 	peer.sendStatusMessage(InterestedMsg)
 	//peer.se
@@ -47,9 +71,7 @@ func (peer *Peer) AskPeer() {
 		if !peer.alive {
 			return
 		}
-		if peer.choked {
-			continue
-		}
+
 		//debugger.Printf("Peer %s Choked?", peer.id)
 		peer.choke.Wait() // if Choked, then Wait
 		//debugger.Printf("Peer %s Unchoke", peer.id)
@@ -65,7 +87,6 @@ func (peer *Peer) AskPeer() {
 		// Don't ask the same peer for too many pieces
 		piece.pending.Wait()
 	}
-
 }
 
 // PieceManager must be run for every piece..

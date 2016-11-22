@@ -7,7 +7,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"io"
-	"time"
+	//"time"
 )
 
 const (
@@ -108,7 +108,7 @@ func (p *Peer) decodePieceMessage(msg []byte) {
 	block := &Block{index: index, offset: begin, data: data}
 	Pieces[index].chanBlocks <- block
 	// if len(Pieces[index].chanBlocks) ==
-	// cap(Pieces[index].chanBlocks) {
+	//	cap(Pieces[index].chanBlocks) {
 	//	Pieces[index].writeBlocks()
 	// }
 }
@@ -230,10 +230,10 @@ func (p *Peer) sendHandShake() error {
 	shake := make([]byte, 68)
 	// TODO: Does this block?
 	// NOTE: Does this work?
-	err = p.conn.SetDeadline(time.Now().Add(time.Second * 10))
-	if err != nil {
-		return err
-	}
+	// err = p.conn.SetDeadline(time.Now().Add(time.Second * 10))
+	// if err != nil {
+	//	return err
+	// }
 	n, err = io.ReadFull(p.conn, shake)
 	if err != nil {
 		return err
