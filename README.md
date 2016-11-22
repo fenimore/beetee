@@ -2,6 +2,41 @@
 
 Bittorrent Client implemented in Go **Work in Progress**. I have a blog post outlining the protocol in dialog format [here](http://another.workingagenda.com/blog/post/d1alog/).
 
+====
+
+# TODO:
+
+- [x] parse pieces
+- [x] put into pieces struct
+- [x] Parse Have and BitField
+
+## Downloading
+
+- [x] ask peer for index // not a big deal
+- [ ] find rarest blocks
+- [x] only ask peer if they have it
+
+### blocks
+
+- [x] put that block into piece by index
+- [x] concat blocks into data field
+
+### Write to disk
+
+- [x] manage blocks
+- [x] write to disk
+- [ ] write and read when incomplete
+
+## Uploading
+
+- [x] run server
+- [ ] construct bitfield
+- [ ] allow handshake
+- [ ] parse request
+- [ ] send blocks
+
+====
+
 File Organisation:
 
 ## torrent
@@ -31,34 +66,3 @@ writing to disk
 ## manager
 
 manage peer and piece threads/channels/lists
-
-====
-
-# TODO:
-
-- [x] parse pieces
-- [x] put into pieces struct
-- [x] Parse Have and BitField
-
-## Downloading
-
-- [x] ask peer for index // not a big deal
-- [ ] find rarest blocks
-- [x] only ask peer if they have it
-
-### blocks
-
-- [x] put that block into piece by index
-- [x] concat blocks into data field
-
-### Write to disk
-
-- [x] manage blocks
-- [x] write to disk
-- [ ] write and read when incomplete
-
-## Uploading
-
-- [ ] allow handshake
-- [ ] parse request
-- [ ] send blocks
