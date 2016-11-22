@@ -14,8 +14,8 @@ func Deluge() {
 	}
 	debugger.Printf("Queue Filled")
 	// TODO: Put into Go routine with channel of peers
-	for _, peer := range Peers[:20] {
-		//debugger.Printf("Launch goroutine for peer")
+	for _, peer := range Peers[:] {
+		//debugger.Printf("Launch goroutine for peer %d", peer)
 		go HandlePeer(peer, pieceChan, recycleChan)
 
 	}

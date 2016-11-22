@@ -18,6 +18,7 @@ type Server struct {
 }
 
 func NewServer() *Server {
+	logger.Println("Launching New Server")
 	port := 6882
 	server := &Server{
 		connecting: make(chan *Peer),
@@ -26,9 +27,9 @@ func NewServer() *Server {
 		laddr:      fmt.Sprintf(":%d", port),
 	}
 	var err error
-	server.listener, err = net.Listen("tcp", server.laddr)
+	server.listener, err = net.Listen("tcp4", server.laddr)
 	if err != nil {
-		debugger.Fatal("FATAL, Server Fails")
+		debugger.Fatalf("FATAL, Server Fails: %s", err)
 	}
 
 	return server
@@ -36,6 +37,8 @@ func NewServer() *Server {
 
 // Listen will listen for connections and say HI!
 func (sv *Server) Listen() {
+	logger.Println("Listening on Server")
+	logger.Println(sv.listener.Addr())
 	for {
 		// Wait for a connection.
 		conn, err := sv.listener.Accept()
@@ -50,7 +53,7 @@ func (sv *Server) Listen() {
 			handshake := make([]byte, 68)
 			_, err := io.ReadFull(c, handshake)
 			if err != nil {
-				debugger.Printf("Error Listening: %s" err)
+				debugger.Printf("Error Listening: %s", err)
 			}
 			debugger.Println(handshake)
 			c.Close()
