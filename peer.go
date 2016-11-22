@@ -67,7 +67,6 @@ func (r *TrackerResponse) parsePeers() {
 func (p *Peer) ConnectPeer() error {
 	logger.Printf("Connecting to %s", p.addr)
 	// Connect to address
-	// TODO: Set deadline
 	conn, err := net.DialTimeout("tcp", p.addr,
 		time.Second*10)
 	if err != nil {

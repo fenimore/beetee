@@ -13,11 +13,13 @@ func Deluge() {
 		pieceChan <- Pieces[idx]
 	}
 	debugger.Printf("Queue Filled")
+	// TODO: Put into Go routine with channel of peers
 	for _, peer := range Peers[:20] {
 		debugger.Printf("Launch goroutine for peer")
 		go HandlePeer(peer, pieceChan, recycleChan)
 
 	}
+	// TODO: Put into Go routine
 	for {
 		select {
 		case recycle := <-recycleChan:
@@ -46,13 +48,16 @@ PeerLoop:
 
 		peer.choke.Wait() // if Choked, then Wait
 
+		var piece *Piece
 		select {
 		case <-peer.stopping:
 			break PeerLoop
-		default:
-			// move along
+		case piece := <-pieces:
+			// move allong
+		case <-time.After(time.Second * 100):
+			break PeerLoop
 		}
-		piece := <-pieces
+		//piece := <-pieces
 		if peer.bitfield == nil {
 			continue
 		}
