@@ -37,6 +37,7 @@ func NewServer() *Server {
 
 // Listen will listen for connections and say HI!
 func (sv *Server) Listen() {
+	// TODO: Make Channel of accepted peers
 	logger.Println("Listening on Server")
 	logger.Println(sv.listener.Addr())
 	for {
@@ -45,18 +46,33 @@ func (sv *Server) Listen() {
 		if err != nil {
 			debugger.Println(err)
 		}
+		p := &Peer{
+			conn:     conn,
+			port:     90,
+			addr:     conn.LocalAddr().String(),
+			choked:   true,
+			choking:  make(chan bool),
+			stopping: make(chan bool),
+			bitfield: make([]bool, len(Pieces)),
+		}
 		// Handle the connection in a new goroutine.
 		// The loop then returns to accepting, so that
 		// multiple connections may be served concurrently.
-		go func(c net.Conn) {
-			// Echo all incoming data.
+		go func(peer *Peer) {
+			// Check Handshake
 			handshake := make([]byte, 68)
-			_, err := io.ReadFull(c, handshake)
+			_, err := io.ReadFull(peer.conn, handshake)
 			if err != nil {
 				debugger.Printf("Error Listening: %s", err)
 			}
-			debugger.Println(handshake)
-			c.Close()
-		}(conn)
+			err = peer.decodeHandShake(handshake)
+			if err != nil {
+				debugger.Printf("Error Handshaking: %s", err)
+			}
+			// TODO: Add Peer to Accepted Channels
+			// TODO: Send bitfield
+			debugger.Println("New Peer %s", peer.id)
+			peer.ListenPeer()
+		}(p)
 	}
 }

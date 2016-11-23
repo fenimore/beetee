@@ -107,6 +107,60 @@ func (p *Peer) decodeCancelMessage(msg []byte) {
 func (p *Peer) decodePortMessage(msg []byte) {
 }
 
+// sendHandShake asks another client to accept your connection.
+func (p *Peer) decodeHandShake(shake []byte) error {
+	///<pstrlen><pstr><reserved><info_hash><peer_id>
+	// 68 bytes long.
+	pstrlen := byte(19) // or len(pstr)
+	pstr := []byte{'B', 'i', 't', 'T', 'o', 'r',
+		'r', 'e', 'n', 't', ' ', 'p', 'r',
+		'o', 't', 'o', 'c', 'o', 'l'}
+	reserved := make([]byte, 8)
+	info := Torrent.InfoHash[:]
+	id := PeerId[:] // my peerId NOTE: Global
+
+	// TODO: Check for Length
+	if !bytes.Equal(shake[1:20], pstr) {
+		return errors.New("Protocol does not match")
+	}
+	if !bytes.Equal(shake[28:48], info) {
+		return errors.New("InfoHash Does not match")
+	}
+	p.id = string(shake[48:68])
+
+	var n int
+	var err error
+	writer := bufio.NewWriter(p.conn)
+	// Handshake message:
+	// Send handshake message
+	err = writer.WriteByte(pstrlen)
+	if err != nil {
+		return err
+	}
+	n, err = writer.Write(pstr)
+	if err != nil || n != len(pstr) {
+		return err
+	}
+	n, err = writer.Write(reserved)
+	if err != nil || n != len(reserved) {
+		return err
+	}
+	n, err = writer.Write(info)
+	if err != nil || n != len(info) {
+		return err
+	}
+	n, err = writer.Write(id)
+	if err != nil || n != len(id) {
+		return err
+	}
+	err = writer.Flush() // TODO: Do I need to Flush?
+	if err != nil {
+		return err
+	}
+	// receive confirmation
+	return nil
+}
+
 /*###################################################
 Sending Messages
 ######################################################*/
