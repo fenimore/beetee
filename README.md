@@ -4,9 +4,9 @@ Bittorrent Client implemented in Go **Work in Progress**. I have a blog post out
 
 > run beetee -file=linux.torrents
 
-`beetee, commandline torrent application. Usage:
-  -file string
-        path to torrent file`
+    beetee, commandline torrent application. Usage:
+      -file string
+            path to torrent file
 
 ====
 
