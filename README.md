@@ -6,13 +6,15 @@ Bittorrent Client implemented in Go **Work in Progress**. I have a blog post out
 
 # TODO:
 
+- [ ] allow multiple file-torrents
+- [ ] control peer flow/ask for more peers
 - [x] parse pieces
 - [x] put into pieces struct
 - [x] Parse Have and BitField
 
 ## Downloading
 
-- [x] ask peer for index // not a big deal
+- [x] ask peer for index
 - [ ] find rarest blocks
 - [x] only ask peer if they have it
 
@@ -25,13 +27,14 @@ Bittorrent Client implemented in Go **Work in Progress**. I have a blog post out
 
 - [x] manage blocks
 - [x] write to disk
+- [ ] write to disk gradually
 - [ ] write and read when incomplete
 
 ## Uploading
 
 - [x] run server
 - [ ] construct bitfield
-- [ ] allow handshake
+- [x] allow handshake
 - [ ] parse request
 - [ ] send blocks
 
@@ -39,30 +42,34 @@ Bittorrent Client implemented in Go **Work in Progress**. I have a blog post out
 
 File Organisation:
 
-## torrent
+`torrent`
 
-torrent/meta/info structs and parse method
+> Torrent/meta/info structs and parse method.
 
-## message
+`message`
 
-Handshake, Message Decoder and Message Senders
+> Handshake, individual message decoder and message sender.
 
-## tracker
+`tracker`
 
-Tracker struct and Response method...
+> Tracker struct and Response method.
 
-## peer
+`server`
 
-Peer struct, connect and Listen Method
+> Server struct and Listen method.
 
-## piece
+`peer`
 
-Piece/Block struct and piece parser from torrent info
+> Peer struct, connect and Listen method. Also, the message decode switch for payloads is here. The peer constructor comes from parsing a TrackerResponse.
 
-## io
+`piece`
 
-writing to disk
+> Piece/Block struct and piece parser from torrent info.
 
-## manager
+`io`
 
-manage peer and piece threads/channels/lists
+> Writing and reading to disk.
+
+`manager`
+
+> Manage peer and piece threads/channels/lists. Also, catch-all for now.
