@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -41,8 +42,13 @@ var (
 
 func main() {
 	/* Get Arguments */
-	torrentFile := flag.String("file", "torrent/tom.torrent", "path to torrent file")
-
+	torrentFile := flag.String("file", "torrents/tom.torrent", "path to torrent file")
+	flag.Usage = func() {
+		fmt.Println("beetee, commandline torrent application. Usage:")
+		flag.PrintDefaults()
+		os.Exit(2)
+	}
+	flag.Parse()
 	/* Exit on CTRL C */
 	c := make(chan os.Signal, 1) // SIGINT
 	signal.Notify(c, os.Interrupt)
