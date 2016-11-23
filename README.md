@@ -40,7 +40,7 @@ Bittorrent Client implemented in Go **Work in Progress**. I have a blog post out
 
 ====
 
-File Organisation:
+Package Organisation:
 
 `torrent`
 

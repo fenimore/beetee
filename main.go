@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 	"os/signal"
@@ -39,6 +40,9 @@ var (
 )
 
 func main() {
+	/* Get Arguments */
+	torrentFile := flag.String("file", "torrent/tom.torrent", "path to torrent file")
+
 	/* Exit on CTRL C */
 	c := make(chan os.Signal, 1) // SIGINT
 	signal.Notify(c, os.Interrupt)
@@ -69,7 +73,7 @@ func main() {
 
 	/* Parse Torrent*/
 	// NOTE: Sets Piece
-	Torrent, err = ParseTorrent("torrents/archlinux.torrent")
+	Torrent, err = ParseTorrent(*torrentFile)
 	if err != nil {
 		debugger.Println(err)
 	}
