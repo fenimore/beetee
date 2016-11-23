@@ -2,6 +2,12 @@
 
 Bittorrent Client implemented in Go **Work in Progress**. I have a blog post outlining the protocol in dialog format [here](http://another.workingagenda.com/blog/post/d1alog/).
 
+> run beetee -file=linux.torrents
+
+`beetee, commandline torrent application. Usage:
+  -file string
+        path to torrent file`
+
 ====
 
 # TODO:
