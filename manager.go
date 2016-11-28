@@ -275,7 +275,7 @@ ForLoop:
 // of pieces, according to the rarest first
 func DecidePieceOrder() []int {
 	order := make([]int, 0, len(Pieces))
-	for i := 0; i < len(Pieces); i++ {
+	for i := len(Pieces) - 1; i >= 0; i-- {
 		if !Pieces[i].verified {
 			order = append(order, i)
 		}
