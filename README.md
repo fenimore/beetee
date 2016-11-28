@@ -17,6 +17,7 @@ Bittorrent Client implemented in Go **Work in Progress**. I have a blog post out
 - [x] parse pieces
 - [x] put into pieces struct
 - [x] Parse Have and BitField
+- [ ] use unsigned ints
 
 ## Downloading
 

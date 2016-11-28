@@ -38,7 +38,6 @@ type TorrentInfo struct {
 	Pieces      bencode.Bytes `bencode:"pieces"` // The concatnated Bytes
 	Private     int64         `bencode:"private"`
 	//PieceList      []*Piece
-	BlocksPerPiece int
 	// md5sum for single files
 	// files for multiple files
 	// path for multiple files

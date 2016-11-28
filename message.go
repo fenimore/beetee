@@ -37,7 +37,6 @@ func (p *Peer) decodePieceMessage(msg []byte) {
 	// Blocks...
 	block := &Block{index: index, offset: begin, data: data}
 	Pieces[index].chanBlocks <- block
-	debugger.Println("PIECE Up to Now", len(Pieces[index].chanBlocks))
 	if len(Pieces[index].chanBlocks) == cap(Pieces[index].chanBlocks) {
 		Pieces[index].writeBlocks()
 		//Pieces[index].success <- true
@@ -83,7 +82,6 @@ func (p *Peer) decodeHaveMessage(msg []byte) {
 // Thank you Tulva RC bittorent client for this algorithm
 // github.com/jtakkala/tulva/
 func (p *Peer) decodeBitfieldMessage(bitfield []byte) {
-	p.bitfield = make([]bool, len(Pieces))
 	// For each byte, look at the bits
 	// NOTE: that is 8 * 8
 	for i := 0; i < len(p.bitfield); i++ {
