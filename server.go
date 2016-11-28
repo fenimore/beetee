@@ -63,7 +63,7 @@ func (sv *Server) Listen() {
 			handshake := make([]byte, 68)
 			_, err := io.ReadFull(peer.conn, handshake)
 			if err != nil {
-				debugger.Printf("Error Listening: %s", err)
+				debugger.Printf("Error reading handshake: %s", err)
 			}
 			err = peer.decodeHandShake(handshake)
 			if err != nil {

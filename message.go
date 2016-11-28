@@ -66,7 +66,7 @@ func (p *Piece) writeBlocks() {
 	}
 	p.verified = true
 	logger.Printf("Piece at %d is successfully written", p.index)
-	//TODO: ioChan <- p
+	ioChan <- p
 	p.success <- true
 }
 

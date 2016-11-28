@@ -37,7 +37,6 @@ func (info *TorrentInfo) WriteData() error {
 }
 
 func (info *TorrentInfo) WriteDataRedux() error {
-	//k	buffer := bufio.NewWriter(w io.Write)
 	file, err := os.Create(info.Name)
 	if err != nil {
 		debugger.Println("File creation err: ", err)
@@ -64,14 +63,20 @@ func (info *TorrentInfo) WriteDataRedux() error {
 	return err
 }
 
-func FileWrite() {
+func (info *TorrentInfo) FileWrite() {
+	file, err := os.Create(info.Name)
+	if err != nil {
+		debugger.Println("File creation err: ", err)
+	}
 	for {
-		if len(ioChan) == cap(ioChan) {
-			debugger.Println("Going to write now")
-			Torrent.Info.WriteData()
-			break
+		piece := <-ioChan
+		offset := info.PieceLength * int64(piece.index)
+		_, err = file.WriteAt(piece.data, offset)
+		if err != nil {
+			debugger.Printf("Error writing %d at offset %d", piece.index, offset)
 		}
-		// TODO: Timeout requests
+		debugger.Printf("Wrote  %d at offset %d", piece.index, offset)
+
 	}
 }
 

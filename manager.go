@@ -75,6 +75,7 @@ PeerLoop:
 		for {
 			select {
 			case <-piece.success:
+				// Put piece into IO chan
 				debugger.Printf("Break from loop %s", peer.id)
 				continue PeerLoop
 			case <-time.After(time.Second * 30):

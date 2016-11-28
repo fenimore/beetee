@@ -54,9 +54,9 @@ func main() {
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		<-c
-		Torrent.Info.WriteData()
+		//Torrent.Info.WriteData()
 		debugger.Println("Good Bye!")
-		os.Exit(1)
+		os.Exit(2)
 	}()
 
 	/* TODO: Start server on Port */
@@ -83,6 +83,7 @@ func main() {
 	if err != nil {
 		debugger.Println(err)
 	}
+
 	debugger.Println("Length: ", Torrent.Info.Length)
 	debugger.Println("Piece Length: ",
 		Torrent.Info.PieceLength)
@@ -103,6 +104,7 @@ func main() {
 	ioChan = make(chan *Piece, len(Pieces))
 	//pieces := make(chan *Piece, len(Pieces))
 	//peers := make(chan *Peer)
+	go Torrent.Info.FileWrite()
 	Deluge()
 	//go FileWrite()
 	//Flood() //pieces, peers)
