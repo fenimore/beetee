@@ -1,11 +1,12 @@
 package main
 
 import (
-	"encoding/binary"
+	"bufio"
+	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"net"
-	"sync"
 	"time"
 )
 
@@ -15,27 +16,20 @@ type Peer struct {
 	port uint16
 	id   string
 	addr string
-	// Connection
-	conn net.Conn
 	// Status
-	sync.Mutex // NOTE: Should be RWMutex?
 	alive      bool
 	interested bool
 	choked     bool
-
-	choke sync.WaitGroup // NOTE: Use this?
-	// Messages
-	//sendChan chan []byte
-	//recvChan chan []byte
 	// Piece Data
-	bitfield []bool
+	bitfield []byte
 }
 
 // parsePeers is a http response gotten from
 // the tracker; parse the peers byte message
 // and put to global Peers slice.
-func (r *TrackerResponse) parsePeers() {
+func ParsePeers(r TrackerResponse) []*Peer {
 	var start int
+	var peers []*Peer
 	for idx, val := range r.Peers {
 		if val == ':' {
 			start = idx + 1
@@ -45,6 +39,11 @@ func (r *TrackerResponse) parsePeers() {
 	p := r.Peers[start:]
 	// A peer is represented in six bytes
 	// four for ip and two for port
+	bitCap := len(Pieces) / 8
+	if len(Pieces)%8 != 0 {
+		bitCap += 1
+	}
+
 	for i := 0; i < len(p); i = i + 6 {
 		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
 		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
@@ -53,73 +52,54 @@ func (r *TrackerResponse) parsePeers() {
 			port:     port,
 			addr:     fmt.Sprintf("%s:%d", ip.String(), port),
 			choked:   true,
-			bitfield: make([]bool, len(Pieces)),
+			bitfield: make([]byte, bitCap),
 		}
-		Peers = append(Peers, &peer)
+		peers = append(peers, &peer)
 	}
+	return peers
 }
 
-func (p *Peer) ConnectPeer() error {
+func (p *Peer) Connect() (net.Conn, error) {
 	logger.Printf("Connecting to %s", p.addr)
+
 	// Connect to address
-	conn, err := net.DialTimeout("tcp", p.addr,
-		time.Second*10)
+	conn, err := net.DialTimeout("tcp", p.addr, time.Second*10)
 	if err != nil {
-		return err
+		return conn, err
 	}
-	p.conn = conn
-	// NOTE: Does io.Readfull Block?
-	err = p.sendHandShake()
-	if err != nil {
-		return err
-	}
+
 	logger.Printf("Connected to %s at %s", p.id, p.addr)
-	p.Lock()
-	p.alive = true
-	p.choke.Add(1)
-	p.Unlock()
-	//recv := make(chan []byte)
-	go p.ListenPeer() //recv)
-	//go p.DecodeMessages(recv)
+	return conn, err
+}
+
+func (p *Peer) HandShake(conn net.Conn, info *TorrentMeta) error {
+	// The response handshake
+	shake := make([]byte, 68)
+
+	writer := bufio.NewWriter(conn)
+	err := writeHandShake(info, writer)
+	if err != nil {
+		return err
+	}
+
+	_, err = io.ReadFull(conn, shake)
+	if err != nil {
+		return err
+	}
+
+	// TODO: Check for Length
+	if !bytes.Equal(shake[1:20], pstr) {
+		return errors.New("Protocol does not match")
+	}
+	if !bytes.Equal(shake[28:48], info.InfoHash[:]) {
+		return errors.New("InfoHash Does not match")
+	}
+
+	p.id = string(shake[48:68])
 	return nil
 }
 
 // ListenPeer reads from socket.
-func (p *Peer) ListenPeer() {
-	for {
-		select {
-		case <-p.stopping:
-			debugger.Printf("Peer %s is closing", p.id)
-			p.Lock()
-			p.conn.Close()
-			p.alive = false
-			p.Unlock()
-			return
-		default:
-			// do nothing
-		}
-		length := make([]byte, 4)
-		_, err := io.ReadFull(p.conn, length)
-		if err != nil {
-			// EOF
-			debugger.Printf("Error %s with %s", err, p.id)
-			p.stopping <- true
-			return
-		}
-		payload := make([]byte, binary.BigEndian.Uint32(length))
-		_, err = io.ReadFull(p.conn, payload)
-		if err != nil {
-			debugger.Printf("Error %s with %s", err, p.id)
-			p.stopping <- true
-			return
-		}
-		//recv <- payload
-		if len(payload) < 1 {
-			continue
-		}
-		go p.DecodeMessages(payload)
-	}
-}
 
 func (p *Peer) DecodeMessages(payload []byte) {
 	//var payload []byte
@@ -130,19 +110,8 @@ func (p *Peer) DecodeMessages(payload []byte) {
 	msg := payload[1:]
 	switch payload[0] {
 	case ChokeMsg:
-		p.choking <- true
-		p.Lock()
-		p.choked = true
-		p.choke.Add(1)
-		p.Unlock()
 		logger.Printf("Recv: %s sends choke", p.id)
 	case UnchokeMsg:
-		if p.choked {
-			p.Lock()
-			p.choked = false
-			p.choke.Done()
-			p.Unlock()
-		}
 		logger.Printf("Recv: %s sends unchoke", p.id)
 	case InterestedMsg:
 		p.interested = true

@@ -19,13 +19,13 @@ type TrackerRequest struct {
 
 // TrackerResponse takes in the BIN response, not dict
 type TrackerResponse struct {
-	FailureReason string `bencode:"failure reason"`
-	Interval      int32  `bencode:"interval"`
-	//	IntervalMin int64         `bencode:"min interval"`
-	TrackerId  string        `bencode:"tracker id"`
-	Complete   int32         `bencode:"complete"`
-	Incomplete int32         `bencode:"incomplete"`
-	Peers      bencode.Bytes `bencode:"peers"`
+	FailureReason string        `bencode:"failure reason"`
+	Interval      int32         `bencode:"interval"`
+	IntervalMin   int64         `bencode:"min interval"`
+	TrackerId     string        `bencode:"tracker id"`
+	Complete      int32         `bencode:"complete"`
+	Incomplete    int32         `bencode:"incomplete"`
+	Peers         bencode.Bytes `bencode:"peers"`
 }
 
 // TODO: When tracker responds in dict instead of BIN
@@ -62,13 +62,10 @@ func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string
 	// Decode bencoded Response
 	dec := bencode.NewDecoder(resp.Body)
 	err = dec.Decode(&response)
-	//fmt.Println(string(resp.Body))
 	if err != nil {
 		debugger.Println("Unable to Decode Response")
 		return response, err
 	}
-
-	response.parsePeers()
 
 	return response, err
 }

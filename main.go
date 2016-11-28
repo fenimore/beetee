@@ -77,9 +77,7 @@ func main() {
 	PeerId = GenPeerId()
 
 	/* Start Listening */
-	server := NewServer()
-	defer server.listener.Close()
-	go server.Listen()
+	// TODO:
 
 	/* Parse Torrent*/
 	// NOTE: Sets Piece
@@ -106,12 +104,7 @@ func main() {
 	//PieceQueue = make(chan *Piece, len(Pieces))
 	PeerQueue = make(chan *Peer)
 	ioChan = make(chan *Piece, len(Pieces))
-	//pieces := make(chan *Piece, len(Pieces))
-	//peers := make(chan *Peer)
-	go Torrent.Info.FileWrite()
-	Deluge()
-	//go FileWrite()
-	//Flood() //pieces, peers)
+
 	writeSync.Add(1)
 	writeSync.Wait()
 }
