@@ -21,8 +21,6 @@ func Deluge() {
 
 	}
 
-	HardConnectPeer()
-
 	// TODO: Put into Go routine
 	for {
 		select {
@@ -92,45 +90,6 @@ PeerLoop:
 }
 
 func WaitForPieceToFill() {
-
-}
-
-// case b := <-piece.chanBlocks:
-//	copy(piece.data[int(b.offset):int(b.offset)+blocksize],
-//		b.data)
-//	blockCount++
-//	if blockCount != len(piece.data)/blocksize {
-//		continue
-//	}
-//	if piece.hash == sha1.Sum(piece.data) {
-//		logger.Printf("Success Writing Piece %d", piece.index)
-//		piece.verified = true
-//		break
-//	}
-//	piece.data = nil
-//	piece.data = make([]byte, piece.size)
-//	logger.Printf("Failure Writing Piece %d", piece.index)
-//	recycle <- piece
-//	break
-
-// Flood is the run() of beetee.
-func Flood() {
-	order := DecidePieceOrder() // TODO: Rarest first?
-	debugger.Println("Filling up QUeue")
-	for _, idx := range order {
-		PieceQueue <- Pieces[idx]
-	}
-	debugger.Println("QUeue Filled")
-	// TODO: add queue for peers
-	for _, peer := range Peers[:16] {
-		err := peer.ConnectPeer()
-		if err != nil {
-			debugger.Printf("Error Connected to %s: %s", peer.addr, err)
-			continue
-		}
-		//go peer.AskPeer()
-		go peer.AskForDataFromPeer()
-	}
 
 }
 
