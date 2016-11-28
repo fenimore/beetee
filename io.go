@@ -76,7 +76,6 @@ func (info *TorrentInfo) FileWrite() {
 			debugger.Printf("Error writing %d at offset %d", piece.index, offset)
 		}
 		debugger.Printf("Wrote  %d at offset %d", piece.index, offset)
-
 	}
 }
 

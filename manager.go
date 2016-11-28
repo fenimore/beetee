@@ -8,13 +8,14 @@ import (
 func Deluge() {
 	pieceChan := make(chan *Piece, len(Pieces))
 	recycleChan := make(chan *Piece)
-	order := DecidePieceOrder()
+	//order := DecidePieceOrder()
+	order := GetLastPiece()
 	for _, idx := range order {
 		pieceChan <- Pieces[idx]
 	}
 	debugger.Printf("Queue Filled")
 	// TODO: Put into Go routine with channel of peers
-	for _, peer := range Peers[:] {
+	for _, peer := range Peers[:3] {
 		//debugger.Printf("Launch goroutine for peer %d", peer.id)
 		go HandlePeer(peer, pieceChan, recycleChan)
 
@@ -280,5 +281,11 @@ func DecidePieceOrder() []int {
 			order = append(order, i)
 		}
 	}
+	return order
+}
+
+func GetLastPiece() []int {
+	order := make([]int, 0, len(Pieces))
+	order = append(order, len(Pieces)-1)
 	return order
 }

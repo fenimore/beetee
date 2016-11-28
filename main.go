@@ -55,6 +55,10 @@ func main() {
 	go func() {
 		<-c
 		//Torrent.Info.WriteData()
+		file, _ := os.Open(Torrent.Info.Name)
+		fi, _ := file.Stat()
+		debugger.Printf("File is %d bytes, out of Length: %d",
+			fi.Size(), Torrent.Info.Length)
 		debugger.Println("Good Bye!")
 		os.Exit(2)
 	}()

@@ -160,7 +160,6 @@ func (p *Peer) ListenPeer() {
 }
 
 func (p *Peer) DecodeMessages(payload []byte) {
-
 	//var payload []byte
 	//var msg []byte
 	if len(payload) < 1 {
@@ -199,7 +198,7 @@ func (p *Peer) DecodeMessages(payload []byte) {
 		logger.Printf("Recv: %s sends request %s", p.id, msg)
 	case BlockMsg: // Officially "Piece" message
 		// TODO: Remove this message, as they are toomuch
-		//logger.Printf("Recv: %s sends block", p.id)
+		logger.Printf("Recv: %s sends block", p.id)
 		p.decodePieceMessage(msg)
 	case CancelMsg:
 		logger.Printf("Recv: %s sends cancel %s", p.id, msg)
