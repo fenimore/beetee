@@ -38,16 +38,39 @@ func (info *TorrentInfo) parsePieces() {
 	for i := 0; i < len(info.Pieces); i = i + 20 {
 		j := i + 20 // NOTE: j is hash end
 		piece := Piece{
-			size:       info.PieceLength,
-			chanBlocks: make(chan *Block, numberOfBlocks), // numberOfBlocks
-			data:       make([]byte, info.PieceLength),
-			index:      len(Pieces),
-			verified:   false,
-			success:    make(chan bool),
+			size:     info.PieceLength,
+			index:    len(Pieces),
+			verified: false,
+			success:  make(chan bool),
+			//chanBlocks: make(chan *Block, numberOfBlocks), // numberOfBlocks
 			//hash:       fmt.Sprintf("%x", piece.hash),
 		}
+		// Last piece has different amount of blocks
+		if i+20 >= len(info.Pieces) {
+			debugger.Println("Last Piece Has this many blocks", info.lastPieceBlockCount(), info.lastPieceSize())
+			piece.chanBlocks = make(chan *Block, info.lastPieceBlockCount())
+			piece.size = info.lastPieceSize()
+			piece.data = nil
+			piece.data = make([]byte, piece.size)
+		} else {
+			piece.chanBlocks = make(chan *Block, numberOfBlocks)
+			piece.data = make([]byte, info.PieceLength)
+		}
+
 		// Copy to next 20 into Piece Hash
 		copy(piece.hash[:], info.Pieces[i:j])
 		Pieces = append(Pieces, &piece)
 	}
+}
+
+func (info *TorrentInfo) lastPieceBlockCount() int64 {
+	finalPieceSize := info.Length % info.PieceLength
+	finalBlockCount := finalPieceSize / int64(blocksize)
+
+	return finalBlockCount
+}
+
+func (info *TorrentInfo) lastPieceSize() int64 {
+	finalPieceSize := info.Length % info.PieceLength
+	return finalPieceSize
 }

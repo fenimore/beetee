@@ -37,6 +37,7 @@ func (p *Peer) decodePieceMessage(msg []byte) {
 	// Blocks...
 	block := &Block{index: index, offset: begin, data: data}
 	Pieces[index].chanBlocks <- block
+	debugger.Println("PIECE Up to Now", len(Pieces[index].chanBlocks))
 	if len(Pieces[index].chanBlocks) == cap(Pieces[index].chanBlocks) {
 		Pieces[index].writeBlocks()
 		//Pieces[index].success <- true
@@ -58,6 +59,7 @@ func (p *Piece) writeBlocks() {
 		}
 	}
 	if p.hash != sha1.Sum(p.data) {
+		debugger.Printf("Error with piece of size %d,\n the hash is %x, and what I got is %x", p.size, p.hash, sha1.Sum(p.data))
 		p.data = nil
 		p.data = make([]byte, p.size)
 		logger.Printf("Unable to Write Blocks to Piece %d",

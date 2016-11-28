@@ -15,7 +15,7 @@ func Deluge() {
 	}
 	debugger.Printf("Queue Filled")
 	// TODO: Put into Go routine with channel of peers
-	for _, peer := range Peers[:3] {
+	for _, peer := range Peers[:5] {
 		//debugger.Printf("Launch goroutine for peer %d", peer.id)
 		go HandlePeer(peer, pieceChan, recycleChan)
 
@@ -276,7 +276,7 @@ ForLoop:
 // of pieces, according to the rarest first
 func DecidePieceOrder() []int {
 	order := make([]int, 0, len(Pieces))
-	for i := len(Pieces) - 1; i >= 0; i-- {
+	for i := 0; i < len(Pieces); i++ {
 		if !Pieces[i].verified {
 			order = append(order, i)
 		}
