@@ -10,6 +10,7 @@ type Server struct {
 	laddr    string
 }
 
+// Serve, TODO: this is for seeding not leeching
 func Serve(port int, shutdown <-chan bool) error {
 	var err error
 	server := &Server{laddr: fmt.Sprintf(":%d", port)}
@@ -22,7 +23,7 @@ func Serve(port int, shutdown <-chan bool) error {
 
 		conn, err := server.listener.Accept()
 		if err == nil {
-			conn.Write([]byte)
+			conn.Close()
 			//go handleConnection(conn, shutdown)
 		}
 		// TODO: handleError(err)

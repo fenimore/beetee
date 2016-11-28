@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"io"
@@ -94,12 +95,39 @@ func (p *Peer) HandShake(conn net.Conn, info *TorrentMeta) error {
 	return nil
 }
 
-func (p *Peer) DecodeMessages(payload []byte) {
-	//var payload []byte
-	//var msg []byte
-	if len(payload) < 1 {
-		return
+// readMessage reads from connection, It blocks
+func (p *Peer) readMessage(conn net.Conn) ([]byte, error) {
+	var err error
+	// NOTE: length is 4 byte big endian
+	length := make([]byte, 4)
+	_, err = io.ReadFull(conn, length)
+	if err != nil {
+		return nil, err
 	}
+
+	if binary.BigEndian.Uint32(length) < 1 {
+		return nil, nil
+	}
+
+	payload := make([]byte, binary.BigEndian.Uint32(length))
+	_, err = io.ReadFull(conn, payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return payload, nil
+}
+
+func (p *Peer) DecodeMessages(conn net.Conn) {
+	payload, err := p.readMessage(conn)
+	if err != nil {
+		debugger.Println("Error reading message: ", err)
+	}
+
+	if payload == nil {
+		return // NOTE, Keep alive was recv
+	}
+
 	msg := payload[1:]
 	switch payload[0] {
 	case ChokeMsg:
@@ -122,8 +150,8 @@ func (p *Peer) DecodeMessages(payload []byte) {
 		logger.Printf("Recv: %s sends request %s", p.id, msg)
 	case BlockMsg: // Officially "Piece" message
 		// TODO: Remove this message, as they are toomuch
-		//logger.Printf("Recv: %s sends block", p.id)
-		p.decodePieceMessage(msg)
+		logger.Printf("Recv: %s sends block", p.id)
+		//p.decodePieceMessage(msg)
 	case CancelMsg:
 		logger.Printf("Recv: %s sends cancel %s", p.id, msg)
 	case PortMsg:
