@@ -36,6 +36,7 @@ func NewServer() *Server {
 }
 
 // Listen will listen for connections and say HI!
+
 func (sv *Server) Listen() {
 	// TODO: Make Channel of accepted peers
 	logger.Println("Listening on Server")

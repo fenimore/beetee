@@ -17,9 +17,6 @@ type Peer struct {
 	addr string
 	// Connection
 	conn net.Conn
-	// Status Chan
-	stopping chan bool
-	choking  chan bool
 	// Status
 	sync.Mutex // NOTE: Should be RWMutex?
 	alive      bool
@@ -56,9 +53,6 @@ func (r *TrackerResponse) parsePeers() {
 			port:     port,
 			addr:     fmt.Sprintf("%s:%d", ip.String(), port),
 			choked:   true,
-			choking:  make(chan bool),
-			stopping: make(chan bool),
-
 			bitfield: make([]bool, len(Pieces)),
 		}
 		Peers = append(Peers, &peer)
