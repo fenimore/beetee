@@ -94,8 +94,6 @@ func (p *Peer) HandShake(conn net.Conn, info *TorrentMeta) error {
 	return nil
 }
 
-// ListenPeer reads from socket.
-
 func (p *Peer) DecodeMessages(payload []byte) {
 	//var payload []byte
 	//var msg []byte
