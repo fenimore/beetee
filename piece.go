@@ -42,15 +42,11 @@ func (info *TorrentInfo) parsePieces() {
 			index:    len(Pieces),
 			verified: false,
 			success:  make(chan bool),
-			//chanBlocks: make(chan *Block, numberOfBlocks), // numberOfBlocks
-			//hash:       fmt.Sprintf("%x", piece.hash),
 		}
 		// Last piece has different amount of blocks
 		if i+20 >= len(info.Pieces) {
-			debugger.Println("Last Piece Has this many blocks", info.lastPieceBlockCount(), info.lastPieceSize())
 			piece.chanBlocks = make(chan *Block, info.lastPieceBlockCount())
 			piece.size = info.lastPieceSize()
-			piece.data = nil
 			piece.data = make([]byte, piece.size)
 		} else {
 			piece.chanBlocks = make(chan *Block, numberOfBlocks)
@@ -65,12 +61,10 @@ func (info *TorrentInfo) parsePieces() {
 
 func (info *TorrentInfo) lastPieceBlockCount() int64 {
 	finalPieceSize := info.Length % info.PieceLength
-	finalBlockCount := finalPieceSize / int64(blocksize)
-
-	return finalBlockCount
+	return finalPieceSize / int64(blocksize)
 }
 
 func (info *TorrentInfo) lastPieceSize() int64 {
-	finalPieceSize := info.Length % info.PieceLength
-	return finalPieceSize
+	return info.Length % info.PieceLength
+
 }
