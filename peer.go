@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"bytes"
 	"errors"
 	"fmt"
@@ -75,14 +74,10 @@ func (p *Peer) Connect() (net.Conn, error) {
 func (p *Peer) HandShake(conn net.Conn, info *TorrentMeta) error {
 	// The response handshake
 	shake := make([]byte, 68)
+	hs := HandShake(info)
+	conn.Write(hs[:])
 
-	writer := bufio.NewWriter(conn)
-	err := writeHandShake(info, writer)
-	if err != nil {
-		return err
-	}
-
-	_, err = io.ReadFull(conn, shake)
+	_, err := io.ReadFull(conn, shake)
 	if err != nil {
 		return err
 	}

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"crypto/sha1"
 	"encoding/binary"
 	//"time"
@@ -111,46 +110,16 @@ Sending Messages
 var pstr = []byte("BitTorrent protocol")
 var pstrlen = byte(19)
 
-// sendHandShake asks another client to accept your connection.
-func writeHandShake(info *TorrentMeta, writer *bufio.Writer) error {
-	///<pstrlen><pstr><reserved><info_hash><peer_id>
-	// 68 bytes long.
-	var n int
-	var err error
-
-	// Handshake message:
-	reserved := make([]byte, 8)
-	hash := info.InfoHash[:]
-	id := PeerId[:] // my peerId NOTE: Global
-
-	// Send handshake message
-	err = writer.WriteByte(pstrlen)
-	if err != nil {
-		return err
-	}
-	n, err = writer.Write(pstr)
-	if err != nil || n != len(pstr) {
-		return err
-	}
-	n, err = writer.Write(reserved)
-	if err != nil || n != len(reserved) {
-		return err
-	}
-	n, err = writer.Write(hash)
-	if err != nil || n != len(hash) {
-		return err
-	}
-	n, err = writer.Write(id)
-	if err != nil || n != len(id) {
-		return err
-	}
-	err = writer.Flush()
-	if err != nil {
-		return err
-	}
-
-	// receive confirmation
-	return nil
+//<pstrlen><pstr><reserved><info_hash><peer_id>
+// 68 bytes long.
+func HandShake(info *TorrentMeta) [68]byte {
+	//h := make([]byte)
+	var h [68]byte
+	h[0] = pstrlen
+	copy(h[1:20], pstr[:])
+	copy(h[28:48], info.InfoHash[:])
+	copy(h[48:], PeerId[:])
+	return h
 }
 
 // sendStatusMessage sends the status message to peer.
