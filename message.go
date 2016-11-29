@@ -23,13 +23,15 @@ const (
 Recieving Messages
 ######################################################*/
 
+// DecodePieceMessage takes the message without the
+// length prefix
 func DecodePieceMessage(msg []byte) *Block {
-	if len(msg[13:]) < 1 {
+	if len(msg[9:]) < 1 {
 		return nil
 	}
-	index := binary.BigEndian.Uint32(msg[5:9]) // NOTE: The piece in question
-	begin := binary.BigEndian.Uint32(msg[9:13])
-	data := msg[13:]
+	index := binary.BigEndian.Uint32(msg[1:5]) // NOTE: The piece in question
+	begin := binary.BigEndian.Uint32(msg[5:9])
+	data := msg[9:]
 
 	return &Block{index: index, offset: begin, data: data}
 }
@@ -64,28 +66,31 @@ func (p *Piece) writeBlocks() {
 
 // 19 bytes
 func DecodeHaveMessage(msg []byte) uint32 {
-	return binary.BigEndian.Uint32(msg[5:])
+	return binary.BigEndian.Uint32(msg[1:])
 }
 
+// DecodeBitfieldMessage returns a bool slice.
 // NOTE: The bitfield will be sent with padding if the size is
 // not divisible by eight.
 // Thank you Tulva RC bittorent client for this algorithm
 // github.com/jtakkala/tulva/
-func (p *Peer) decodeBitfieldMessage(bitfield []byte) {
-	// // For each byte, look at the bits
-	// // NOTE: that is 8 * 8
-	// for i := 0; i < len(p.bitfield); i++ {
-	//	for j := 0; j < 8; j++ {
-	//		index := i*8 + j
-	//		if index >= len(Pieces) {
-	//			break // Hit padding bits
-	//		}
-
-	//		byte := bitfield[i]              // Within bytes
-	//		bit := (byte >> uint32(7-j)) & 1 // some shifting
-	//		//p.bitfield[index] = bit == 1     // if bit is true
-	//	}
-	// }
+func DecodeBitfieldMessage(msg []byte) []bool {
+	result := make([]bool, len(Pieces))
+	bitfield := msg[1:]
+	// For each byte, look at the bits
+	// NOTE: that is 8 * 8
+	for i := 0; i < len(bitfield); i++ {
+		for j := 0; j < 8; j++ {
+			index := i*8 + j
+			if index >= len(Pieces) {
+				break // Hit padding bits
+			}
+			byte := bitfield[i]              // Within bytes
+			bit := (byte >> uint32(7-j)) & 1 // some shifting
+			result[index] = bit == 1         // if bit is true
+		}
+	}
+	return result
 }
 
 func (p *Peer) decodeRequestMessage(msg []byte) {

@@ -22,6 +22,8 @@ type Peer struct {
 	choked     bool
 	// Piece Data
 	bitfield []byte
+	// Connection?
+	conn net.Conn
 }
 
 // parsePeers is a http response gotten from
@@ -106,7 +108,7 @@ func (p *Peer) readMessage(conn net.Conn) ([]byte, error) {
 	}
 
 	if binary.BigEndian.Uint32(length) < 1 {
-		return nil, nil
+		return nil, nil // Keep Alive
 	}
 
 	payload := make([]byte, binary.BigEndian.Uint32(length))
@@ -124,11 +126,10 @@ func (p *Peer) DecodeMessages(conn net.Conn) {
 		debugger.Println("Error reading message: ", err)
 	}
 
-	if payload == nil {
+	if len(payload) < 1 {
 		return // NOTE, Keep alive was recv
 	}
 
-	msg := payload[1:]
 	switch payload[0] {
 	case ChokeMsg:
 		logger.Printf("Recv: %s sends choke", p.id)
@@ -141,21 +142,23 @@ func (p *Peer) DecodeMessages(conn net.Conn) {
 		p.interested = false
 		logger.Printf("Recv: %s sends uninterested", p.id)
 	case HaveMsg:
-		p.decodeHaveMessage(msg)
-		logger.Printf("Recv: %s sends have %v", p.id, msg)
+		idx := DecodeHaveMessage(payload)
+		logger.Printf("Recv: %s sends have %v for Piece %d",
+			p.id, payload[1:], idx)
 	case BitFieldMsg:
-		p.decodeBitfieldMessage(msg)
 		logger.Printf("Recv: %s sends bitfield", p.id)
+		field := DecodeBitfieldMessage(payload)
+		debugger.Println(field)
 	case RequestMsg:
-		logger.Printf("Recv: %s sends request %s", p.id, msg)
+		logger.Printf("Recv: %s sends request %s", p.id, payload)
 	case BlockMsg: // Officially "Piece" message
 		// TODO: Remove this message, as they are toomuch
 		logger.Printf("Recv: %s sends block", p.id)
 		//p.decodePieceMessage(msg)
 	case CancelMsg:
-		logger.Printf("Recv: %s sends cancel %s", p.id, msg)
+		logger.Printf("Recv: %s sends cancel %s", p.id, payload)
 	case PortMsg:
-		logger.Printf("Recv: %s sends port %s", p.id, msg)
+		logger.Printf("Recv: %s sends port %s", p.id, payload)
 	default:
 		break
 

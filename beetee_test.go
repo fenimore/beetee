@@ -163,7 +163,7 @@ func TestPieceMessage(t *testing.T) {
 func TestDecodePieceMessage(t *testing.T) {
 	msg := PieceMessage(2, blocksize*2, []byte("I am the payload"))
 
-	b := DecodePieceMessage(msg)
+	b := DecodePieceMessage(msg[4:])
 	if b.index != 2 {
 		t.Error("Piece index for block no good")
 	}

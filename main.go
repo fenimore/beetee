@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"os"
 	"os/signal"
 	"sync"
@@ -75,9 +76,6 @@ func main() {
 	logger = log.New(os.Stdout, "LOG: ",
 		log.Ltime|log.Lshortfile)
 
-	/* My Peer Id TODO unique */
-	PeerId = GenPeerId()
-
 	/* Start Listening */
 	// TODO:
 
@@ -88,24 +86,45 @@ func main() {
 		debugger.Println(err)
 	}
 
-	debugger.Println("Length: ", Torrent.Info.Length)
-	debugger.Println("Piece Length: ",
-		Torrent.Info.PieceLength)
-	debugger.Println("Piece Len: ",
-		len(Torrent.Info.Pieces))
-	debugger.Println("Pieces count: ", len(Pieces))
+	debugger.Println("File Length: ", Torrent.Info.Length)
+	debugger.Println("Piece Length: ", Torrent.Info.PieceLength)
+	debugger.Println("len(info.Pieces) // bytes: ", len(Torrent.Info.Pieces))
+	debugger.Println("len(Pieces) // pieces: ", len(Pieces))
 
 	/*Parse Tracker Response*/
-	// NOTE: Sets Peer
-	_, err = GetTrackerResponse(Torrent)
+	tr, err := GetTrackerResponse(Torrent)
 	if err != nil {
 		debugger.Println(err)
 	}
+
+	// Get Peers
+	Peers = ParsePeers(tr)
 
 	/* Start Client */
 	//PieceQueue = make(chan *Piece, len(Pieces))
 	PeerQueue = make(chan *Peer)
 	ioChan = make(chan *Piece, len(Pieces))
+
+	for _, peer := range Peers {
+		if peer.addr == "207.251.103.46:6882" {
+			continue
+		}
+		conn, err := peer.Connect()
+		if err != nil {
+			debugger.Printf("Connect error %s", err)
+			continue
+		}
+		err = peer.HandShake(conn, Torrent)
+		if err != nil {
+			debugger.Printf("Handshake error %s", err)
+			continue
+		}
+		go func(p *Peer, c net.Conn) {
+			for {
+				p.DecodeMessages(c)
+			}
+		}(peer, conn)
+	}
 
 	writeSync.Add(1)
 	writeSync.Wait()
