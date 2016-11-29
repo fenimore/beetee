@@ -127,45 +127,29 @@ func HandShake(info *TorrentMeta) [68]byte {
 
 // sendRequestMessage pass in the index of the piece your looking for,
 // and the offset of the piece (it's offset index * BLOCKSIZE
-func (p *Peer) sendRequestMessage(idx uint32, offset int) error {
+func RequestMessage(idx uint32, offset int) []byte {
 	//4-byte message length,1-byte message ID, and payload:
 	// <len=0013><id=6><index><begin><length>
-	// NOTE: being offset the offset by byte:
-	// that is  0, 16K, 13K, etc
-	var err error
-	//writer := bufio.NewWriter(make([]byte, 0))
+	msg := make([]byte, 17)
+	// Message prefix
 	len := make([]byte, 4)
 	binary.BigEndian.PutUint32(len, 13)
-	_ = byte(RequestMsg)
-	// payload
+	id := byte(RequestMsg)
+	// Payload
 	index := make([]byte, 4)
 	binary.BigEndian.PutUint32(index, idx)
 	begin := make([]byte, 4)
 	binary.BigEndian.PutUint32(begin, uint32(offset))
 	length := make([]byte, 4)
 	binary.BigEndian.PutUint32(length, uint32(blocksize))
-	//_, err = writer.Write(len)
-	if err != nil {
-		return err
-	}
-	//err = writer.WriteByte(id)
-	if err != nil {
-		return err
-	}
-	//_, err = writer.Write(index)
-	if err != nil {
-		return err
-	}
-	//_, err = writer.Write(begin)
-	if err != nil {
-		return err
-	}
-	//_, err = writer.Write(length)
-	if err != nil {
-		return err
-	}
-	//writer.Flush()
-	return nil
+	// Write to buffer
+	copy(msg[:4], len)
+	msg[4] = id
+	copy(msg[5:9], index)
+	copy(msg[9:13], begin)
+	copy(msg[13:17], length)
+
+	return msg
 }
 
 // FOR TESTING NOTE
@@ -182,9 +166,6 @@ func (p *Peer) requestPiece(piece int) {
 	logger.Printf("Requesting piece %d from peer %s", piece, p.id)
 	blocksPerPiece := int(Torrent.Info.PieceLength) / blocksize
 	for offset := 0; offset < blocksPerPiece; offset++ {
-		err := p.sendRequestMessage(uint32(piece), offset*blocksize)
-		if err != nil {
-			debugger.Println("Error Requesting", err)
-		}
+		_ = RequestMessage(uint32(piece), offset*blocksize)
 	}
 }

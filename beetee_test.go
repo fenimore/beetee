@@ -4,6 +4,13 @@ import "testing"
 import "bytes"
 import "os"
 import "github.com/anacrolix/torrent/bencode"
+import "encoding/binary"
+
+func TestMain(m *testing.M) {
+	PeerId = GenPeerId()
+	Torrent, _ = ParseTorrent("torrents/tom.torrent")
+	os.Exit(m.Run())
+}
 
 func TestPeerIdSize(t *testing.T) {
 	peerid := GenPeerId()
@@ -73,10 +80,19 @@ func TestPeerParse(t *testing.T) {
 	}
 }
 
-func TestMain(m *testing.M) {
-	PeerId = GenPeerId()
-	Torrent, _ = ParseTorrent("torrents/tom.torrent")
-	os.Exit(m.Run())
+func TestRequestMessage(t *testing.T) {
+	msg := RequestMessage(24, blocksize*3)
+	if len(msg[8:]) < 1 {
+		t.Error("Block is empty?")
+	}
+	index := binary.BigEndian.Uint32(msg[1:5])
+	if index != 24 {
+		t.Error("Wrong index")
+	}
+	begin := binary.BigEndian.Uint32(msg[5:9])
+	if int(begin)/blocksize != 3 {
+		t.Error("Wrong offset")
+	}
 }
 
 // Wait, I don't know how to test network things..
