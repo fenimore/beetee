@@ -86,7 +86,7 @@ func TestPeerParse(t *testing.T) {
 	if len(peers) != 2 {
 		t.Error("Not enough Peers")
 	}
-	if !peers[0].choked {
+	if !peers[0].choke {
 		t.Error("Peer Should be choked")
 	}
 

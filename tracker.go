@@ -112,7 +112,7 @@ func ParsePeers(r TrackerResponse) []*Peer {
 			ip:       ip.String(),
 			port:     port,
 			addr:     fmt.Sprintf("%s:%d", ip.String(), port),
-			choked:   true,
+			choke:    true,
 			bitfield: make([]byte, bitCap),
 		}
 		peers = append(peers, &peer)

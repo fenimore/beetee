@@ -60,6 +60,12 @@ func spawnFileWriter(f *os.File) (chan *Piece, chan struct{}) {
 }
 
 func main() {
+	d = &Download{
+		Peers:  make([]*Peer, 0),
+		Pieces: make([]*Piece, 0),
+		Left:   0, // TODO: set according to partial download
+	}
+
 	/* Get Arguments */
 	torrentFile := flag.String("file", "torrents/tom.torrent", "path to torrent file")
 	flag.Usage = func() {
@@ -110,4 +116,24 @@ func main() {
 
 	// Get Peers
 	d.Peers = ParsePeers(tr)
+
+	//file, _ := os.Open(d.Torrent.Info.Name)
+	//diskIO, closeIO := spawnFileWriter(file)
+
+	peerChannels := make(map[*Peer]PeerChannels)
+
+	for _, peer := range d.Peers {
+		in := make(chan []byte)
+		out, halt := peer.spawnPeerHandler(in, d)
+		peerChannels[peer] = PeerChannels{in: in, out: out, halt: halt}
+	}
+
+	writeSync.Add(1)
+	writeSync.Wait()
+}
+
+type PeerChannels struct {
+	in   chan []byte
+	out  chan []byte
+	halt chan []byte
 }

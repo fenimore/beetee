@@ -16,13 +16,12 @@ type Peer struct {
 	port uint16
 	id   string
 	addr string
-	// Status
-	alive      bool
+	// State
+	sync.Mutex
+	choke      bool
 	interested bool
-	choked     bool
-	chokeWg    sync.WaitGroup
-	// Piece Data
-	bitfield []byte
+	alive      bool
+	bitfield   []byte
 }
 
 func (p *Peer) Connect() (net.Conn, error) {
@@ -83,30 +82,6 @@ func readMessage(conn net.Conn) ([]byte, error) {
 	return payload, nil
 }
 
-func connReader(conn net.Conn) (chan []byte, chan struct{}) {
-	out := make(chan []byte)
-	halt := make(chan struct{})
-	go func() {
-		for {
-			select {
-			case <-halt:
-				conn.Close()
-				close(out)
-				break
-			default:
-				msg, err := readMessage(conn)
-				if err != nil {
-					logger.Println(err)
-					close(out)
-					break
-				}
-				out <- msg
-			}
-		}
-	}()
-	return out, halt
-}
-
 func (p *Peer) handleMessage(payload []byte) error {
 	if len(payload) < 1 {
 		return nil // NOTE, Keep alive was recv
@@ -115,8 +90,7 @@ func (p *Peer) handleMessage(payload []byte) error {
 	switch payload[0] {
 	case ChokeMsg:
 		// TODO: Set Peer unchoke
-		p.choked = false
-		p.chokeWg.Done()
+		p.choke = false
 		logger.Printf("Recv: %s sends choke", p.id)
 	case UnchokeMsg:
 		logger.Printf("Recv: %s sends unchoke", p.id)
@@ -154,12 +128,35 @@ func (p *Peer) handleMessage(payload []byte) error {
 	return nil
 }
 
-func (p *Peer) openChannel(in <-chan []byte, d *Download) (chan []byte, chan []byte) {
+func spawnConnReader(conn net.Conn) (chan []byte, chan struct{}) {
+	out := make(chan []byte)
+	halt := make(chan struct{})
+	go func() {
+		for {
+			select {
+			case <-halt:
+				conn.Close()
+				close(out)
+				break
+			default:
+				msg, err := readMessage(conn)
+				if err != nil {
+					logger.Println(err)
+					close(out)
+					break
+				}
+				out <- msg
+			}
+		}
+	}()
+	return out, halt
+}
+
+func (p *Peer) spawnPeerHandler(in <-chan []byte, d *Download) (chan []byte, chan []byte) {
 	out := make(chan []byte)
 	halt := make(chan []byte)
 	go func() {
 		conn, err := p.Connect()
-
 		if err != nil {
 			close(out)
 		}
@@ -169,7 +166,7 @@ func (p *Peer) openChannel(in <-chan []byte, d *Download) (chan []byte, chan []b
 			close(out)
 		}
 
-		ch, cl := connReader(conn)
+		ch, cl := spawnConnReader(conn)
 
 		for {
 			select {
