@@ -125,14 +125,17 @@ func main() {
 	}
 	diskIO, _ := spawnFileWriter(file)
 	peerChannels := make(map[*Peer]PeerChannels)
+
 	connPeers := make(chan *Peer)
 	readyPeers := make(chan *Peer)
-	for _, peer := range d.Peers {
+	pieceNext := FillPieceOrder()
+
+	for _, peer := range d.Peers[:] {
 		in := make(chan []byte)
 		out, halt := peer.spawnPeerHandler(in, d, connPeers, readyPeers)
 		peerChannels[peer] = PeerChannels{in: in, out: out, halt: halt}
-
 	}
+
 	go func() {
 		for {
 			peer := <-connPeers
@@ -145,35 +148,24 @@ func main() {
 		for {
 			peer := <-readyPeers
 			channels := peerChannels[peer]
-			for i := 0; i < len(d.Pieces); i++ {
-				msgs := requestPiece(i)
+			go func(p *Peer, ch PeerChannels) {
+				piece := <-pieceNext
+				logger.Println("Requesting Pieces From ", peer.id)
+				msgs := requestPiece(piece.index)
 				for _, msg := range msgs {
 					channels.in <- msg
 				}
 				select {
-				case <-d.Pieces[i].success:
-					diskIO <- d.Pieces[i]
-					continue
+				case <-piece.success:
+					logger.Println("Wrote Piece:", piece.index)
+					diskIO <- piece
 				case <-time.After(30 * time.Second):
-					continue
+					logger.Println("TimeOut Pieces", piece.index)
+					pieceNext <- piece
 				}
-			}
-
+			}(peer, channels)
 		}
 	}()
-
-	//	for _, peer := range d.Peers {
-	// msgs := requestPiece(idx)
-	// for _, msg := range msgs {
-	//	channels.in <- msg
-	// }
-	// select {
-	// case <-d.Pieces[idx].success:
-	//	continue
-	// case <-time.After(30 * time.Second):
-	//	continue
-	// }
-	//	}
 
 	writeSync.Add(1)
 	writeSync.Wait()
@@ -183,4 +175,12 @@ type PeerChannels struct {
 	in   chan []byte
 	out  chan []byte
 	halt chan []byte
+}
+
+func FillPieceOrder() chan *Piece {
+	out := make(chan *Piece, len(d.Pieces))
+	for i := 0; i < len(d.Pieces); i++ {
+		out <- d.Pieces[i]
+	}
+	return out
 }

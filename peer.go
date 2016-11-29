@@ -116,7 +116,7 @@ func (p *Peer) handleMessage(payload []byte, ready chan<- *Peer) error {
 		logger.Printf("Recv: %s sends request %s", p.id, payload)
 	case BlockMsg: // Officially "Piece" message
 		// TODO: Remove this message, as they are toomuch
-		logger.Printf("Recv: %s sends block", p.id)
+		//logger.Printf("Recv: %s sends block", p.id)
 		b := DecodePieceMessage(payload)
 		d.Pieces[b.index].chanBlocks <- b
 		if len(d.Pieces[b.index].chanBlocks) == cap(d.Pieces[b.index].chanBlocks) {
@@ -141,13 +141,13 @@ func spawnConnReader(conn net.Conn) (chan []byte, chan struct{}) {
 			select {
 			case <-halt:
 				conn.Close()
-				close(out)
+				//close(out)
 				break
 			default:
 				msg, err := readMessage(conn)
 				if err != nil {
 					logger.Println(err)
-					close(out)
+					close(halt)
 					break
 				}
 				out <- msg
@@ -157,8 +157,8 @@ func spawnConnReader(conn net.Conn) (chan []byte, chan struct{}) {
 	return out, halt
 }
 
-func (p *Peer) spawnPeerHandler(in <-chan []byte,
-	d *Download, alives chan<- *Peer, ready chan<- *Peer) (chan []byte, chan []byte) {
+func (p *Peer) spawnPeerHandler(in <-chan []byte, d *Download, alives chan<- *Peer,
+	ready chan<- *Peer) (chan []byte, chan []byte) {
 	out := make(chan []byte)
 	halt := make(chan []byte)
 	go func() {
@@ -179,7 +179,7 @@ func (p *Peer) spawnPeerHandler(in <-chan []byte,
 		for {
 			select {
 			case msg := <-in:
-				logger.Println("Sending msg", msg)
+				//logger.Println("Sending msg", msg, p.id)
 				conn.Write(msg)
 				//p.sendMessage(msg, conn)
 			case msg := <-ch:
