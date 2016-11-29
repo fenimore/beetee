@@ -51,7 +51,7 @@ func spawnFileWriter(f *os.File) (chan *Piece, chan struct{}) {
 		for {
 			select {
 			case piece := <-in:
-				logger.Printf("Writing Data to piece %d", piece.index)
+				logger.Printf("Writing Data to Disk, Piece: %d", piece.index)
 				f.WriteAt(piece.data, int64(piece.index)*piece.size)
 			case <-close:
 				f.Close()
@@ -161,6 +161,7 @@ func main() {
 		for {
 			peer := <-ready
 			go func(p *Peer) {
+
 				for {
 					piece := <-pieceNext
 					logger.Println("Requesting Pieces From ", peer.id)
@@ -169,6 +170,7 @@ func main() {
 						peer.in <- msg
 					}
 					select {
+					// TODO: stop when peer closes
 					case <-piece.success:
 						logger.Println("Wrote Piece:", piece.index)
 						diskIO <- piece
@@ -180,7 +182,6 @@ func main() {
 			}(peer)
 		}
 	}()
-
 	writeSync.Add(1)
 	writeSync.Wait()
 }

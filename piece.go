@@ -99,9 +99,8 @@ func (p *Piece) VerifyPiece() {
 		return
 	}
 	p.verified = true
-	logger.Printf("Piece at %d is successfully written", p.index)
+	logger.Printf("Piece at %d is Collected", p.index)
 	// TODO: Update personal bitfield
 	// TODO: Send have to peers
-	// Send msg with global msgChan?
 	p.success <- true // FIXME: Keep?
 }

@@ -24,6 +24,7 @@ type Peer struct {
 	interested bool
 	alive      bool
 	bitfield   []byte
+	bitmap     []bool
 	// Chan
 	in   chan []byte
 	out  chan []byte
@@ -124,6 +125,7 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 	case BitFieldMsg:
 		// TODO: Decode into slice?
 		logger.Printf("Recv: %s sends bitfield", p.id)
+		p.bitmap = DecodeBitfieldMessage(payload)
 	case RequestMsg:
 		logger.Printf("Recv: %s sends request %s", p.id, payload)
 	case BlockMsg: // Officially "Piece" message
