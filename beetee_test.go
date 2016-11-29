@@ -9,7 +9,8 @@ import "fmt"
 
 func TestMain(m *testing.M) {
 	//PeerId = GenPeerId()
-	Torrent, _ = ParseTorrent("torrents/tom.torrent")
+	d = new(Download)
+	d.Torrent, _ = ParseTorrent("torrents/tom.torrent")
 	os.Exit(m.Run())
 }
 
@@ -36,7 +37,7 @@ func TestPieceLen(t *testing.T) {
 		debugger.Println("Unable to Decode Response")
 	}
 
-	if len(Torrent.Info.Pieces)%20 != 0 {
+	if len(d.Torrent.Info.Pieces)%20 != 0 {
 		t.Error("Pieces should be mod 20")
 	}
 
@@ -89,7 +90,7 @@ func TestPeerParse(t *testing.T) {
 		t.Error("Peer Should be choked")
 	}
 
-	numPieces := len(Torrent.Info.Pieces) / 20
+	numPieces := len(d.Torrent.Info.Pieces) / 20
 	var expectedBitfieldSize int
 	if numPieces%8 == 0 {
 		expectedBitfieldSize = numPieces / 8
@@ -104,7 +105,7 @@ func TestPeerParse(t *testing.T) {
 
 // Message Tests
 func TestRequestMessage(t *testing.T) {
-	msg := RequestMessage(24, blocksize*3)
+	msg := RequestMessage(24, BLOCKSIZE*3)
 	if len(msg[8:]) < 1 {
 		t.Error("Block is empty?")
 	}
@@ -113,7 +114,7 @@ func TestRequestMessage(t *testing.T) {
 		t.Error("Wrong index")
 	}
 	begin := binary.BigEndian.Uint32(msg[9:13])
-	if int(begin)/blocksize != 3 {
+	if int(begin)/BLOCKSIZE != 3 {
 		t.Error("Wrong offset")
 	}
 }
@@ -137,7 +138,7 @@ func TestStatusMessage(t *testing.T) {
 
 func TestPieceMessage(t *testing.T) {
 	// <len=0009+X><id=7><index><begin><block>
-	msg := PieceMessage(2, blocksize*2, []byte("I am the payload"))
+	msg := PieceMessage(2, BLOCKSIZE*2, []byte("I am the payload"))
 
 	if int(msg[4]) != BlockMsg {
 		fmt.Println(msg[4])
@@ -155,21 +156,21 @@ func TestPieceMessage(t *testing.T) {
 	}
 
 	offset := binary.BigEndian.Uint32(msg[9:13])
-	if int(offset) != blocksize*2 {
-		fmt.Println(offset, blocksize*2)
+	if int(offset) != BLOCKSIZE*2 {
+		fmt.Println(offset, BLOCKSIZE*2)
 		t.Error("Wrong offset")
 	}
 }
 
 func TestDecodePieceMessage(t *testing.T) {
-	msg := PieceMessage(2, blocksize*2, []byte("I am the payload"))
+	msg := PieceMessage(2, BLOCKSIZE*2, []byte("I am the payload"))
 
 	b := DecodePieceMessage(msg[4:])
 	if b.index != 2 {
 		t.Error("Piece index for block no good")
 	}
-	if int(b.offset) != 2*blocksize {
-		fmt.Println(2*blocksize, blocksize)
+	if int(b.offset) != 2*BLOCKSIZE {
+		fmt.Println(2*BLOCKSIZE, BLOCKSIZE)
 		t.Error("Block offset not good")
 	}
 	if string(b.data) != "I am the payload" {
@@ -187,7 +188,7 @@ func ExampleStatusMessage() {
 
 func ExamplePieceMessage() {
 	// <len=0009+X><id=7><index><begin><block>
-	msg := PieceMessage(2, blocksize*2, []byte("I am the payload"))
+	msg := PieceMessage(2, BLOCKSIZE*2, []byte("I am the payload"))
 	fmt.Println(string(msg[13:]))
 
 	//output:

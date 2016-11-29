@@ -3,6 +3,8 @@ package main
 import "github.com/anacrolix/torrent/bencode"
 import "strconv"
 import "net/http"
+import "net"
+import "fmt"
 
 type TrackerRequest struct {
 	InfoHash,
@@ -98,8 +100,8 @@ func ParsePeers(r TrackerResponse) []*Peer {
 	p := r.Peers[start:]
 	// A peer is represented in six bytes
 	// four for ip and two for port
-	bitCap := len(Pieces) / 8
-	if len(Pieces)%8 != 0 {
+	bitCap := len(d.Pieces) / 8
+	if len(d.Pieces)%8 != 0 {
 		bitCap += 1
 	}
 

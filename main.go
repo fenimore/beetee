@@ -4,13 +4,15 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"net"
 	"os"
 	"os/signal"
 	"sync"
 )
 
-const port = 6881 // TODO
+const (
+	PORT                = 6881 // TODO
+	FILE_WRITER_BUFSIZE = 25
+)
 
 type Download struct {
 	Torrent *TorrentMeta
@@ -34,13 +36,28 @@ var ( // NOTE Global Important Variables
 	// Protocol Values
 	pstr    = []byte("BitTorrent protocol")
 	pstrlen = byte(19)
-)
+	d       *Download
 
-var (
 	pieceChan chan *Piece
 	peerChan  chan *Peer
 	ioChan    chan *Piece
 )
+
+func spawnFileWriter(f *os.File) (chan *Piece, chan struct{}) {
+	in := make(chan *Piece, FILE_WRITER_BUFSIZE)
+	close := make(chan struct{})
+	go func() {
+		for {
+			select {
+			case piece := <-in:
+				f.WriteAt(piece.data, int64(piece.index)*piece.size)
+			case <-close:
+				f.Close()
+			}
+		}
+	}()
+	return in, close
+}
 
 func main() {
 	/* Get Arguments */
@@ -57,10 +74,10 @@ func main() {
 	go func() {
 		<-c
 		//Torrent.Info.WriteData()
-		file, _ := os.Open(Torrent.Info.Name)
+		file, _ := os.Open(d.Torrent.Info.Name)
 		fi, _ := file.Stat()
 		debugger.Printf("File is %d bytes, out of Length: %d",
-			fi.Size(), Torrent.Info.Length)
+			fi.Size(), d.Torrent.Info.Length)
 		debugger.Println("Good Bye!")
 		os.Exit(2)
 	}()
@@ -75,78 +92,22 @@ func main() {
 
 	/* Parse Torrent*/
 	// NOTE: Sets Piece
-	Torrent, err = ParseTorrent(*torrentFile)
+	d.Torrent, err = ParseTorrent(*torrentFile)
 	if err != nil {
 		debugger.Println(err)
 	}
 
-	debugger.Println("File Length: ", Torrent.Info.Length)
-	debugger.Println("Piece Length: ", Torrent.Info.PieceLength)
-	debugger.Println("len(info.Pieces) // bytes: ", len(Torrent.Info.Pieces))
-	debugger.Println("len(Pieces) // pieces: ", len(Pieces))
+	debugger.Println("File Length: ", d.Torrent.Info.Length)
+	debugger.Println("Piece Length: ", d.Torrent.Info.PieceLength)
+	debugger.Println("len(info.Pieces) // bytes: ", len(d.Torrent.Info.Pieces))
+	debugger.Println("len(Pieces) // pieces: ", len(d.Pieces))
 
 	/*Parse Tracker Response*/
-	tr, err := GetTrackerResponse(Torrent)
+	tr, err := GetTrackerResponse(d.Torrent)
 	if err != nil {
 		debugger.Println(err)
 	}
 
 	// Get Peers
-	Peers = ParsePeers(tr)
-
-	/* Start Client */
-	PieceQueue = make(chan *Piece, len(Pieces))
-	msgChan = make(chan []byte)
-	PeerQueue = make(chan *Peer)
-	ioChan = make(chan *Piece, len(Pieces))
-
-	for _, peer := range Peers {
-		if peer.addr == "207.251.103.46:6882" {
-			continue
-		}
-		conn, err := peer.Connect()
-		if err != nil {
-			debugger.Printf("Connect error %s", err)
-			continue
-		}
-		err = peer.HandShake(conn, Torrent)
-		if err != nil {
-			debugger.Printf("Handshake error %s", err)
-			continue
-		}
-
-		peer.chokeWg.Add(1)
-		go func(p *Peer, c net.Conn) {
-			for {
-				err = p.DecodeMessages(c)
-				if err != nil {
-					debugger.Printf("Error Decoding: %s", err)
-					break
-				}
-			}
-			c.Close()
-			debugger.Printf("Connection Closing to Peer %s", p.id)
-		}(peer, conn)
-
-		go func(p *Peer, c net.Conn) {
-			// TODO: Send interested if bitfield has been received
-			debugger.Println("Sending Interested")
-			c.Write(StatusMessage(InterestedMsg))
-			//p.chokeWg.Wait()
-			debugger.Println("Recv Unchoke Message, Stop waiting")
-			for idx, val := range Pieces {
-				requests := requestPiece(idx)
-				val.pending.Add(1)
-				for _, r := range requests {
-					debugger.Printf("Request Away: %s", r)
-					c.Write(r)
-				}
-				val.pending.Wait()
-
-			}
-		}(peer, conn)
-	}
-
-	writeSync.Add(1)
-	writeSync.Wait()
+	d.Peers = ParsePeers(tr)
 }

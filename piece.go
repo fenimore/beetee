@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	blocksize int = 16384
+	BLOCKSIZE = 16384
 )
 
 // Piece is the general unit that files are divided into.
@@ -33,14 +33,14 @@ type Block struct {
 // the torrent file.
 func (info *TorrentInfo) parsePieces() {
 	info.cleanPieces()
-	numberOfBlocks := info.PieceLength / int64(blocksize)
+	numberOfBlocks := info.PieceLength / int64(BLOCKSIZE)
 	// NOTE: Pieces are global variable of all pieces
-	Pieces = make([]*Piece, 0, len(info.Pieces)/20)
+	d.Pieces = make([]*Piece, 0, len(info.Pieces)/20)
 	for i := 0; i < len(info.Pieces); i = i + 20 {
 		j := i + 20 // NOTE: j is hash end
 		piece := Piece{
 			size:     info.PieceLength,
-			index:    len(Pieces),
+			index:    len(d.Pieces),
 			verified: false,
 			success:  make(chan bool),
 		}
@@ -56,18 +56,18 @@ func (info *TorrentInfo) parsePieces() {
 
 		// Copy to next 20 into Piece Hash
 		copy(piece.hash[:], info.Pieces[i:j])
-		Pieces = append(Pieces, &piece)
+		d.Pieces = append(d.Pieces, &piece)
 	}
-	bitCap := len(Pieces) / 8
-	if len(Pieces)%8 != 0 {
+	bitCap := len(d.Pieces) / 8
+	if len(d.Pieces)%8 != 0 {
 		bitCap += 1
 	}
 
-	bitfield = make([]byte, bitCap)
+	d.bitfield = make([]byte, bitCap)
 }
 
 func (info *TorrentInfo) lastPieceBlockCount() int64 {
-	pieceCount := (info.Length % info.PieceLength) / int64(blocksize)
+	pieceCount := (info.Length % info.PieceLength) / int64(BLOCKSIZE)
 	if pieceCount == 0 {
 		return 1
 	}
@@ -82,7 +82,7 @@ func (info *TorrentInfo) lastPieceSize() int64 {
 func (p *Piece) VerifyPiece() {
 	for {
 		b := <-p.chanBlocks
-		copy(p.data[int(b.offset):int(b.offset)+blocksize],
+		copy(p.data[int(b.offset):int(b.offset)+BLOCKSIZE],
 			b.data)
 		if len(p.chanBlocks) < 1 {
 			break

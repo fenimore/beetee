@@ -46,14 +46,14 @@ func DecodeHaveMessage(msg []byte) uint32 {
 // Thank you Tulva RC bittorent client for this algorithm
 // github.com/jtakkala/tulva/
 func DecodeBitfieldMessage(msg []byte) []bool {
-	result := make([]bool, len(Pieces))
+	result := make([]bool, len(d.Pieces))
 	bitfield := msg[1:]
 	// For each byte, look at the bits
 	// NOTE: that is 8 * 8
 	for i := 0; i < len(bitfield); i++ {
 		for j := 0; j < 8; j++ {
 			index := i*8 + j
-			if index >= len(Pieces) {
+			if index >= len(d.Pieces) {
 				break // Hit padding bits
 			}
 			byte := bitfield[i]              // Within bytes
@@ -121,7 +121,7 @@ func RequestMessage(idx uint32, offset int) []byte {
 	// Payload
 	binary.BigEndian.PutUint32(msg[5:9], idx)
 	binary.BigEndian.PutUint32(msg[9:13], uint32(offset))
-	binary.BigEndian.PutUint32(msg[13:], uint32(blocksize))
+	binary.BigEndian.PutUint32(msg[13:], uint32(BLOCKSIZE))
 
 	return msg
 }
@@ -143,10 +143,10 @@ func PieceMessage(idx uint32, offset int, data []byte) []byte {
 }
 
 func requestPiece(piece int) [][]byte {
-	blocksPerPiece := int(Torrent.Info.PieceLength) / blocksize
+	blocksPerPiece := int(d.Torrent.Info.PieceLength) / BLOCKSIZE
 	msgs := make([][]byte, blocksPerPiece)
 	for offset := 0; offset < blocksPerPiece; offset++ {
-		msgs = append(msgs, RequestMessage(uint32(piece), offset*blocksize))
+		msgs = append(msgs, RequestMessage(uint32(piece), offset*BLOCKSIZE))
 	}
 
 	return msgs
