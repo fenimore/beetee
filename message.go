@@ -24,12 +24,12 @@ Recieving Messages
 ######################################################*/
 
 func DecodePieceMessage(msg []byte) *Block {
-	if len(msg[9:]) < 1 {
+	if len(msg[13:]) < 1 {
 		return nil
 	}
-	index := binary.BigEndian.Uint32(msg[:4])
-	begin := binary.BigEndian.Uint32(msg[5:9])
-	data := msg[9:]
+	index := binary.BigEndian.Uint32(msg[5:9])
+	begin := binary.BigEndian.Uint32(msg[9:13])
+	data := msg[13:]
 	// Blocks...
 	block := &Block{index: index, offset: begin, data: data}
 
@@ -175,7 +175,7 @@ func PieceMessage(idx uint32, offset int, data []byte) []byte {
 	binary.BigEndian.PutUint32(prefix[:4], uint32(len(data)+9))
 	prefix[4] = byte(BlockMsg)
 	// Payload
-	binary.BigEndian.PutUint32(prefix[4:9], idx)
+	binary.BigEndian.PutUint32(prefix[5:9], idx)
 	binary.BigEndian.PutUint32(prefix[9:13], uint32(offset))
 
 	// Write to buffer
