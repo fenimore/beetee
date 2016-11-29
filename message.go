@@ -119,8 +119,24 @@ func HandShake(info *TorrentMeta) [68]byte {
 	return h
 }
 
-// sendStatusMessage sends the status message to peer.
+// StatusMessage sends the status message to peer.
 // If sent -1 then a Keep alive message is sent.
+func StatusMessage(status int) []byte {
+	//<len=0001><id=1>
+	msg := make([]byte, 5)
+	length := make([]byte, 4)
+	if status == -1 {
+		binary.BigEndian.PutUint32(length, 0)
+		return length // NOTE: Keep alive message
+	} else {
+		binary.BigEndian.PutUint32(length, 1)
+	}
+
+	copy(msg[:4], length)
+	msg[4] = byte(status)
+
+	return msg
+}
 
 // sendRequestMessage pass in the index of the piece your looking for,
 // and the offset of the piece (it's offset index * BLOCKSIZE
