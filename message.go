@@ -27,13 +27,11 @@ func DecodePieceMessage(msg []byte) *Block {
 	if len(msg[13:]) < 1 {
 		return nil
 	}
-	index := binary.BigEndian.Uint32(msg[5:9])
+	index := binary.BigEndian.Uint32(msg[5:9]) // NOTE: The piece in question
 	begin := binary.BigEndian.Uint32(msg[9:13])
 	data := msg[13:]
-	// Blocks...
-	block := &Block{index: index, offset: begin, data: data}
 
-	return block
+	return &Block{index: index, offset: begin, data: data}
 }
 
 func (p *Piece) writeBlocks() {
@@ -65,9 +63,8 @@ func (p *Piece) writeBlocks() {
 }
 
 // 19 bytes
-func (p *Peer) decodeHaveMessage(msg []byte) {
-	//index := binary.BigEndian.Uint32(msg)
-	//p.bitfield[index] = true
+func DecodeHaveMessage(msg []byte) uint32 {
+	return binary.BigEndian.Uint32(msg[5:])
 }
 
 // NOTE: The bitfield will be sent with padding if the size is
@@ -104,9 +101,6 @@ func (p *Peer) decodePortMessage(msg []byte) {
 Sending Messages
 ######################################################*/
 
-var pstr = []byte("BitTorrent protocol")
-var pstrlen = byte(19)
-
 //<pstrlen><pstr><reserved><info_hash><peer_id>
 // 68 bytes long.
 func HandShake(info *TorrentMeta) [68]byte {
@@ -115,7 +109,8 @@ func HandShake(info *TorrentMeta) [68]byte {
 	h[0] = pstrlen
 	copy(h[1:20], pstr[:])
 	copy(h[28:48], info.InfoHash[:])
-	copy(h[48:], PeerId[:])
+	copy(h[48:], info.PeerId[:])
+
 	return h
 }
 
@@ -145,23 +140,13 @@ func RequestMessage(idx uint32, offset int) []byte {
 	// <len=0013><id=6><index><begin><length>
 	msg := make([]byte, 17)
 	// Message prefix
-	len := make([]byte, 4)
-	binary.BigEndian.PutUint32(len, 13)
-	id := byte(RequestMsg)
+	binary.BigEndian.PutUint32(msg[:4], 13)
+	msg[4] = byte(RequestMsg)
 	// Payload
-	index := make([]byte, 4)
-	binary.BigEndian.PutUint32(index, idx)
-	begin := make([]byte, 4)
-	binary.BigEndian.PutUint32(begin, uint32(offset))
-	length := make([]byte, 4)
-	binary.BigEndian.PutUint32(length, uint32(blocksize))
-	// Write to buffer
-	copy(msg[:4], len)
-	msg[4] = id
-	copy(msg[5:9], index)
-	copy(msg[9:13], begin)
-	copy(msg[13:], length)
-	//logger.Println(msg)
+	binary.BigEndian.PutUint32(msg[5:9], idx)
+	binary.BigEndian.PutUint32(msg[9:13], uint32(offset))
+	binary.BigEndian.PutUint32(msg[13:], uint32(blocksize))
+
 	return msg
 }
 
@@ -170,17 +155,12 @@ func RequestMessage(idx uint32, offset int) []byte {
 func PieceMessage(idx uint32, offset int, data []byte) []byte {
 	// 4-byte message length,1-byte message ID, and payload:
 	// <len=0009+X><id=7><index><begin><block>
-	prefix := make([]byte, 13)
-	// Message prefix
-	binary.BigEndian.PutUint32(prefix[:4], uint32(len(data)+9))
-	prefix[4] = byte(BlockMsg)
-	// Payload
-	binary.BigEndian.PutUint32(prefix[5:9], idx)
-	binary.BigEndian.PutUint32(prefix[9:13], uint32(offset))
-
-	// Write to buffer
 	msg := make([]byte, 13+len(data))
-	copy(msg[:13], prefix)
+	// Message prefix
+	binary.BigEndian.PutUint32(msg[:4], uint32(len(data)+9))
+	msg[4] = byte(BlockMsg)
+	binary.BigEndian.PutUint32(msg[5:9], idx)
+	binary.BigEndian.PutUint32(msg[9:13], uint32(offset))
 	copy(msg[13:], data)
 
 	return msg

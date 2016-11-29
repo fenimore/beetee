@@ -8,7 +8,7 @@ import "encoding/binary"
 import "fmt"
 
 func TestMain(m *testing.M) {
-	PeerId = GenPeerId()
+	//PeerId = GenPeerId()
 	Torrent, _ = ParseTorrent("torrents/tom.torrent")
 	os.Exit(m.Run())
 }
@@ -60,7 +60,7 @@ func TestHandShakeInfoHash(t *testing.T) {
 func TestHandShakePeerId(t *testing.T) {
 	info, _ := ParseTorrent("torrents/tom.torrent")
 	hs := HandShake(info)
-	if !bytes.Equal(hs[48:], PeerId[:]) {
+	if !bytes.Equal(hs[48:], info.PeerId[:]) {
 		t.Error("Incorrect peerid")
 	}
 }

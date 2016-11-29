@@ -23,6 +23,7 @@ type TorrentMeta struct {
 	Info         *TorrentInfo
 	InfoHash     [20]byte
 	InfoHashEnc  string
+	PeerId       [20]byte // NOTE: my peer ID
 }
 
 func (t *TorrentMeta) String() string {
@@ -69,6 +70,7 @@ func ParseTorrent(file string) (*TorrentMeta, error) {
 	data.InfoHash = sha1.Sum(data.InfoBytes)
 	data.InfoHashEnc = UrlEncode(data.InfoHash)
 	data.Info.parsePieces()
+	data.PeerId = GenPeerId()
 	return &data, nil
 }
 

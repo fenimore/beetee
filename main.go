@@ -31,7 +31,9 @@ var ( // NOTE Global Important Variables
 	completionSync sync.WaitGroup
 	writeSync      sync.WaitGroup
 	queueSync      sync.WaitGroup
-	// Mutex
+	// Protocol Values
+	pstr    = []byte("BitTorrent protocol")
+	pstrlen = byte(19)
 )
 
 var (
