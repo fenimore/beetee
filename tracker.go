@@ -114,6 +114,10 @@ func ParsePeers(r TrackerResponse) []*Peer {
 			addr:     fmt.Sprintf("%s:%d", ip.String(), port),
 			choke:    true,
 			bitfield: make([]byte, bitCap),
+			info:     d.Torrent,
+			//in:       make(chan []byte),
+			//out:      make(chan []byte),
+			//halt:     make(chan struct{}),
 		}
 		peers = append(peers, &peer)
 	}

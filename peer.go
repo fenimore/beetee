@@ -16,6 +16,8 @@ type Peer struct {
 	port uint16
 	id   string
 	addr string
+	info *TorrentMeta
+	conn net.Conn
 	// State
 	sync.Mutex
 	choke      bool
@@ -25,28 +27,29 @@ type Peer struct {
 	// Chan
 	in   chan []byte
 	out  chan []byte
-	halt chan []byte
+	halt chan struct{}
 }
 
-func (p *Peer) Connect() (net.Conn, error) {
+func (p *Peer) Connect() error {
 	logger.Printf("Connecting to %s", p.addr)
 
 	// Connect to address
 	conn, err := net.DialTimeout("tcp", p.addr, time.Second*10)
 	if err != nil {
-		return conn, err
+		return err
 	}
+	p.conn = conn
 	logger.Printf("Connected to %s at %s", p.id, p.addr)
-	return conn, err
+	return err
 }
 
-func (p *Peer) HandShake(conn net.Conn, info *TorrentMeta) error {
+func (p *Peer) HandShake() error {
 	// The response handshake
 	shake := make([]byte, 68)
-	hs := HandShake(info)
-	conn.Write(hs[:])
+	hs := HandShake(p.info)
+	p.conn.Write(hs[:])
 
-	_, err := io.ReadFull(conn, shake)
+	_, err := io.ReadFull(p.conn, shake)
 	if err != nil {
 		return err
 	}
@@ -55,7 +58,7 @@ func (p *Peer) HandShake(conn net.Conn, info *TorrentMeta) error {
 	if !bytes.Equal(shake[1:20], pstr) {
 		return errors.New("Protocol does not match")
 	}
-	if !bytes.Equal(shake[28:48], info.InfoHash[:]) {
+	if !bytes.Equal(shake[28:48], p.info.InfoHash[:]) {
 		return errors.New("InfoHash Does not match")
 	}
 
@@ -64,11 +67,11 @@ func (p *Peer) HandShake(conn net.Conn, info *TorrentMeta) error {
 }
 
 // readMessage reads from connection, It blocks
-func readMessage(conn net.Conn) ([]byte, error) {
+func (p *Peer) readMessage() ([]byte, error) {
 	var err error
 	// NOTE: length is 4 byte big endian
 	length := make([]byte, 4)
-	_, err = io.ReadFull(conn, length)
+	_, err = io.ReadFull(p.conn, length)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +81,7 @@ func readMessage(conn net.Conn) ([]byte, error) {
 	}
 
 	payload := make([]byte, binary.BigEndian.Uint32(length))
-	_, err = io.ReadFull(conn, payload)
+	_, err = io.ReadFull(p.conn, payload)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +89,7 @@ func readMessage(conn net.Conn) ([]byte, error) {
 	return payload, nil
 }
 
-func (p *Peer) handleMessage(payload []byte, ready chan<- *Peer) error {
+func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer) error {
 	if len(payload) < 1 {
 		return nil // NOTE, Keep alive was recv
 	}
@@ -94,8 +97,17 @@ func (p *Peer) handleMessage(payload []byte, ready chan<- *Peer) error {
 	switch payload[0] {
 	case ChokeMsg:
 		// TODO: Set Peer unchoke
+		// Halt?
+		//close(p.halt)
+		p.Lock()
+		p.choke = true
+		p.Unlock()
+		choked <- p
 		logger.Printf("Recv: %s sends choke", p.id)
 	case UnchokeMsg:
+		p.Lock()
+		p.choke = false
+		p.Unlock()
 		ready <- p
 		logger.Printf("Recv: %s sends unchoke", p.id)
 	case InterestedMsg:
@@ -133,65 +145,62 @@ func (p *Peer) handleMessage(payload []byte, ready chan<- *Peer) error {
 	return nil
 }
 
-func spawnConnReader(conn net.Conn) (chan []byte, chan struct{}) {
-	out := make(chan []byte)
+func (p *Peer) spawnPeerReader(disconnected chan<- *Peer) chan struct{} {
 	halt := make(chan struct{})
 	go func() {
 		for {
 			select {
 			case <-halt:
-				conn.Close()
-				//close(out)
+				disconnected <- p
+				p.conn.Close()
+				debugger.Println("Halt closes Peer", p.id)
 				break
 			default:
-				msg, err := readMessage(conn)
+				msg, err := p.readMessage()
 				if err != nil {
 					logger.Println(err)
 					close(halt)
 					break
 				}
-				out <- msg
+				p.out <- msg
 			}
 		}
 	}()
-	return out, halt
+	return halt
 }
 
-func (p *Peer) spawnPeerHandler(in <-chan []byte, d *Download, alives chan<- *Peer,
-	ready chan<- *Peer) (chan []byte, chan []byte) {
-	out := make(chan []byte)
-	halt := make(chan []byte)
+func (p *Peer) spawnPeerHandler(waiting, choked, ready, disconnected chan<- *Peer) {
+	p.in = make(chan []byte)
+	p.out = make(chan []byte)
+	p.halt = make(chan struct{})
 	go func() {
-		conn, err := p.Connect()
+		err := p.Connect()
 		if err != nil {
-			close(out)
+			close(p.out)
 			debugger.Println("Connection Fails", err)
 			return
 		}
 
-		err = p.HandShake(conn, d.Torrent)
+		err = p.HandShake()
 		if err != nil {
-			close(out)
+			close(p.out)
 		}
 
-		ch, cl := spawnConnReader(conn)
-		alives <- p
+		closeReader := p.spawnPeerReader(disconnected)
+		choked <- p
 		for {
 			select {
-			case msg := <-in:
-				//logger.Println("Sending msg", msg, p.id)
-				conn.Write(msg)
-				//p.sendMessage(msg, conn)
-			case msg := <-ch:
-				p.handleMessage(msg, ready)
-			case <-halt:
-				close(cl)
-				close(out)
+			case msg := <-p.in:
+				p.conn.Write(msg)
+			case msg := <-p.out:
+				p.handleMessage(msg, waiting, choked, ready)
+			case <-p.halt:
+				close(closeReader)
+				close(p.out)
 				break
 			}
 		}
 	}()
-	return out, halt
 }
 
 func (p *Peer) spawnPieceRequest(piece int, info *TorrentInfo) chan *Piece {

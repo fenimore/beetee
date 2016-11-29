@@ -124,36 +124,47 @@ func main() {
 		debugger.Println("Unable to create file")
 	}
 	diskIO, _ := spawnFileWriter(file)
-	peerChannels := make(map[*Peer]PeerChannels)
 
-	connPeers := make(chan *Peer)
-	readyPeers := make(chan *Peer)
+	waiting := make(chan *Peer)
+	ready := make(chan *Peer) // Unchoked
+	choked := make(chan *Peer)
+	disconnected := make(chan *Peer)
+
 	pieceNext := FillPieceOrder()
 
-	for _, peer := range d.Peers[:] {
-		in := make(chan []byte)
-		out, halt := peer.spawnPeerHandler(in, d, connPeers, readyPeers)
-		peerChannels[peer] = PeerChannels{in: in, out: out, halt: halt}
-	}
-
 	go func() {
+		for _, peer := range d.Peers[:] {
+			waiting <- peer
+		}
 		for {
-			peer := <-connPeers
-			channels := peerChannels[peer]
-			channels.in <- StatusMessage(InterestedMsg)
+			waiting <- <-disconnected
 		}
 	}()
 
 	go func() {
 		for {
-			peer := <-readyPeers
-			channels := peerChannels[peer]
-			go func(p *Peer, ch PeerChannels) {
+			peer := <-waiting
+			peer.spawnPeerHandler(waiting, choked, ready)
+		}
+	}()
+
+	go func() {
+		for {
+			peer := <-choked
+			// if peer has what I want TODO:
+			peer.in <- StatusMessage(InterestedMsg)
+		}
+	}()
+
+	go func() {
+		for {
+			peer := <-ready
+			go func(p *Peer) {
 				piece := <-pieceNext
 				logger.Println("Requesting Pieces From ", peer.id)
 				msgs := requestPiece(piece.index)
 				for _, msg := range msgs {
-					channels.in <- msg
+					peer.in <- msg
 				}
 				select {
 				case <-piece.success:
@@ -163,18 +174,12 @@ func main() {
 					logger.Println("TimeOut Pieces", piece.index)
 					pieceNext <- piece
 				}
-			}(peer, channels)
+			}(peer)
 		}
 	}()
 
 	writeSync.Add(1)
 	writeSync.Wait()
-}
-
-type PeerChannels struct {
-	in   chan []byte
-	out  chan []byte
-	halt chan []byte
 }
 
 func FillPieceOrder() chan *Piece {
