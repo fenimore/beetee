@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"sync"
+	"time"
 )
 
 const (
@@ -50,6 +51,7 @@ func spawnFileWriter(f *os.File) (chan *Piece, chan struct{}) {
 		for {
 			select {
 			case piece := <-in:
+				logger.Printf("Writing Data to piece %d", piece.index)
 				f.WriteAt(piece.data, int64(piece.index)*piece.size)
 			case <-close:
 				f.Close()
@@ -117,16 +119,58 @@ func main() {
 	// Get Peers
 	d.Peers = ParsePeers(tr)
 
-	//file, _ := os.Open(d.Torrent.Info.Name)
-	//diskIO, closeIO := spawnFileWriter(file)
-
+	file, _ := os.Open(d.Torrent.Info.Name)
+	diskIO, _ := spawnFileWriter(file)
 	peerChannels := make(map[*Peer]PeerChannels)
-
+	connPeers := make(chan *Peer)
+	readyPeers := make(chan *Peer)
 	for _, peer := range d.Peers {
 		in := make(chan []byte)
-		out, halt := peer.spawnPeerHandler(in, d)
+		out, halt := peer.spawnPeerHandler(in, d, connPeers, readyPeers)
 		peerChannels[peer] = PeerChannels{in: in, out: out, halt: halt}
+
 	}
+	go func() {
+		for {
+			peer := <-connPeers
+			channels := peerChannels[peer]
+			channels.in <- StatusMessage(InterestedMsg)
+		}
+	}()
+
+	go func() {
+		for {
+			peer := <-readyPeers
+			channels := peerChannels[peer]
+			for i := 0; i < len(d.Pieces); i++ {
+				msgs := requestPiece(i)
+				for _, msg := range msgs {
+					channels.in <- msg
+				}
+				select {
+				case <-d.Pieces[i].success:
+					diskIO <- d.Pieces[i]
+					continue
+				case <-time.After(30 * time.Second):
+					continue
+				}
+			}
+
+		}
+	}()
+
+	//	for _, peer := range d.Peers {
+	// msgs := requestPiece(idx)
+	// for _, msg := range msgs {
+	//	channels.in <- msg
+	// }
+	// select {
+	// case <-d.Pieces[idx].success:
+	//	continue
+	// case <-time.After(30 * time.Second):
+	//	continue
+	// }
+	//	}
 
 	writeSync.Add(1)
 	writeSync.Wait()

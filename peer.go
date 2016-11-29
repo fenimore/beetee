@@ -22,6 +22,10 @@ type Peer struct {
 	interested bool
 	alive      bool
 	bitfield   []byte
+	// Chan
+	in   chan []byte
+	out  chan []byte
+	halt chan []byte
 }
 
 func (p *Peer) Connect() (net.Conn, error) {
@@ -82,7 +86,7 @@ func readMessage(conn net.Conn) ([]byte, error) {
 	return payload, nil
 }
 
-func (p *Peer) handleMessage(payload []byte) error {
+func (p *Peer) handleMessage(payload []byte, ready chan<- *Peer) error {
 	if len(payload) < 1 {
 		return nil // NOTE, Keep alive was recv
 	}
@@ -90,9 +94,9 @@ func (p *Peer) handleMessage(payload []byte) error {
 	switch payload[0] {
 	case ChokeMsg:
 		// TODO: Set Peer unchoke
-		p.choke = false
 		logger.Printf("Recv: %s sends choke", p.id)
 	case UnchokeMsg:
+		ready <- p
 		logger.Printf("Recv: %s sends unchoke", p.id)
 	case InterestedMsg:
 		p.interested = true
@@ -102,6 +106,7 @@ func (p *Peer) handleMessage(payload []byte) error {
 		logger.Printf("Recv: %s sends uninterested", p.id)
 	case HaveMsg:
 		idx := DecodeHaveMessage(payload)
+		// TODO: Update bitfield
 		logger.Printf("Recv: %s sends have %v for Piece %d",
 			p.id, payload[1:], idx)
 	case BitFieldMsg:
@@ -152,13 +157,16 @@ func spawnConnReader(conn net.Conn) (chan []byte, chan struct{}) {
 	return out, halt
 }
 
-func (p *Peer) spawnPeerHandler(in <-chan []byte, d *Download) (chan []byte, chan []byte) {
+func (p *Peer) spawnPeerHandler(in <-chan []byte,
+	d *Download, alives chan<- *Peer, ready chan<- *Peer) (chan []byte, chan []byte) {
 	out := make(chan []byte)
 	halt := make(chan []byte)
 	go func() {
 		conn, err := p.Connect()
 		if err != nil {
 			close(out)
+			debugger.Println("Connection Fails", err)
+			return
 		}
 
 		err = p.HandShake(conn, d.Torrent)
@@ -167,15 +175,15 @@ func (p *Peer) spawnPeerHandler(in <-chan []byte, d *Download) (chan []byte, cha
 		}
 
 		ch, cl := spawnConnReader(conn)
-
+		alives <- p
 		for {
 			select {
 			case msg := <-in:
+				logger.Println("Sending msg", msg)
 				conn.Write(msg)
+				//p.sendMessage(msg, conn)
 			case msg := <-ch:
-				logger.Println(msg)
-				// handleMessage() or
-				// write to Out?
+				p.handleMessage(msg, ready)
 			case <-halt:
 				close(cl)
 				close(out)
@@ -184,4 +192,17 @@ func (p *Peer) spawnPeerHandler(in <-chan []byte, d *Download) (chan []byte, cha
 		}
 	}()
 	return out, halt
+}
+
+func (p *Peer) spawnPieceRequest(piece int, info *TorrentInfo) chan *Piece {
+	out := make(chan *Piece)
+	go func() {
+		blocksPerPiece := int(info.PieceLength) / BLOCKSIZE
+		for offset := 0; offset < blocksPerPiece; offset++ {
+			RequestMessage(uint32(piece), offset*BLOCKSIZE)
+
+		}
+
+	}()
+	return out
 }
