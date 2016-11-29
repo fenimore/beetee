@@ -104,6 +104,7 @@ func TestPeerParse(t *testing.T) {
 // Message Test
 func TestRequestMessage(t *testing.T) {
 	msg := RequestMessage(24, blocksize*3)
+	fmt.Println(msg)
 	if len(msg[8:]) < 1 {
 		t.Error("Block is empty?")
 	}
@@ -117,20 +118,45 @@ func TestRequestMessage(t *testing.T) {
 	}
 }
 
+func TestStatusMessage(t *testing.T) {
+	// looks like thi
+	//[0 0 0 1 2]
+	msg := StatusMessage(InterestedMsg)
+	if len(msg) != 5 {
+		t.Error("Msg is too short")
+	}
+	length := binary.BigEndian.Uint32(msg[0:4])
+	if length != 1 {
+		t.Error("Wrong length prefix")
+	}
+	id := msg[4]
+	if id != InterestedMsg {
+		t.Error("Wrong Status")
+	}
+}
+
 func TestDecodePieceMessage(t *testing.T) {
-	msg := RequestMessage(34, blocksize*2)[5:]
+	msg := PieceMessage(2, blocksize*2, []byte("I am the payload"))
 	fmt.Println(msg)
-	// if int(msg[[]) != RequestMsg {
-	//	fmt.Println(msg[4])
-	//	t.Error("Request Message ID")
-	// }
-	// b := DecodePieceMessage(msg)
-	// if b.index != 2004 {
-	//	fmt.Println(b.index)
-	//	t.Error("Piece index for block no good")
-	// }
-	// if int(b.offset) != 2*blocksize {
-	//	fmt.Println(2*blocksize, blocksize)
-	//	t.Error("Block offset not good")
-	// }
+	if int(msg[4]) != RequestMsg {
+		fmt.Println(msg[4])
+		t.Error("Request Message ID")
+	}
+	b := DecodePieceMessage(msg)
+	if b.index != 2004 {
+		fmt.Println(b.index)
+		t.Error("Piece index for block no good")
+	}
+	if int(b.offset) != 2*blocksize {
+		fmt.Println(2*blocksize, blocksize)
+		t.Error("Block offset not good")
+	}
+}
+
+func ExampleStatusMessage() {
+	msg := StatusMessage(UnchokeMsg)
+	fmt.Println(msg)
+
+	// Output:
+	// [0 0 0 1 1]
 }

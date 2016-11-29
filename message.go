@@ -165,6 +165,27 @@ func RequestMessage(idx uint32, offset int) []byte {
 	return msg
 }
 
+// PieceMessage send a block of a piece
+// and the offset of the piece (it's offset index * BLOCKSIZE
+func PieceMessage(idx uint32, offset int, data []byte) []byte {
+	// 4-byte message length,1-byte message ID, and payload:
+	// <len=0009+X><id=7><index><begin><block>
+	prefix := make([]byte, 13)
+	// Message prefix
+	binary.BigEndian.PutUint32(prefix[:4], uint32(len(data)+9))
+	prefix[4] = byte(BlockMsg)
+	// Payload
+	binary.BigEndian.PutUint32(prefix[4:9], idx)
+	binary.BigEndian.PutUint32(prefix[9:13], uint32(offset))
+
+	// Write to buffer
+	msg := make([]byte, 13+len(data))
+	copy(msg[:13], prefix)
+	copy(msg[13:], data)
+
+	return msg
+}
+
 // FOR TESTING NOTE
 func (p *Peer) requestAllPieces() {
 	total := len(Pieces)
