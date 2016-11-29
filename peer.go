@@ -132,6 +132,7 @@ func (p *Peer) DecodeMessages(conn net.Conn) {
 
 	switch payload[0] {
 	case ChokeMsg:
+		// TODO: Set Peer unchoke
 		logger.Printf("Recv: %s sends choke", p.id)
 	case UnchokeMsg:
 		logger.Printf("Recv: %s sends unchoke", p.id)
@@ -154,7 +155,11 @@ func (p *Peer) DecodeMessages(conn net.Conn) {
 	case BlockMsg: // Officially "Piece" message
 		// TODO: Remove this message, as they are toomuch
 		logger.Printf("Recv: %s sends block", p.id)
-		//p.decodePieceMessage(msg)
+		b := DecodePieceMessage(payload)
+		Pieces[b.index].chanBlocks <- b
+		if len(Pieces[b.index].chanBlocks) == cap(Pieces[b.index].chanBlocks) {
+			Pieces[b.index].VerifyPiece() // FIXME: Goroutine?
+		}
 	case CancelMsg:
 		logger.Printf("Recv: %s sends cancel %s", p.id, payload)
 	case PortMsg:

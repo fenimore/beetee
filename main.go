@@ -22,6 +22,7 @@ var ( // NOTE Global Important Variables
 	PeerQueue   chan *Peer
 	ActivePeers []*Peer
 	// Status ongoing
+	bitfield   []byte
 	Left       int
 	Uploaded   int
 	AliveDelta int // TODO:
@@ -41,6 +42,7 @@ var (
 	pieceChan chan *Piece
 	peerChan  chan *Peer
 	ioChan    chan *Piece
+	msgChan   chan []byte
 )
 
 func main() {
@@ -102,6 +104,7 @@ func main() {
 
 	/* Start Client */
 	//PieceQueue = make(chan *Piece, len(Pieces))
+	msgChan = make(chan []byte)
 	PeerQueue = make(chan *Peer)
 	ioChan = make(chan *Piece, len(Pieces))
 

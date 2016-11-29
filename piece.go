@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/sha1"
 	"sync"
 )
 
@@ -70,4 +71,32 @@ func (info *TorrentInfo) lastPieceBlockCount() int64 {
 func (info *TorrentInfo) lastPieceSize() int64 {
 	return info.Length % info.PieceLength
 
+}
+
+func (p *Piece) VerifyPiece() {
+	for {
+		b := <-p.chanBlocks
+		copy(p.data[int(b.offset):int(b.offset)+blocksize],
+			b.data)
+		if len(p.chanBlocks) < 1 {
+			break
+		}
+	}
+	if p.hash != sha1.Sum(p.data) {
+		debugger.Printf(
+			"Error with piece of size %d,\n"+
+				"the hash is %x, and what I got is %x",
+			p.size, p.hash, sha1.Sum(p.data))
+		p.data = nil
+		p.data = make([]byte, p.size)
+		logger.Printf("Unable to Write Blocks to Piece %d", p.index)
+		return
+	}
+	p.verified = true
+	logger.Printf("Piece at %d is successfully written", p.index)
+	ioChan <- p
+	// TODO: Update personal bitfield
+	// TODO: Send have to peers
+	// Send msg with global msgChan?
+	//p.success <- true // FIXME: Keep?
 }

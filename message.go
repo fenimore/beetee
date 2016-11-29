@@ -36,34 +36,6 @@ func DecodePieceMessage(msg []byte) *Block {
 	return &Block{index: index, offset: begin, data: data}
 }
 
-func (p *Piece) writeBlocks() {
-	//p.pending.Done() // not waiting on any more blocks
-	if len(p.chanBlocks) < cap(p.chanBlocks) {
-		logger.Printf("The block channel for %d is not full", p.index)
-		return
-	}
-	for {
-		b := <-p.chanBlocks // NOTE: b for block
-		copy(p.data[int(b.offset):int(b.offset)+blocksize],
-			b.data)
-		if len(p.chanBlocks) < 1 {
-			break
-		}
-	}
-	if p.hash != sha1.Sum(p.data) {
-		debugger.Printf("Error with piece of size %d,\n the hash is %x, and what I got is %x", p.size, p.hash, sha1.Sum(p.data))
-		p.data = nil
-		p.data = make([]byte, p.size)
-		logger.Printf("Unable to Write Blocks to Piece %d",
-			p.index)
-		return
-	}
-	p.verified = true
-	logger.Printf("Piece at %d is successfully written", p.index)
-	ioChan <- p
-	p.success <- true
-}
-
 // 19 bytes
 func DecodeHaveMessage(msg []byte) uint32 {
 	return binary.BigEndian.Uint32(msg[1:])
@@ -93,13 +65,13 @@ func DecodeBitfieldMessage(msg []byte) []bool {
 	return result
 }
 
-func (p *Peer) decodeRequestMessage(msg []byte) {
+func DecodeRequestMessage(msg []byte) {
 }
 
-func (p *Peer) decodeCancelMessage(msg []byte) {
+func DecodeCancelMessage(msg []byte) {
 }
 
-func (p *Peer) decodePortMessage(msg []byte) {
+func DecodePortMessage(msg []byte) {
 }
 
 /*###################################################

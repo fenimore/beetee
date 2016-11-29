@@ -21,6 +21,7 @@ func TestPeerIdSize(t *testing.T) {
 	}
 }
 
+// Parsing Tests
 func TestPieceLen(t *testing.T) {
 	tr := TrackerResponse{}
 	file, err := os.Open("data/announce")
@@ -101,7 +102,7 @@ func TestPeerParse(t *testing.T) {
 	}
 }
 
-// Message Test
+// Message Tests
 func TestRequestMessage(t *testing.T) {
 	msg := RequestMessage(24, blocksize*3)
 	if len(msg[8:]) < 1 {
