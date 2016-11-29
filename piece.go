@@ -58,6 +58,12 @@ func (info *TorrentInfo) parsePieces() {
 		copy(piece.hash[:], info.Pieces[i:j])
 		Pieces = append(Pieces, &piece)
 	}
+	bitCap := len(Pieces) / 8
+	if len(Pieces)%8 != 0 {
+		bitCap += 1
+	}
+
+	bitfield = make([]byte, bitCap)
 }
 
 func (info *TorrentInfo) lastPieceBlockCount() int64 {

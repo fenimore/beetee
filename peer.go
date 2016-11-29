@@ -133,6 +133,7 @@ func (p *Peer) DecodeMessages(conn net.Conn) {
 	switch payload[0] {
 	case ChokeMsg:
 		// TODO: Set Peer unchoke
+
 		logger.Printf("Recv: %s sends choke", p.id)
 	case UnchokeMsg:
 		logger.Printf("Recv: %s sends unchoke", p.id)
@@ -147,9 +148,8 @@ func (p *Peer) DecodeMessages(conn net.Conn) {
 		logger.Printf("Recv: %s sends have %v for Piece %d",
 			p.id, payload[1:], idx)
 	case BitFieldMsg:
+		// TODO: Decode into slice?
 		logger.Printf("Recv: %s sends bitfield", p.id)
-		field := DecodeBitfieldMessage(payload)
-		debugger.Println(field)
 	case RequestMsg:
 		logger.Printf("Recv: %s sends request %s", p.id, payload)
 	case BlockMsg: // Officially "Piece" message

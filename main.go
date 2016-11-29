@@ -103,7 +103,7 @@ func main() {
 	Peers = ParsePeers(tr)
 
 	/* Start Client */
-	//PieceQueue = make(chan *Piece, len(Pieces))
+	PieceQueue = make(chan *Piece, len(Pieces))
 	msgChan = make(chan []byte)
 	PeerQueue = make(chan *Peer)
 	ioChan = make(chan *Piece, len(Pieces))

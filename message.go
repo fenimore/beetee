@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/sha1"
 	"encoding/binary"
 	//"time"
 )
@@ -143,20 +142,11 @@ func PieceMessage(idx uint32, offset int, data []byte) []byte {
 	return msg
 }
 
-// FOR TESTING NOTE
-func (p *Peer) requestAllPieces() {
-	total := len(Pieces)
-	//completionSync.Add(total - 1)
-	debugger.Printf("Requesting all %d pieces", total)
-	for i := 0; i < total; i++ {
-		p.requestPiece(i)
-	}
-}
-
-func (p *Peer) requestPiece(piece int) {
-	logger.Printf("Requesting piece %d from peer %s", piece, p.id)
+func requestPiece(piece int) [][]byte {
 	blocksPerPiece := int(Torrent.Info.PieceLength) / blocksize
+	msgs := make([][]byte, blocksPerPiece)
 	for offset := 0; offset < blocksPerPiece; offset++ {
-		_ = RequestMessage(uint32(piece), offset*blocksize)
+		msgs = append(msgs, RequestMessage(uint32(piece), offset*blocksize))
 	}
+	return msgs
 }
