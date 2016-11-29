@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
-	"fmt"
 	"io"
 	"net"
+	"sync"
 	"time"
 )
 
@@ -20,48 +20,12 @@ type Peer struct {
 	alive      bool
 	interested bool
 	choked     bool
+	chokeWg    sync.WaitGroup
 	// Piece Data
 	bitfield []byte
-	// Connection?
-	conn net.Conn
 }
 
-// parsePeers is a http response gotten from
-// the tracker; parse the peers byte message
-// and put to global Peers slice.
-func ParsePeers(r TrackerResponse) []*Peer {
-	var start int
-	var peers []*Peer
-	for idx, val := range r.Peers {
-		if val == ':' {
-			start = idx + 1
-			break
-		}
-	}
-	p := r.Peers[start:]
-	// A peer is represented in six bytes
-	// four for ip and two for port
-	bitCap := len(Pieces) / 8
-	if len(Pieces)%8 != 0 {
-		bitCap += 1
-	}
-
-	for i := 0; i < len(p); i = i + 6 {
-		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
-		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
-		peer := Peer{
-			ip:       ip.String(),
-			port:     port,
-			addr:     fmt.Sprintf("%s:%d", ip.String(), port),
-			choked:   true,
-			bitfield: make([]byte, bitCap),
-		}
-		peers = append(peers, &peer)
-	}
-	return peers
-}
-
-func (p *Peer) Connect() (net.Conn, error) {
+func (p *Peer) Connect() (*net.Conn, error) {
 	logger.Printf("Connecting to %s", p.addr)
 
 	// Connect to address
@@ -69,18 +33,17 @@ func (p *Peer) Connect() (net.Conn, error) {
 	if err != nil {
 		return conn, err
 	}
-
 	logger.Printf("Connected to %s at %s", p.id, p.addr)
 	return conn, err
 }
 
-func (p *Peer) HandShake(conn net.Conn, info *TorrentMeta) error {
+func (p *Peer) HandShake(conn *net.Conn, info *TorrentMeta) error {
 	// The response handshake
 	shake := make([]byte, 68)
 	hs := HandShake(info)
 	conn.Write(hs[:])
 
-	_, err := io.ReadFull(conn, shake)
+	_, err := io.ReadFull(p.conn, shake)
 	if err != nil {
 		return err
 	}
@@ -98,7 +61,7 @@ func (p *Peer) HandShake(conn net.Conn, info *TorrentMeta) error {
 }
 
 // readMessage reads from connection, It blocks
-func (p *Peer) readMessage(conn net.Conn) ([]byte, error) {
+func ReadMessage(conn net.Conn) ([]byte, error) {
 	var err error
 	// NOTE: length is 4 byte big endian
 	length := make([]byte, 4)
@@ -120,12 +83,7 @@ func (p *Peer) readMessage(conn net.Conn) ([]byte, error) {
 	return payload, nil
 }
 
-func (p *Peer) DecodeMessages(conn net.Conn) error {
-	payload, err := p.readMessage(conn)
-	if err != nil {
-		return err
-	}
-
+func handleMessage(payload []byte) error {
 	if len(payload) < 1 {
 		return nil // NOTE, Keep alive was recv
 	}
@@ -134,6 +92,7 @@ func (p *Peer) DecodeMessages(conn net.Conn) error {
 	case ChokeMsg:
 		// TODO: Set Peer unchoke
 		p.choked = false
+		p.chokeWg.Done()
 		logger.Printf("Recv: %s sends choke", p.id)
 	case UnchokeMsg:
 		logger.Printf("Recv: %s sends unchoke", p.id)
@@ -169,4 +128,26 @@ func (p *Peer) DecodeMessages(conn net.Conn) error {
 
 	}
 	return nil
+}
+
+func (p *Peer) openChannel(in chan []byte) (chan []byte, chan []byte) {
+	out := make(chan []byte)
+	halt := make(chan []byte)
+	go func() {
+		err, conn := p.Connect()
+		if err != nil {
+			close(out)
+		}
+		for {
+			select {
+			case msg := <-in:
+				conn.Write(msg)
+			case data := <-conn:
+				//x
+			case end := <-halt:
+				close(out)
+			}
+		}
+	}()
+	return out, halt
 }

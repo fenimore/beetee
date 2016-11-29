@@ -148,5 +148,6 @@ func requestPiece(piece int) [][]byte {
 	for offset := 0; offset < blocksPerPiece; offset++ {
 		msgs = append(msgs, RequestMessage(uint32(piece), offset*blocksize))
 	}
+
 	return msgs
 }

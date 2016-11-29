@@ -82,3 +82,38 @@ func GenPeerId() [20]byte {
 		'9', '1', 'a', '2', '4', 'W', '5', '7', '7', '4', '6', '1'}
 	return b
 }
+
+// parsePeers is a http response gotten from
+// the tracker; parse the peers byte message
+// and put to global Peers slice.
+func ParsePeers(r TrackerResponse) []*Peer {
+	var start int
+	var peers []*Peer
+	for idx, val := range r.Peers {
+		if val == ':' {
+			start = idx + 1
+			break
+		}
+	}
+	p := r.Peers[start:]
+	// A peer is represented in six bytes
+	// four for ip and two for port
+	bitCap := len(Pieces) / 8
+	if len(Pieces)%8 != 0 {
+		bitCap += 1
+	}
+
+	for i := 0; i < len(p); i = i + 6 {
+		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
+		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
+		peer := Peer{
+			ip:       ip.String(),
+			port:     port,
+			addr:     fmt.Sprintf("%s:%d", ip.String(), port),
+			choked:   true,
+			bitfield: make([]byte, bitCap),
+		}
+		peers = append(peers, &peer)
+	}
+	return peers
+}

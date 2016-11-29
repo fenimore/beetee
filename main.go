@@ -12,27 +12,25 @@ import (
 
 const port = 6881 // TODO
 
-var ( // NOTE Global Important Variables
+type Download struct {
 	Torrent *TorrentMeta
 	Peers   []*Peer
 	Pieces  []*Piece
-	PeerId  [20]byte
+
+	bitfield []byte
+	Left     int
+	Uploaded int
+}
+
+var ( // NOTE Global Important Variables
 	// Channels
-	PieceQueue  chan *Piece
-	PeerQueue   chan *Peer
-	ActivePeers []*Peer
-	// Status ongoing
-	bitfield   []byte
-	Left       int
-	Uploaded   int
-	AliveDelta int // TODO:
+	PieceQueue chan *Piece
+	PeerQueue  chan *Peer
 	// Loggers
 	debugger *log.Logger
 	logger   *log.Logger
 	// WaitGroup
-	completionSync sync.WaitGroup
-	writeSync      sync.WaitGroup
-	queueSync      sync.WaitGroup
+	writeSync sync.WaitGroup
 	// Protocol Values
 	pstr    = []byte("BitTorrent protocol")
 	pstrlen = byte(19)
@@ -42,7 +40,6 @@ var (
 	pieceChan chan *Piece
 	peerChan  chan *Peer
 	ioChan    chan *Piece
-	msgChan   chan []byte
 )
 
 func main() {
@@ -68,15 +65,10 @@ func main() {
 		os.Exit(2)
 	}()
 
-	/* TODO: Start server on Port */
-	// server
-
 	/* Debug and Error variables */
 	var err error
-	debugger = log.New(os.Stdout, "DEBUG: ",
-		log.Ltime|log.Lshortfile)
-	logger = log.New(os.Stdout, "LOG: ",
-		log.Ltime|log.Lshortfile)
+	debugger = log.New(os.Stdout, "DEBUG: ", log.Ltime|log.Lshortfile)
+	logger = log.New(os.Stdout, "LOG: ", log.Ltime|log.Lshortfile)
 
 	/* Start Listening */
 	// TODO:
@@ -122,16 +114,36 @@ func main() {
 			debugger.Printf("Handshake error %s", err)
 			continue
 		}
+
+		peer.chokeWg.Add(1)
 		go func(p *Peer, c net.Conn) {
-			c.Write(StatusMessage(InterestedMsg))
 			for {
 				err = p.DecodeMessages(c)
 				if err != nil {
+					debugger.Printf("Error Decoding: %s", err)
 					break
 				}
 			}
 			c.Close()
 			debugger.Printf("Connection Closing to Peer %s", p.id)
+		}(peer, conn)
+
+		go func(p *Peer, c net.Conn) {
+			// TODO: Send interested if bitfield has been received
+			debugger.Println("Sending Interested")
+			c.Write(StatusMessage(InterestedMsg))
+			//p.chokeWg.Wait()
+			debugger.Println("Recv Unchoke Message, Stop waiting")
+			for idx, val := range Pieces {
+				requests := requestPiece(idx)
+				val.pending.Add(1)
+				for _, r := range requests {
+					debugger.Printf("Request Away: %s", r)
+					c.Write(r)
+				}
+				val.pending.Wait()
+
+			}
 		}(peer, conn)
 	}
 
