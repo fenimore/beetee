@@ -119,7 +119,10 @@ func main() {
 	// Get Peers
 	d.Peers = ParsePeers(tr)
 
-	file, _ := os.Open(d.Torrent.Info.Name)
+	file, err := os.Create(d.Torrent.Info.Name)
+	if err != nil {
+		debugger.Println("Unable to create file")
+	}
 	diskIO, _ := spawnFileWriter(file)
 	peerChannels := make(map[*Peer]PeerChannels)
 	connPeers := make(chan *Peer)
