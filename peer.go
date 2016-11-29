@@ -25,7 +25,7 @@ type Peer struct {
 	bitfield []byte
 }
 
-func (p *Peer) Connect() (*net.Conn, error) {
+func (p *Peer) Connect() (net.Conn, error) {
 	logger.Printf("Connecting to %s", p.addr)
 
 	// Connect to address
@@ -37,13 +37,13 @@ func (p *Peer) Connect() (*net.Conn, error) {
 	return conn, err
 }
 
-func (p *Peer) HandShake(conn *net.Conn, info *TorrentMeta) error {
+func (p *Peer) HandShake(conn net.Conn, info *TorrentMeta) error {
 	// The response handshake
 	shake := make([]byte, 68)
 	hs := HandShake(info)
 	conn.Write(hs[:])
 
-	_, err := io.ReadFull(p.conn, shake)
+	_, err := io.ReadFull(conn, shake)
 	if err != nil {
 		return err
 	}
@@ -61,7 +61,7 @@ func (p *Peer) HandShake(conn *net.Conn, info *TorrentMeta) error {
 }
 
 // readMessage reads from connection, It blocks
-func ReadMessage(conn net.Conn) ([]byte, error) {
+func readMessage(conn net.Conn) ([]byte, error) {
 	var err error
 	// NOTE: length is 4 byte big endian
 	length := make([]byte, 4)
@@ -83,7 +83,31 @@ func ReadMessage(conn net.Conn) ([]byte, error) {
 	return payload, nil
 }
 
-func handleMessage(payload []byte) error {
+func connReader(conn net.Conn) (chan []byte, chan struct{}) {
+	out := make(chan []byte)
+	halt := make(chan struct{})
+	go func() {
+		for {
+			select {
+			case <-halt:
+				conn.Close()
+				close(out)
+				break
+			default:
+				msg, err := readMessage(conn)
+				if err != nil {
+					logger.Println(err)
+					close(out)
+					break
+				}
+				out <- msg
+			}
+		}
+	}()
+	return out, halt
+}
+
+func (p *Peer) handleMessage(payload []byte) error {
 	if len(payload) < 1 {
 		return nil // NOTE, Keep alive was recv
 	}
@@ -115,9 +139,9 @@ func handleMessage(payload []byte) error {
 		// TODO: Remove this message, as they are toomuch
 		logger.Printf("Recv: %s sends block", p.id)
 		b := DecodePieceMessage(payload)
-		Pieces[b.index].chanBlocks <- b
-		if len(Pieces[b.index].chanBlocks) == cap(Pieces[b.index].chanBlocks) {
-			Pieces[b.index].VerifyPiece() // FIXME: Goroutine?
+		d.Pieces[b.index].chanBlocks <- b
+		if len(d.Pieces[b.index].chanBlocks) == cap(d.Pieces[b.index].chanBlocks) {
+			d.Pieces[b.index].VerifyPiece() // FIXME: Goroutine?
 		}
 	case CancelMsg:
 		logger.Printf("Recv: %s sends cancel %s", p.id, payload)
@@ -130,22 +154,35 @@ func handleMessage(payload []byte) error {
 	return nil
 }
 
-func (p *Peer) openChannel(in chan []byte) (chan []byte, chan []byte) {
+func (p *Peer) openChannel(in <-chan []byte, d *Download) (chan []byte, chan []byte) {
 	out := make(chan []byte)
 	halt := make(chan []byte)
 	go func() {
-		err, conn := p.Connect()
+		conn, err := p.Connect()
+
 		if err != nil {
 			close(out)
 		}
+
+		err = p.HandShake(conn, d.Torrent)
+		if err != nil {
+			close(out)
+		}
+
+		ch, cl := connReader(conn)
+
 		for {
 			select {
 			case msg := <-in:
 				conn.Write(msg)
-			case data := <-conn:
-				//x
-			case end := <-halt:
+			case msg := <-ch:
+				logger.Println(msg)
+				// handleMessage() or
+				// write to Out?
+			case <-halt:
+				close(cl)
 				close(out)
+				break
 			}
 		}
 	}()
