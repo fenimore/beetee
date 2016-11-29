@@ -109,12 +109,28 @@ func TestRequestMessage(t *testing.T) {
 	}
 	index := binary.BigEndian.Uint32(msg[5:9])
 	if index != 24 {
-		fmt.Println(index, msg[5:9])
 		t.Error("Wrong index")
 	}
 	begin := binary.BigEndian.Uint32(msg[9:13])
 	if int(begin)/blocksize != 3 {
-		fmt.Println(begin, msg[9:13])
 		t.Error("Wrong offset")
 	}
+}
+
+func TestDecodePieceMessage(t *testing.T) {
+	msg := RequestMessage(34, blocksize*2)[5:]
+	fmt.Println(msg)
+	// if int(msg[[]) != RequestMsg {
+	//	fmt.Println(msg[4])
+	//	t.Error("Request Message ID")
+	// }
+	// b := DecodePieceMessage(msg)
+	// if b.index != 2004 {
+	//	fmt.Println(b.index)
+	//	t.Error("Piece index for block no good")
+	// }
+	// if int(b.offset) != 2*blocksize {
+	//	fmt.Println(2*blocksize, blocksize)
+	//	t.Error("Block offset not good")
+	// }
 }
