@@ -131,20 +131,21 @@ func main() {
 	disconnected := make(chan *Peer)
 
 	pieceNext := FillPieceOrder()
+	debugger.Println(len(pieceNext))
 
 	go func() {
 		for _, peer := range d.Peers[:] {
 			waiting <- peer
 		}
 		for {
-			waiting <- <-disconnected
+			//waiting <- <-disconnected
 		}
 	}()
 
 	go func() {
 		for {
 			peer := <-waiting
-			peer.spawnPeerHandler(waiting, choked, ready)
+			peer.spawnPeerHandler(waiting, choked, ready, disconnected)
 		}
 	}()
 
@@ -160,19 +161,21 @@ func main() {
 		for {
 			peer := <-ready
 			go func(p *Peer) {
-				piece := <-pieceNext
-				logger.Println("Requesting Pieces From ", peer.id)
-				msgs := requestPiece(piece.index)
-				for _, msg := range msgs {
-					peer.in <- msg
-				}
-				select {
-				case <-piece.success:
-					logger.Println("Wrote Piece:", piece.index)
-					diskIO <- piece
-				case <-time.After(30 * time.Second):
-					logger.Println("TimeOut Pieces", piece.index)
-					pieceNext <- piece
+				for {
+					piece := <-pieceNext
+					logger.Println("Requesting Pieces From ", peer.id)
+					msgs := requestPiece(piece.index)
+					for _, msg := range msgs {
+						peer.in <- msg
+					}
+					select {
+					case <-piece.success:
+						logger.Println("Wrote Piece:", piece.index)
+						diskIO <- piece
+					case <-time.After(30 * time.Second):
+						logger.Println("TimeOut Pieces", piece.index)
+						pieceNext <- piece
+					}
 				}
 			}(peer)
 		}
