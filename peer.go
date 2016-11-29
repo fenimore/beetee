@@ -120,20 +120,20 @@ func (p *Peer) readMessage(conn net.Conn) ([]byte, error) {
 	return payload, nil
 }
 
-func (p *Peer) DecodeMessages(conn net.Conn) {
+func (p *Peer) DecodeMessages(conn net.Conn) error {
 	payload, err := p.readMessage(conn)
 	if err != nil {
-		debugger.Println("Error reading message: ", err)
+		return err
 	}
 
 	if len(payload) < 1 {
-		return // NOTE, Keep alive was recv
+		return nil // NOTE, Keep alive was recv
 	}
 
 	switch payload[0] {
 	case ChokeMsg:
 		// TODO: Set Peer unchoke
-
+		p.choked = false
 		logger.Printf("Recv: %s sends choke", p.id)
 	case UnchokeMsg:
 		logger.Printf("Recv: %s sends unchoke", p.id)
@@ -168,5 +168,5 @@ func (p *Peer) DecodeMessages(conn net.Conn) {
 		break
 
 	}
-
+	return nil
 }

@@ -41,12 +41,18 @@ func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string
 	// TODO: Use scrape conventions
 	//url := strings.Replace(m.Announce, "announce", "scrape", 1)
 	//request := url + "?info_hash=" + m.InfoHashEnc + "&peer_id=" + GenPeerId() +
-	request := m.Announce + "?info_hash=" + m.InfoHashEnc + "&peer_id=" + UrlEncode(PeerId) +
+	request := m.Announce +
+		"?info_hash=" +
+		m.InfoHashEnc +
+		"&peer_id=" +
+		UrlEncode(m.PeerId) +
 		"&uploaded=0" +
 		"&downloaded=0" +
-		"&left=" + strconv.Itoa(int(m.Info.Length)) +
+		"&left=" +
+		strconv.Itoa(int(m.Info.Length)) +
 		"&port=6882" +
-		"&key=60502143" + "&numwant=80&compact=1&supportcrypto=1" +
+		"&key=60502143" +
+		"&numwant=80&compact=1&supportcrypto=1" +
 		"&event=started"
 
 	// TODO: conStruct

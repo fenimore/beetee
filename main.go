@@ -123,9 +123,15 @@ func main() {
 			continue
 		}
 		go func(p *Peer, c net.Conn) {
+			c.Write(StatusMessage(InterestedMsg))
 			for {
-				p.DecodeMessages(c)
+				err = p.DecodeMessages(c)
+				if err != nil {
+					break
+				}
 			}
+			c.Close()
+			debugger.Printf("Connection Closing to Peer %s", p.id)
 		}(peer, conn)
 	}
 
