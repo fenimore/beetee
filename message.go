@@ -23,20 +23,17 @@ const (
 Recieving Messages
 ######################################################*/
 
-func (p *Peer) decodePieceMessage(msg []byte) {
+func DecodePieceMessage(msg []byte) *Block {
 	if len(msg[8:]) < 1 {
-		return
+		return nil
 	}
 	index := binary.BigEndian.Uint32(msg[:4])
 	begin := binary.BigEndian.Uint32(msg[4:8])
 	data := msg[8:]
 	// Blocks...
 	block := &Block{index: index, offset: begin, data: data}
-	Pieces[index].chanBlocks <- block
-	if len(Pieces[index].chanBlocks) == cap(Pieces[index].chanBlocks) {
-		Pieces[index].writeBlocks()
-		//Pieces[index].success <- true
-	}
+
+	return block
 }
 
 func (p *Piece) writeBlocks() {
