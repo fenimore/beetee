@@ -5,6 +5,7 @@ import "bytes"
 import "os"
 import "github.com/anacrolix/torrent/bencode"
 import "encoding/binary"
+import "fmt"
 
 func TestMain(m *testing.M) {
 	PeerId = GenPeerId()
@@ -18,6 +19,26 @@ func TestPeerIdSize(t *testing.T) {
 	if len(peerid) != 20 {
 		t.Error("Peer Id should be 20 bytes")
 	}
+}
+
+func TestPieceLen(t *testing.T) {
+	tr := TrackerResponse{}
+	file, err := os.Open("data/announce")
+	if err != nil {
+		t.Error("Couldn't open announce file")
+	}
+	defer file.Close()
+
+	dec := bencode.NewDecoder(file)
+	err = dec.Decode(&tr)
+	if err != nil {
+		debugger.Println("Unable to Decode Response")
+	}
+
+	if len(Torrent.Info.Pieces)%20 != 0 {
+		t.Error("Pieces should be mod 20")
+	}
+
 }
 
 func TestTorrentParse(t *testing.T) {
@@ -80,19 +101,20 @@ func TestPeerParse(t *testing.T) {
 	}
 }
 
+// Message Test
 func TestRequestMessage(t *testing.T) {
 	msg := RequestMessage(24, blocksize*3)
 	if len(msg[8:]) < 1 {
 		t.Error("Block is empty?")
 	}
-	index := binary.BigEndian.Uint32(msg[1:5])
+	index := binary.BigEndian.Uint32(msg[5:9])
 	if index != 24 {
+		fmt.Println(index, msg[5:9])
 		t.Error("Wrong index")
 	}
-	begin := binary.BigEndian.Uint32(msg[5:9])
+	begin := binary.BigEndian.Uint32(msg[9:13])
 	if int(begin)/blocksize != 3 {
+		fmt.Println(begin, msg[9:13])
 		t.Error("Wrong offset")
 	}
 }
-
-// Wait, I don't know how to test network things..

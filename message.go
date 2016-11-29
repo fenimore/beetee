@@ -147,8 +147,8 @@ func RequestMessage(idx uint32, offset int) []byte {
 	msg[4] = id
 	copy(msg[5:9], index)
 	copy(msg[9:13], begin)
-	copy(msg[13:17], length)
-
+	copy(msg[13:], length)
+	//logger.Println(msg)
 	return msg
 }
 
