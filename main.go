@@ -163,7 +163,6 @@ func main() {
 	go func() {
 		for {
 			peer := <-ready
-			logger.Println("New Peer U", peer.id)
 			go func(p *Peer) {
 
 				for {

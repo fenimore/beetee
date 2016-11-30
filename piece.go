@@ -110,3 +110,23 @@ func (p *Piece) VerifyPiece() {
 	// TODO: Send have to peers
 	p.success <- true // FIXME: Keep?
 }
+
+func UpdateBitfield() []byte {
+	// result := make([]bool, len(d.Pieces)/8)
+	// bitfield := msg[1:]
+	// // For each byte, look at the bits
+	// // NOTE: that is 8 * 8
+	// for i := 0; i < len(bitfield); i++ {
+	//	for j := 0; j < 8; j++ {
+	//		index := i*8 + j
+	//		if index >= len(d.Pieces) {
+	//			break // Hit padding bits
+	//		}
+	//		byte := bitfield[i]              // Within bytes
+	//		bit := (byte >> uint32(7-j)) & 1 // some shifting
+	//		result[index] = bit == 1         // if bit is true
+	//	}
+	// }
+	// return result
+	return nil
+}
