@@ -9,6 +9,7 @@ import "fmt"
 import "net"
 import "io/ioutil"
 import "log"
+import "io"
 
 func TestMain(m *testing.M) {
 	//PeerId = GenPeerId()
@@ -218,6 +219,53 @@ func TestConnect(t *testing.T) {
 
 		if !bytes.Equal(buf, msg) {
 			t.Error("Message sent wasn't received")
+		}
+
+		return // Done
+	}
+}
+
+func TestHandShake(t *testing.T) {
+	peer := Peer{
+		addr: ":6882",
+		info: d.Torrent,
+	}
+
+	l, err := net.Listen("tcp", ":6882")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer l.Close()
+
+	go func() {
+		err := peer.Connect()
+		if err != nil {
+			t.Error(err)
+		}
+		defer peer.conn.Close()
+		err = peer.HandShake()
+		if err != nil {
+			t.Error(err)
+		}
+	}()
+
+	for {
+		conn, err := l.Accept()
+		if err != nil {
+			return
+		}
+		defer conn.Close()
+
+		shake := make([]byte, 68)
+		_, err = io.ReadFull(conn, shake)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(shake[1:20], pstr) {
+			t.Error("Protocol does not match")
+		}
+		if !bytes.Equal(shake[28:48], d.Torrent.InfoHash[:]) {
+			t.Error("InfoHash Does not match")
 		}
 
 		return // Done
