@@ -44,23 +44,6 @@ var ( // NOTE Global Important Variables
 	ioChan    chan *Piece
 )
 
-func spawnFileWriter(f *os.File) (chan *Piece, chan struct{}) {
-	in := make(chan *Piece, FILE_WRITER_BUFSIZE)
-	close := make(chan struct{})
-	go func() {
-		for {
-			select {
-			case piece := <-in:
-				logger.Printf("Writing Data to Disk, Piece: %d", piece.index)
-				f.WriteAt(piece.data, int64(piece.index)*piece.size)
-			case <-close:
-				f.Close()
-			}
-		}
-	}()
-	return in, close
-}
-
 func main() {
 	d = &Download{
 		Peers:  make([]*Peer, 0),
@@ -123,7 +106,7 @@ func main() {
 	if err != nil {
 		debugger.Println("Unable to create file")
 	}
-	diskIO, _ := spawnFileWriter(file)
+	diskIO, closeIO := spawnFileWriter(file)
 
 	waiting := make(chan *Peer)
 	ready := make(chan *Peer) // Unchoked
@@ -182,6 +165,7 @@ func main() {
 	}()
 	writeSync.Add(1)
 	writeSync.Wait()
+	close(closeIO)
 }
 
 func FillPieceOrder() chan *Piece {
