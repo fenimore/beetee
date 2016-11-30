@@ -119,10 +119,8 @@ func main() {
 	choked := make(chan *Peer)
 	disconnected := make(chan *Peer)
 
-	//	pieceNext := FillPieceOrder()
-	//	debugger.Println(len(pieceNext))
-
-	pieceNext := Backwards()
+	pieceNext := FillPieceOrder()
+	//pieceNext := Backwards()
 
 	go func() {
 		for _, peer := range d.Peers[:] {
