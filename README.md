@@ -2,11 +2,13 @@
 
 Bittorrent Client implemented in Go **Work in Progress**. I have a blog post outlining the protocol in dialog format [here](http://another.workingagenda.com/blog/post/d1alog/).
 
-> run beetee -file=linux.torrent
+> run $ ./beetee -file=linux.torrent
 
     beetee, commandline torrent application. Usage:
       -file string
             path to torrent file
+
+Thanks @kracekumar and @alex-segura, fellow Recursers, for all your help :)
 
 ====
 
@@ -18,6 +20,7 @@ Bittorrent Client implemented in Go **Work in Progress**. I have a blog post out
 - [x] put into pieces struct
 - [x] Parse Have and BitField
 - [ ] use unsigned ints
+- [x] Begin Unit and Integration Tests
 
 ## Downloading
 
@@ -34,7 +37,7 @@ Bittorrent Client implemented in Go **Work in Progress**. I have a blog post out
 
 - [x] manage blocks
 - [x] write to disk
-- [ ] write to disk gradually
+- [x] write to disk gradually
 - [ ] write and read when incomplete
 
 ## Uploading
@@ -53,30 +56,33 @@ Package Organisation:
 
 > Torrent/meta/info structs and parse method.
 
-`message`
-
-> Handshake, individual message decoder and message sender.
 
 `tracker`
 
 > Tracker struct and Response method.
 
+`message`
+
+> Handshake, individual message decoder and message constructor.
+
+`peer`
+
+> Peer struct, connect and Listen method. Also, the message decode switch for payloads is here. The peer constructor comes from parsing a TrackerResponse. This file is mostly IO for peer sockets.
+
 `server`
 
 > Server struct and Listen method.
 
-`peer`
-
-> Peer struct, connect and Listen method. Also, the message decode switch for payloads is here. The peer constructor comes from parsing a TrackerResponse.
-
 `piece`
 
-> Piece/Block struct and piece parser from torrent info.
+> Piece/Block struct and piece parser from torrent info. Also piece validator and helper functions for parsing the last piece/blocks in a download.
 
 `io`
 
 > Writing and reading to disk.
 
-`manager`
 
-> Manage peer and piece threads/channels/lists. Also, catch-all for now.
+For testing, here are the checksums for the torrent files provided in `torrents/`:
+
+    17643c29e3c4609818f26becf76d29a3 > Ubuntu
+    47672450bcda8acf0c8512bd5b543cc0 > Arch

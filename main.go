@@ -70,6 +70,7 @@ func main() {
 			}
 		}
 		file, _ := os.Open(d.Torrent.Info.Name)
+		defer file.Close()
 		fi, _ := file.Stat()
 		debugger.Printf("File is %d bytes, out of Length: %d",
 			fi.Size(), d.Torrent.Info.Length)
@@ -196,6 +197,13 @@ func main() {
 			debugger.Println("Piece Not found:", p.index)
 		}
 	}
+	file, _ = os.Open(d.Torrent.Info.Name)
+	defer file.Close()
+	fi, _ := file.Stat()
+	debugger.Printf("File is %d bytes, out of Length: %d",
+		fi.Size(), d.Torrent.Info.Length)
+	debugger.Println("Good Bye!")
+
 }
 
 func FillPieceOrder() chan *Piece {
