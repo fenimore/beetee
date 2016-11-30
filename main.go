@@ -64,11 +64,11 @@ func main() {
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		<-c
-		// for _, p := range d.Pieces {
-		//	if !p.verified {
-		//		debugger.Println("Piece Not found:", p.index)
-		//	}
-		// }
+		for _, p := range d.Pieces {
+			if !p.verified {
+				debugger.Println("Piece Not found:", p.index)
+			}
+		}
 		file, _ := os.Open(d.Torrent.Info.Name)
 		fi, _ := file.Stat()
 		debugger.Printf("File is %d bytes, out of Length: %d",
@@ -191,6 +191,11 @@ func main() {
 	}()
 	writeSync.Wait()
 	close(closeIO)
+	for _, p := range d.Pieces {
+		if !p.verified {
+			debugger.Println("Piece Not found:", p.index)
+		}
+	}
 }
 
 func FillPieceOrder() chan *Piece {
