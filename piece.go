@@ -5,10 +5,6 @@ import (
 	"sync"
 )
 
-const (
-	BLOCKSIZE = 16384
-)
-
 // Piece is the general unit that files are divided into.
 type Piece struct {
 	index      int

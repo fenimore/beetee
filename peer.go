@@ -132,7 +132,7 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 		logger.Printf("Recv: %s sends request %s", p.id, payload)
 	case BlockMsg: // Officially "Piece" message
 		// TODO: Remove this message, as they are toomuch
-		logger.Printf("Recv: %s sends block %s", p.id, payload[5:10])
+		//logger.Printf("Recv: %s sends block %s", p.id, payload[5:10])
 		b := DecodePieceMessage(payload)
 		d.Pieces[b.index].chanBlocks <- b
 		if len(d.Pieces[b.index].chanBlocks) == cap(d.Pieces[b.index].chanBlocks) {

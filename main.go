@@ -11,6 +11,7 @@ import (
 )
 
 const (
+	BLOCKSIZE           = 16384
 	PORT                = 6881 // TODO
 	FILE_WRITER_BUFSIZE = 25
 )
@@ -26,9 +27,6 @@ type Download struct {
 }
 
 var ( // NOTE Global Important Variables
-	// Channels
-	PieceQueue chan *Piece
-	PeerQueue  chan *Peer
 	// Loggers
 	debugger *log.Logger
 	logger   *log.Logger
@@ -38,10 +36,6 @@ var ( // NOTE Global Important Variables
 	pstr    = []byte("BitTorrent protocol")
 	pstrlen = byte(19)
 	d       *Download
-
-	pieceChan chan *Piece
-	peerChan  chan *Peer
-	ioChan    chan *Piece
 )
 
 func main() {
