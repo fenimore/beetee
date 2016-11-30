@@ -119,13 +119,15 @@ func main() {
 	choked := make(chan *Peer)
 	disconnected := make(chan *Peer)
 
-	pieceNext := FillPieceOrder()
-	debugger.Println(len(pieceNext))
+	//	pieceNext := FillPieceOrder()
+	//	debugger.Println(len(pieceNext))
+
+	pieceNext := Backwards()
 
 	go func() {
 		for _, peer := range d.Peers[:] {
-			debugger.Println(peer)
-			//waiting <- peer
+			//debugger.Println(peer)
+			waiting <- peer
 		}
 	}()
 
@@ -188,6 +190,14 @@ func main() {
 func FillPieceOrder() chan *Piece {
 	out := make(chan *Piece, len(d.Pieces))
 	for i := 0; i < len(d.Pieces); i++ {
+		out <- d.Pieces[i]
+	}
+	return out
+}
+
+func Backwards() chan *Piece {
+	out := make(chan *Piece, len(d.Pieces))
+	for i := len(d.Pieces) - 1; i >= 0; i-- {
 		out <- d.Pieces[i]
 	}
 	return out

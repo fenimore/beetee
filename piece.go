@@ -75,14 +75,19 @@ func (info *TorrentInfo) lastPieceBlockCount() int64 {
 }
 
 func (info *TorrentInfo) lastPieceSize() int64 {
-	return info.Length % info.PieceLength
+	if info.Length%info.PieceLength != 0 {
+		return info.Length % info.PieceLength
+	}
+	return info.PieceLength
 
 }
 
 func (p *Piece) VerifyPiece() {
 	debugger.Println("Verifying Piece", p.index)
+	debugger.Println(len(p.chanBlocks))
 	for {
 		b := <-p.chanBlocks
+		debugger.Println(b.offset, b.index)
 		copy(p.data[int(b.offset):int(b.offset)+BLOCKSIZE],
 			b.data)
 		if len(p.chanBlocks) < 1 {
