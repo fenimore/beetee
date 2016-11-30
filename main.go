@@ -183,7 +183,7 @@ func main() {
 					case <-piece.success:
 						logger.Println("Wrote Piece:", piece.index)
 						diskIO <- piece
-					case <-time.After(10 * time.Second):
+					case <-time.After(30 * time.Second):
 						logger.Println("TimeOut Pieces", piece.index)
 						pieceNext <- piece
 					}

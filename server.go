@@ -49,10 +49,17 @@ func Serve(port int, shutdown <-chan bool) <-chan *Peer {
 			if !bytes.Equal(shake[28:48], d.Torrent.InfoHash[:]) {
 				debugger.Println("InfoHash Does not match")
 			}
-			peer := &Peer{conn: newConn, id: string(shake[48:]),
-				addr: newConn.RemoteAddr().String()}
+			peer := &Peer{
+				conn:  newConn,
+				id:    string(shake[48:]),
+				addr:  newConn.RemoteAddr().String(),
+				choke: true,
+			}
+
 			hs := HandShake(d.Torrent)
 			peer.conn.Write(hs[:])
+			// TODO: write bitfield
+			// TODO: construct bitfield
 			leechers <- peer
 
 		}
