@@ -52,7 +52,7 @@ func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string
 		"&downloaded=0" +
 		"&left=" +
 		strconv.Itoa(int(m.Info.Length)) +
-		"&port=6882" +
+		"&port=" + strconv.Itoa(PORT) +
 		"&key=60502143" +
 		"&numwant=80&compact=1&supportcrypto=1" +
 		"&event=started"

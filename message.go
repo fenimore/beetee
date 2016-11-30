@@ -31,8 +31,22 @@ func DecodePieceMessage(msg []byte) *Block {
 	index := binary.BigEndian.Uint32(msg[1:5]) // NOTE: The piece in question
 	begin := binary.BigEndian.Uint32(msg[5:9])
 	data := msg[9:]
+	var blocksize int
+	if int(index) == len(d.Pieces)-1 { // NOTE: last piece
+		if d.Pieces[index].size < BLOCKSIZE {
+			blocksize = int(d.Pieces[index].size)
+		} else {
+			blocksize = BLOCKSIZE
+		}
+	} else {
+		blocksize = BLOCKSIZE
+	}
 
-	return &Block{index: index, offset: begin, data: data}
+	return &Block{
+		index:  index,
+		offset: begin,
+		data:   data,
+		size:   blocksize}
 }
 
 // 19 bytes

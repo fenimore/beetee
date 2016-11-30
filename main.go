@@ -97,6 +97,7 @@ func main() {
 
 	debugger.Println("File Length: ", d.Torrent.Info.Length)
 	debugger.Println("Piece Length: ", d.Torrent.Info.PieceLength)
+	debugger.Println(d.Torrent.Info.lastPieceSize())
 	debugger.Println("len(info.Pieces) // bytes: ", len(d.Torrent.Info.Pieces))
 	debugger.Println("len(Pieces) // pieces: ", len(d.Pieces))
 
@@ -120,8 +121,8 @@ func main() {
 	choked := make(chan *Peer)
 	disconnected := make(chan *Peer)
 
-	pieceNext := FillPieceOrder()
-	//pieceNext := Backwards()
+	//pieceNext := FillPieceOrder()
+	pieceNext := Backwards()
 
 	go func() {
 		for _, peer := range d.Peers[:] {
@@ -190,6 +191,7 @@ func main() {
 			}(peer)
 		}
 	}()
+
 	writeSync.Wait()
 	close(closeIO)
 	for _, p := range d.Pieces {
@@ -217,7 +219,7 @@ func FillPieceOrder() chan *Piece {
 
 func Backwards() chan *Piece {
 	out := make(chan *Piece, len(d.Pieces))
-	for i := len(d.Pieces) - 1; i >= 1592; i-- {
+	for i := len(d.Pieces) - 1; i >= len(d.Pieces)-2; i-- {
 		out <- d.Pieces[i]
 	}
 	return out

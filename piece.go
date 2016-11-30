@@ -27,6 +27,7 @@ type Block struct {
 	index  uint32 // NOTE: piece index
 	offset uint32
 	data   []byte
+	size   int // typicall BLOCKSIZE, except for last
 }
 
 // parsePieces constructs the Piece list from
@@ -77,6 +78,15 @@ func (info *TorrentInfo) lastPieceBlockCount() int64 {
 	return pieceCount
 }
 
+func (info *TorrentInfo) lastBlockSize() int64 {
+	if info.Length%info.PieceLength == 0 {
+		return (info.PieceLength / int64(BLOCKSIZE)) * BLOCKSIZE
+	}
+
+	return 0
+
+}
+
 func (info *TorrentInfo) lastPieceSize() int64 {
 	if info.Length%info.PieceLength != 0 {
 		return info.Length % info.PieceLength
@@ -86,6 +96,8 @@ func (info *TorrentInfo) lastPieceSize() int64 {
 }
 
 func (p *Piece) VerifyPiece() {
+	debugger.Println("Verify", p.index)
+	debugger.Println(p.size)
 	for {
 		b := <-p.chanBlocks
 		copy(p.data[int(b.offset):int(b.offset)+BLOCKSIZE],
