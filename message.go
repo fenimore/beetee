@@ -144,7 +144,7 @@ func PieceMessage(idx uint32, offset int, data []byte) []byte {
 
 func requestPiece(piece int) [][]byte {
 	blocksPerPiece := int(d.Torrent.Info.PieceLength) / BLOCKSIZE
-	msgs := make([][]byte, blocksPerPiece)
+	msgs := make([][]byte, 0)
 	for offset := 0; offset < blocksPerPiece; offset++ {
 		msgs = append(msgs, RequestMessage(uint32(piece), offset*BLOCKSIZE))
 	}

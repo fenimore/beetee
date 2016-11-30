@@ -130,6 +130,10 @@ func main() {
 	}()
 
 	go func() {
+
+	}()
+
+	go func() {
 		for {
 			peer := <-choked
 			// if peer has what I want TODO:
@@ -141,11 +145,13 @@ func main() {
 	go func() {
 		for {
 			peer := <-ready
+			logger.Println("New Peer U", peer.id)
 			go func(p *Peer) {
 
 				for {
 					piece := <-pieceNext
-					logger.Println("Requesting Pieces From ", peer.id)
+					logger.Printf("Requesting Piece %d From %s",
+						piece.index, peer.id)
 					msgs := requestPiece(piece.index)
 					for _, msg := range msgs {
 						peer.in <- msg
