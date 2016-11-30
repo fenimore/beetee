@@ -267,6 +267,8 @@ func TestHandShake(t *testing.T) {
 		if !bytes.Equal(shake[28:48], d.Torrent.InfoHash[:]) {
 			t.Error("InfoHash Does not match")
 		}
+		hs := HandShake(d.Torrent)
+		conn.Write(hs[:])
 
 		return // Done
 	}
