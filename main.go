@@ -69,11 +69,12 @@ func main() {
 				debugger.Println("Piece Not found:", p.index)
 			}
 		}
-		file, _ := os.Open(d.Torrent.Info.Name)
-		defer file.Close()
-		fi, _ := file.Stat()
+		curSize, err := checkFileSize(d.Torrent.Info.Name)
+		if err != nil {
+			debugger.Println(err)
+		}
 		debugger.Printf("File is %d bytes, out of Length: %d",
-			fi.Size(), d.Torrent.Info.Length)
+			curSize, d.Torrent.Info.Length)
 		debugger.Println("Good Bye!")
 		os.Exit(2)
 	}()
@@ -182,7 +183,7 @@ func main() {
 					case <-piece.success:
 						logger.Println("Wrote Piece:", piece.index)
 						diskIO <- piece
-					case <-time.After(30 * time.Second):
+					case <-time.After(10 * time.Second):
 						logger.Println("TimeOut Pieces", piece.index)
 						pieceNext <- piece
 					}
@@ -197,11 +198,12 @@ func main() {
 			debugger.Println("Piece Not found:", p.index)
 		}
 	}
-	file, _ = os.Open(d.Torrent.Info.Name)
-	defer file.Close()
-	fi, _ := file.Stat()
+	curSize, err := checkFileSize(d.Torrent.Info.Name)
+	if err != nil {
+		debugger.Println(err)
+	}
 	debugger.Printf("File is %d bytes, out of Length: %d",
-		fi.Size(), d.Torrent.Info.Length)
+		curSize, d.Torrent.Info.Length)
 	debugger.Println("Good Bye!")
 
 }

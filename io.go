@@ -22,3 +22,14 @@ func spawnFileWriter(f *os.File) (chan *Piece, chan struct{}) {
 	}()
 	return in, close
 }
+
+func checkFileSize(filename string) (int64, error) {
+	// TODO: If it is only one file
+	file, err := os.OpenFile(filename, os.O_RDONLY, os.ModeTemporary)
+	if err != nil {
+		return 0, err
+	}
+	defer file.Close()
+	fi, _ := file.Stat()
+	return fi.Size(), nil
+}
