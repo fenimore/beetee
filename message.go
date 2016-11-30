@@ -31,15 +31,11 @@ func DecodePieceMessage(msg []byte) *Block {
 	index := binary.BigEndian.Uint32(msg[1:5]) // NOTE: The piece in question
 	begin := binary.BigEndian.Uint32(msg[5:9])
 	data := msg[9:]
-	var blocksize int
+	var blocksize = BLOCKSIZE
 	if int(index) == len(d.Pieces)-1 { // NOTE: last piece
 		if d.Pieces[index].size < BLOCKSIZE {
 			blocksize = int(d.Pieces[index].size)
-		} else {
-			blocksize = BLOCKSIZE
 		}
-	} else {
-		blocksize = BLOCKSIZE
 	}
 
 	return &Block{
@@ -135,7 +131,13 @@ func RequestMessage(idx uint32, offset int) []byte {
 	// Payload
 	binary.BigEndian.PutUint32(msg[5:9], idx)
 	binary.BigEndian.PutUint32(msg[9:13], uint32(offset))
-	binary.BigEndian.PutUint32(msg[13:], uint32(BLOCKSIZE))
+	var blocksize = BLOCKSIZE
+	if int(idx) == len(d.Pieces)-1 { // for last piece
+		if int(d.Pieces[idx].size) < blocksize {
+			blocksize = int(d.Pieces[idx].size)
+		}
+	}
+	binary.BigEndian.PutUint32(msg[13:], uint32(blocksize))
 
 	return msg
 }
