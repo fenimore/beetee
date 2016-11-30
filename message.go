@@ -94,6 +94,8 @@ func HandShake(info *TorrentMeta) [68]byte {
 // If sent -1 then a Keep alive message is sent.
 func StatusMessage(status int) []byte {
 	//<len=0001><id=1>
+	logger.Println("Sending status message", status)
+
 	msg := make([]byte, 5)
 	length := make([]byte, 4)
 	if status == -1 {

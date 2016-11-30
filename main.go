@@ -150,7 +150,8 @@ func main() {
 		for {
 			peer := <-choked
 			// if peer has what I want TODO:
-			peer.in <- StatusMessage(InterestedMsg)
+			// XOR my bitmap with theirs
+			peer.out <- StatusMessage(InterestedMsg)
 		}
 	}()
 

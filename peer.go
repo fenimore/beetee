@@ -97,9 +97,6 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 
 	switch payload[0] {
 	case ChokeMsg:
-		// TODO: Set Peer unchoke
-		// Halt?
-		//close(p.halt)
 		p.Lock()
 		p.choke = true
 		p.Unlock()
@@ -133,7 +130,6 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 		logger.Printf("Recv: %s sends request %s", p.id, payload)
 	case BlockMsg: // Officially "Piece" message
 		// TODO: Remove this message, as they are toomuch
-		//logger.Printf("Recv: %s sends block", p.id)
 		b := DecodePieceMessage(payload)
 		d.Pieces[b.index].chanBlocks <- b
 		if len(d.Pieces[b.index].chanBlocks) == cap(d.Pieces[b.index].chanBlocks) {
@@ -156,10 +152,10 @@ func (p *Peer) spawnPeerReader(disconnected chan<- *Peer) chan struct{} {
 		for {
 			select {
 			case <-halt:
-				disconnected <- p
+				//disconnected <- p
 				p.conn.Close()
 				debugger.Println("Halt closes Peer", p.id)
-				break
+				return
 			default:
 				msg, err := p.readMessage()
 				if err != nil {
@@ -167,7 +163,7 @@ func (p *Peer) spawnPeerReader(disconnected chan<- *Peer) chan struct{} {
 					close(halt)
 					break
 				}
-				p.out <- msg
+				p.in <- msg
 			}
 		}
 	}()
@@ -181,27 +177,26 @@ func (p *Peer) spawnPeerHandler(waiting, choked, ready, disconnected chan<- *Pee
 	go func() {
 		err := p.Connect()
 		if err != nil {
-			close(p.out)
 			debugger.Println("Connection Fails", err)
 			return
 		}
 
 		err = p.HandShake()
 		if err != nil {
-			close(p.out)
+			debugger.Println("Handshake Fails", err)
+			return
 		}
 
 		closeReader := p.spawnPeerReader(disconnected)
 		choked <- p
 		for {
 			select {
-			case msg := <-p.in:
-				p.conn.Write(msg)
 			case msg := <-p.out:
+				p.conn.Write(msg)
+			case msg := <-p.in:
 				p.handleMessage(msg, waiting, choked, ready)
 			case <-p.halt:
 				close(closeReader)
-				close(p.out)
 				break
 			}
 		}
