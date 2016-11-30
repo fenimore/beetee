@@ -122,6 +122,7 @@ func main() {
 		}
 	}()
 
+	// Peers not yet connected/handshaken
 	go func() {
 		for {
 			peer := <-waiting
@@ -129,14 +130,7 @@ func main() {
 		}
 	}()
 
-	// Open communication
-	go func() {
-		for {
-
-		}
-
-	}()
-
+	// Peers having been handshaked
 	go func() {
 		for {
 			peer := <-choked
@@ -158,6 +152,10 @@ func main() {
 					piece := <-pieceNext
 					logger.Printf("Requesting Piece %d From %s",
 						piece.index, peer.id)
+					if !p.bitmap[piece.index] {
+						pieceNext <- piece
+						continue
+					}
 					msgs := requestPiece(piece.index)
 					for _, msg := range msgs {
 						peer.out <- msg
