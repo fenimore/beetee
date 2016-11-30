@@ -13,7 +13,7 @@ type Server struct {
 }
 
 // Serve, TODO: this is for seeding not leeching
-func Serve(port int, shutdown <-chan bool) chan<- *Peer {
+func Serve(port int, shutdown <-chan bool) <-chan *Peer {
 	leechers := make(chan *Peer)
 	incoming := make(chan net.Conn)
 

@@ -84,7 +84,7 @@ func main() {
 
 	/* Start Listening */
 	// TODO: use leechers
-	_ = Serve(PORT, make(chan bool))
+	leechers := Serve(PORT, make(chan bool))
 
 	/* Parse Torrent*/
 	// NOTE: Sets Piece
@@ -145,6 +145,15 @@ func main() {
 			// if peer has what I want TODO:
 			// XOR my bitmap with theirse
 			peer.out <- StatusMessage(InterestedMsg)
+		}
+	}()
+
+	go func() {
+		for {
+			peer := <-leechers
+			// leechers have already been handshaken
+			peer.spawnPeerReader()
+			peer.spawnPeerHandler(waiting, choked, ready, disconnected)
 		}
 	}()
 
