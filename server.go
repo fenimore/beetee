@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"net"
 )
 
@@ -11,7 +13,10 @@ type Server struct {
 }
 
 // Serve, TODO: this is for seeding not leeching
-func Serve(port int, shutdown <-chan bool) error {
+func Serve(port int, shutdown <-chan bool) chan<- *Peer {
+	leechers := make(chan *Peer)
+	incoming := make(chan net.Conn)
+
 	var err error
 	server := &Server{laddr: fmt.Sprintf(":%d", port)}
 
@@ -19,16 +24,41 @@ func Serve(port int, shutdown <-chan bool) error {
 	if err != nil {
 		debugger.Fatalf("Fatal, server fails: %s", err)
 	}
-	for {
+	go func() {
+		for {
 
-		conn, err := server.listener.Accept()
-		if err == nil {
-			conn.Close()
-			//go handleConnection(conn, shutdown)
+			conn, err := server.listener.Accept()
+			if err != nil {
+				conn.Close()
+			}
+			incoming <- conn
+			// TODO: handleError(err)
 		}
-		// TODO: handleError(err)
-	}
-	return err
+	}()
+	go func() {
+		for {
+			newConn := <-incoming
+			shake := make([]byte, 68)
+			_, err = io.ReadFull(newConn, shake)
+			if err != nil {
+				debugger.Fatal(err)
+			}
+			if !bytes.Equal(shake[1:20], pstr) {
+				debugger.Println("Protocol does not match")
+			}
+			if !bytes.Equal(shake[28:48], d.Torrent.InfoHash[:]) {
+				debugger.Println("InfoHash Does not match")
+			}
+			peer := &Peer{conn: newConn, id: string(shake[48:]),
+				addr: newConn.RemoteAddr().String()}
+			hs := HandShake(d.Torrent)
+			peer.conn.Write(hs[:])
+			debugger.Println("New Leecher", peer.id)
+			leechers <- peer
+
+		}
+	}()
+	return leechers // TODO: Add shutdown
 }
 
 // download (Torrent, Peers, all your stuff)...

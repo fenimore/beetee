@@ -180,7 +180,6 @@ func (p *Peer) spawnPeerHandler(waiting, choked, ready, disconnected chan<- *Pee
 		for {
 			select {
 			case msg := <-p.out:
-				logger.Println("Sending msg:", msg)
 				p.conn.Write(msg)
 			case msg := <-p.in:
 				p.handleMessage(msg, waiting, choked, ready)

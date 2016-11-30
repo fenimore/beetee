@@ -80,6 +80,7 @@ func (info *TorrentInfo) lastPieceSize() int64 {
 }
 
 func (p *Piece) VerifyPiece() {
+	debugger.Println("Verifying Piece", p.index)
 	for {
 		b := <-p.chanBlocks
 		copy(p.data[int(b.offset):int(b.offset)+BLOCKSIZE],

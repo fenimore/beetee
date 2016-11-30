@@ -227,11 +227,11 @@ func TestConnect(t *testing.T) {
 
 func TestHandShake(t *testing.T) {
 	peer := Peer{
-		addr: ":6882",
+		addr: ":6883",
 		info: d.Torrent,
 	}
 
-	l, err := net.Listen("tcp", ":6882")
+	l, err := net.Listen("tcp", ":6883") // the listening peer?
 	if err != nil {
 		t.Fatal(err)
 	}

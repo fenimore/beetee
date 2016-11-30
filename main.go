@@ -65,6 +65,11 @@ func main() {
 	go func() {
 		<-c
 		//Torrent.Info.WriteData()
+		for _, p := range d.Pieces {
+			if !p.verified {
+				debugger.Println("Piece Not found:", p.index)
+			}
+		}
 		file, _ := os.Open(d.Torrent.Info.Name)
 		fi, _ := file.Stat()
 		debugger.Printf("File is %d bytes, out of Length: %d",
@@ -79,7 +84,8 @@ func main() {
 	logger = log.New(os.Stdout, "LOG: ", log.Ltime|log.Lshortfile)
 
 	/* Start Listening */
-	// TODO:
+	// TODO: use leechers
+	_ = Serve(PORT, make(chan bool))
 
 	/* Parse Torrent*/
 	// NOTE: Sets Piece
@@ -118,7 +124,8 @@ func main() {
 
 	go func() {
 		for _, peer := range d.Peers[:] {
-			waiting <- peer
+			debugger.Println(peer)
+			//waiting <- peer
 		}
 	}()
 
