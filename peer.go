@@ -119,6 +119,9 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 		logger.Printf("Recv: %s sends uninterested", p.id)
 	case HaveMsg:
 		idx := DecodeHaveMessage(payload)
+		p.Lock()
+		p.bitmap[idx] = true
+		p.Unlock()
 		// TODO: Update bitfield
 		logger.Printf("Recv: %s sends have %v for Piece %d",
 			p.id, payload[1:], idx)

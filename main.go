@@ -137,9 +137,6 @@ func main() {
 		for _, peer := range d.Peers[:] {
 			waiting <- peer
 		}
-		for {
-			//waiting <- <-disconnected
-		}
 	}()
 
 	go func() {
