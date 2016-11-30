@@ -53,7 +53,6 @@ func Serve(port int, shutdown <-chan bool) <-chan *Peer {
 				addr: newConn.RemoteAddr().String()}
 			hs := HandShake(d.Torrent)
 			peer.conn.Write(hs[:])
-			debugger.Println("New Leecher", peer.id)
 			leechers <- peer
 
 		}

@@ -274,6 +274,20 @@ func TestHandShake(t *testing.T) {
 	}
 }
 
+func TestServeHandShake(t *testing.T) {
+	_ = Serve(6884, make(chan bool)) // NOTE: diff port than prod
+	peer := Peer{                    // This is my "Server"
+		addr: ":6884",
+		info: d.Torrent,
+	}
+	peer.Connect()
+	err := peer.HandShake()
+	if err != nil {
+		t.Error(err)
+	}
+
+}
+
 func ExampleStatusMessage() {
 	msg := StatusMessage(UnchokeMsg)
 	fmt.Println(msg)

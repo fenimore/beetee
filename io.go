@@ -3,7 +3,9 @@ package main
 import "os"
 
 func spawnFileWriter(f *os.File) (chan *Piece, chan struct{}) {
+
 	writeSync.Add(len(d.Pieces))
+
 	in := make(chan *Piece, FILE_WRITER_BUFSIZE)
 	close := make(chan struct{})
 	go func() {

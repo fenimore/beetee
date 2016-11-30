@@ -151,6 +151,7 @@ func main() {
 	go func() {
 		for {
 			peer := <-leechers
+			debugger.Println("New Leecher", peer.id)
 			// leechers have already been handshaken
 			peer.spawnPeerReader()
 			peer.spawnPeerHandler(waiting, choked, ready, disconnected)
