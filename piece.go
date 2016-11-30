@@ -67,6 +67,9 @@ func (info *TorrentInfo) parsePieces() {
 }
 
 func (info *TorrentInfo) lastPieceBlockCount() int64 {
+	if info.Length%info.PieceLength == 0 {
+		return info.PieceLength / int64(BLOCKSIZE)
+	}
 	pieceCount := (info.Length % info.PieceLength) / int64(BLOCKSIZE)
 	if pieceCount == 0 {
 		return 1
