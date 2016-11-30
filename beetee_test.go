@@ -6,10 +6,15 @@ import "os"
 import "github.com/anacrolix/torrent/bencode"
 import "encoding/binary"
 import "fmt"
+import "net"
+import "io/ioutil"
+import "log"
 
 func TestMain(m *testing.M) {
 	//PeerId = GenPeerId()
 	d = new(Download)
+	logger = log.New(os.Stdout, "Log:", log.Ltime)
+	debugger = log.New(os.Stdout, "Log:", log.Ltime)
 	d.Torrent, _ = ParseTorrent("torrents/tom.torrent")
 	os.Exit(m.Run())
 }
@@ -175,6 +180,44 @@ func TestDecodePieceMessage(t *testing.T) {
 	}
 	if string(b.data) != "I am the payload" {
 		fmt.Println("Wrong payload")
+	}
+}
+
+func TestConnect(t *testing.T) {
+	peer := Peer{
+		addr: ":6882",
+	}
+	msg := StatusMessage(InterestedMsg)
+
+	l, err := net.Listen("tcp", ":6882")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer l.Close()
+
+	go func() {
+		err := peer.Connect()
+		if err != nil {
+			t.Error(err)
+		}
+		defer peer.conn.Close()
+		peer.conn.Write(msg)
+	}()
+
+	for {
+		conn, err := l.Accept()
+		if err != nil {
+			return
+		}
+		defer conn.Close()
+
+		buf, err := ioutil.ReadAll(conn)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		fmt.Println(string(buf[:]))
+		return // Done
 	}
 }
 

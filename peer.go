@@ -97,6 +97,9 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 
 	switch payload[0] {
 	case ChokeMsg:
+		// TODO: Set Peer unchoke
+		// Halt?
+		//close(p.halt)
 		p.Lock()
 		p.choke = true
 		p.Unlock()
@@ -155,7 +158,7 @@ func (p *Peer) spawnPeerReader(disconnected chan<- *Peer) chan struct{} {
 				//disconnected <- p
 				p.conn.Close()
 				debugger.Println("Halt closes Peer", p.id)
-				return
+				break
 			default:
 				msg, err := p.readMessage()
 				if err != nil {
