@@ -149,7 +149,7 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 	return nil
 }
 
-func (p *Peer) spawnPeerReader(disconnected chan<- *Peer) chan struct{} {
+func (p *Peer) spawnPeerReader() {
 	halt := make(chan struct{})
 	go func() {
 		for {
@@ -170,7 +170,6 @@ func (p *Peer) spawnPeerReader(disconnected chan<- *Peer) chan struct{} {
 			}
 		}
 	}()
-	return halt
 }
 
 func (p *Peer) spawnPeerHandler(waiting, choked, ready, disconnected chan<- *Peer) {
@@ -178,22 +177,6 @@ func (p *Peer) spawnPeerHandler(waiting, choked, ready, disconnected chan<- *Pee
 	p.out = make(chan []byte)
 	p.halt = make(chan struct{})
 	go func() {
-		logger.Printf("Connecting to %s", p.addr)
-		err := p.Connect()
-		if err != nil {
-			debugger.Println("Connection Fails", err)
-			return
-		}
-		logger.Printf("Connected to %s at %s", p.id, p.addr)
-
-		err = p.HandShake()
-		if err != nil {
-			debugger.Println("Handshake Fails", err)
-			return
-		}
-
-		closeReader := p.spawnPeerReader(disconnected)
-		choked <- p
 		for {
 			select {
 			case msg := <-p.out:
@@ -202,11 +185,28 @@ func (p *Peer) spawnPeerHandler(waiting, choked, ready, disconnected chan<- *Pee
 			case msg := <-p.in:
 				p.handleMessage(msg, waiting, choked, ready)
 			case <-p.halt:
-				close(closeReader)
-				break
+				return
 			}
 		}
 	}()
+}
+
+func (p *Peer) spawnPeerHandShake(waiting, choked, ready chan<- *Peer) {
+	logger.Printf("Connecting to %s", p.addr)
+	err := p.Connect()
+	if err != nil {
+		debugger.Println("Connection Fails", err)
+		return
+	}
+	logger.Printf("Connected to %s at %s", p.id, p.addr)
+
+	err = p.HandShake()
+	if err != nil {
+		debugger.Println("Handshake Fails", err)
+		return
+	}
+
+	choked <- p
 }
 
 func (p *Peer) spawnPieceRequest(piece int, info *TorrentInfo) chan *Piece {

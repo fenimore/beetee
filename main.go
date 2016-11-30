@@ -125,17 +125,23 @@ func main() {
 	go func() {
 		for {
 			peer := <-waiting
-			peer.spawnPeerHandler(waiting, choked, ready, disconnected)
+			go peer.spawnPeerHandShake(waiting, choked, ready)
 		}
 	}()
 
+	// Open communication
 	go func() {
+		for {
+
+		}
 
 	}()
 
 	go func() {
 		for {
 			peer := <-choked
+			peer.spawnPeerHandler(waiting, choked, ready, disconnected)
+			peer.spawnPeerReader()
 			// if peer has what I want TODO:
 			// XOR my bitmap with theirse
 			peer.out <- StatusMessage(InterestedMsg)
@@ -154,7 +160,7 @@ func main() {
 						piece.index, peer.id)
 					msgs := requestPiece(piece.index)
 					for _, msg := range msgs {
-						peer.in <- msg
+						peer.out <- msg
 					}
 					select {
 					// TODO: stop when peer closes
