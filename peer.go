@@ -32,15 +32,14 @@ type Peer struct {
 }
 
 func (p *Peer) Connect() error {
-	logger.Printf("Connecting to %s", p.addr)
-
 	// Connect to address
 	conn, err := net.DialTimeout("tcp", p.addr, time.Second*10)
 	if err != nil {
 		return err
 	}
+
 	p.conn = conn
-	logger.Printf("Connected to %s at %s", p.id, p.addr)
+
 	return err
 }
 
@@ -178,11 +177,13 @@ func (p *Peer) spawnPeerHandler(waiting, choked, ready, disconnected chan<- *Pee
 	p.out = make(chan []byte)
 	p.halt = make(chan struct{})
 	go func() {
+		logger.Printf("Connecting to %s", p.addr)
 		err := p.Connect()
 		if err != nil {
 			debugger.Println("Connection Fails", err)
 			return
 		}
+		logger.Printf("Connected to %s at %s", p.id, p.addr)
 
 		err = p.HandShake()
 		if err != nil {

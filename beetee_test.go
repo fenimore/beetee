@@ -216,7 +216,10 @@ func TestConnect(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		fmt.Println(string(buf[:]))
+		if !bytes.Equal(buf, msg) {
+			t.Error("Message sent wasn't received")
+		}
+
 		return // Done
 	}
 }
