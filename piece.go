@@ -111,7 +111,7 @@ func (p *Piece) VerifyPiece() {
 		return
 	}
 	p.verified = true
-	logger.Printf("Piece at %d is Collected", p.index)
+	//logger.Printf("Piece at %d is Collected", p.index)
 	// TODO: Update personal bitfield
 	// TODO: Send have to peers
 	p.success <- true // FIXME: Keep?

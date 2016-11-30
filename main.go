@@ -12,7 +12,7 @@ import (
 
 const (
 	BLOCKSIZE           = 16384
-	PORT                = 6881 // TODO
+	PORT                = 6939 // TODO
 	FILE_WRITER_BUFSIZE = 25
 )
 
@@ -94,6 +94,7 @@ func main() {
 	debugger.Println(d.Torrent.Info.lastPieceSize())
 	debugger.Println("len(info.Pieces) // bytes: ", len(d.Torrent.Info.Pieces))
 	debugger.Println("len(Pieces) // pieces: ", len(d.Pieces))
+	debugger.Println("Port listening on", PORT)
 
 	/*Parse Tracker Response*/
 	tr, err := GetTrackerResponse(d.Torrent)
@@ -175,17 +176,18 @@ func main() {
 					select {
 					// TODO: stop when peer closes
 					case <-piece.success:
-						logger.Println("Wrote Piece:", piece.index)
 						diskIO <- piece
 					case <-time.After(30 * time.Second):
 						logger.Println("TimeOut Pieces", piece.index)
 						pieceNext <- piece
+						close(peer.halt)
+						return
 					}
 				}
 			}(peer)
 		}
 	}()
-
+	writeSync.Add(1)
 	writeSync.Wait()
 	close(closeIO)
 	for _, p := range d.Pieces {

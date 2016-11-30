@@ -96,9 +96,6 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 
 	switch payload[0] {
 	case ChokeMsg:
-		// TODO: Set Peer unchoke
-		// Halt?
-		//close(p.halt)
 		p.Lock()
 		p.choke = true
 		p.Unlock()
@@ -113,6 +110,7 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 	case InterestedMsg:
 		p.interested = true
 		logger.Printf("Recv: %s sends interested", p.id)
+		// TODO: Send a unchoke message, and unchoke them
 	case NotInterestedMsg:
 		p.interested = false
 		logger.Printf("Recv: %s sends uninterested", p.id)
@@ -125,18 +123,16 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 		logger.Printf("Recv: %s sends have %v for Piece %d",
 			p.id, payload[1:], idx)
 	case BitFieldMsg:
-		// TODO: Decode into slice?
 		logger.Printf("Recv: %s sends bitfield", p.id)
 		p.bitmap = DecodeBitfieldMessage(payload)
 	case RequestMsg:
 		logger.Printf("Recv: %s sends request %s", p.id, payload)
-	case BlockMsg: // Officially "Piece" message
-		// TODO: Remove this message, as they are toomuch
+	case BlockMsg: // NOTE: Officially "Piece" message
 		//logger.Printf("Recv: %s sends block %s", p.id, payload[5:10])
 		b := DecodePieceMessage(payload)
 		d.Pieces[b.index].chanBlocks <- b
 		if len(d.Pieces[b.index].chanBlocks) == cap(d.Pieces[b.index].chanBlocks) {
-			d.Pieces[b.index].VerifyPiece() // FIXME: Goroutine?
+			d.Pieces[b.index].VerifyPiece()
 		}
 	case CancelMsg:
 		logger.Printf("Recv: %s sends cancel %s", p.id, payload)
