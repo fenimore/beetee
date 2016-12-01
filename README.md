@@ -7,6 +7,8 @@ Bittorrent Client implemented in Go **Work in Progress**. I have a blog post out
     beetee, commandline torrent application. Usage:
       -file string
             path to torrent file
+      -seed
+            keep running after download completes
 
 Thanks @kracekumar and @alex-segura, fellow Recursers, for all your help :)
 
@@ -14,7 +16,8 @@ Thanks @kracekumar and @alex-segura, fellow Recursers, for all your help :)
 
 # TODO:
 
-- [ ] allow multiple file-torrents
+- [x] allow multiple file-torrents
+- [ ] allow multiple dir-torrents
 - [ ] control peer flow/ask for more peers
 - [x] parse pieces
 - [x] put into pieces struct
