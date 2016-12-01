@@ -112,6 +112,7 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 		// NOTE: Recv from Leechers,
 		p.Lock()
 		p.interested = true
+		p.unchoke = true
 		p.Unlock()
 		logger.Printf("Recv: %s sends interested", p.id)
 		// TODO: Send a unchoke message, and unchoke them
@@ -131,8 +132,14 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 		p.bitmap = DecodeBitfieldMessage(payload)
 	case RequestMsg:
 		logger.Printf("Recv: %s sends request %s", p.id, payload)
-		// if peer is unchoke
-		// stick into p.in <- PieceMessage()
+		p.Lock()
+		if p.unchoke {
+			idx, offset, length := DecodeRequestMessage(payload)
+			block := BlockMessage(idx, offset, length, d.Pieces)
+			msg := PieceMessage(block.index, block.offset, block.data)
+			p.in <- msg
+		}
+		p.Unlock()
 	case BlockMsg: // NOTE: Officially "Piece" message
 		//logger.Printf("Recv: %s sends block %s", p.id, payload[5:10])
 		b := DecodePieceMessage(payload)

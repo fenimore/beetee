@@ -152,7 +152,7 @@ func RequestMessage(idx uint32, offset int) []byte {
 
 // PieceMessage send a block of a piece
 // and the offset of the piece (it's offset index * BLOCKSIZE
-func PieceMessage(idx uint32, offset int, data []byte) []byte {
+func PieceMessage(idx uint32, offset uint32, data []byte) []byte {
 	// 4-byte message length,1-byte message ID, and payload:
 	// <len=0009+X><id=7><index><begin><block>
 	msg := make([]byte, 13+len(data))
