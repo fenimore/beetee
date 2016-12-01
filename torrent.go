@@ -52,8 +52,9 @@ type TorrentInfo struct {
 }
 
 type TorrentFile struct {
-	Length int64    `bencode:"length"`
-	Path   []string `bencode:"[]string"`
+	Length          int64    `bencode:"length"`
+	Path            []string `bencode:"[]string"`
+	PreceedingTotal int64    // NOTE: the total bytes before this file in piece list
 }
 
 // ParseTorrent parses a torrent file.
@@ -96,6 +97,7 @@ func ParseTorrent(file string) (*TorrentMeta, error) {
 func (info *TorrentInfo) getTotalLength() int64 {
 	var total int64
 	for _, file := range info.Files {
+		file.PreceedingTotal = total
 		total += file.Length
 	}
 	return total

@@ -46,10 +46,11 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 			createFiles(name, files)
 			for {
 				piece := <-in
+				writeSync.Done()
 				logger.Printf("Writing Data to Disk, Piece: %d", piece.index)
 				// TODO: WriteToDisk
-				writeMultipleFiles(piece, d.Torrent.Info.Files)
-				writeSync.Done()
+				writeMultipleFiles(piece, name, d.Torrent.Info.Files)
+
 			}
 		}()
 	}
@@ -82,7 +83,53 @@ func createFiles(name string, files []*TorrentFile) {
 	}
 }
 
-func writeMultipleFiles(piece *Piece, files []*TorrentFile) {
+func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
+	// NOTE: Not fully supported:
+	// NOTE: Won't work if piece extends past two files
+	for idx, file := range files {
+		// These bounds are relative to the total Piece list
+		pieceLower := int64(piece.index)*piece.size - piece.size // 0    or 16
+		pieceUpper := int64(piece.index) * piece.size            // 16 kb   32
+		// fileLower := file.PreceedingTotal
+		fileUpper := file.PreceedingTotal + file.Length
+		if pieceLower > fileUpper {
+			continue // Wrong File
+		}
+		f, err := os.Open(filepath.Join(name, file.Path[0]))
+		if err != nil {
+			debugger.Println("Error Opening/Writing Piece %d to file %s",
+				piece.index, file.Path)
+		}
+		defer f.Close()
+		if pieceUpper <= fileUpper {
+			fileOffset := int64(piece.index)*piece.size - file.PreceedingTotal
+			f.WriteAt(piece.data, fileOffset)
+			break
+		} else { // Piece Extends to multple files
+			carrySize := pieceUpper - fileUpper // How much of the piece overflows
+			data := piece.data[:carrySize]
+			carry := piece.data[carrySize:]
+			fileOffset := int64(piece.index)*piece.size - file.PreceedingTotal
+			f.WriteAt(data, fileOffset)
+			fi, err := f.Stat()
+			if err != nil {
+				debugger.Println("Err Getting file stats", err)
+			}
+
+			if fi.Size() != file.Length {
+				debugger.Printf("File is not the write size: Got %d, Expected %d",
+					fi.Size(), file.Length)
+			}
+
+			nxtFile, err := os.Open(filepath.Join(name, files[idx+1].Path[0]))
+			if err != nil {
+				debugger.Println("Error opening Next file")
+			}
+
+			nxtFile.WriteAt(carry, 0)
+
+		}
+	}
 
 }
 

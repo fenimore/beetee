@@ -57,7 +57,7 @@ func TestTorrentParse(t *testing.T) {
 }
 
 func TestTorrentParseMultiple(t *testing.T) {
-	meta, err := ParseTorrent("torrents/20000leagues.torrent")
+	meta, err := ParseTorrent("torrents/tails.torrent")
 	if err != nil {
 		t.Error(err)
 	}
