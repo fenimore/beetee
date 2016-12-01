@@ -16,6 +16,8 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 
 	if single {
 		f, err := os.Create(name)
+		// NOTE: Because it's created
+		// No need for perm flags?
 		if err != nil {
 			debugger.Println("Unable to create file")
 		}
@@ -97,7 +99,8 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 		if pieceLower > fileUpper {
 			continue // Wrong File
 		}
-		f, err := os.Open(filepath.Join(name, file.Path[0]))
+		f, err := os.OpenFile(filepath.Join(name, file.Path[0]),
+			os.O_APPEND|os.O_WRONLY, 0777)
 		if err != nil {
 			debugger.Println("Error Opening/Writing Piece %d to file %s",
 				piece.index, file.Path)
@@ -107,16 +110,11 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 		if pieceUpper <= fileUpper {
 			fileOffset := int64(piece.index)*piece.size - file.PreceedingTotal
 			n, err := f.WriteAt(piece.data, fileOffset)
-			debugger.Println(n, err)
-
-			fi, err := f.Stat()
 			if err != nil {
-				debugger.Println("Err Getting file stats", err)
+				debugger.Println("Write Error", n, err)
 			}
-			debugger.Println(fi.Name(), fi.Size())
 
 			f.Close()
-			debugger.Println("WRITING?", piece.data[:4], fileOffset)
 			break
 		} else { // Piece Extends to multple files
 			carrySize := pieceUpper - fileUpper // How much of the piece overflows
@@ -139,8 +137,10 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 				debugger.Println("Error opening Next file")
 			}
 
-			nxtFile.WriteAt(carry, 0)
-
+			n, err := nxtFile.WriteAt(carry, 0)
+			if err != nil {
+				debugger.Println("Write Error", n, err)
+			}
 		}
 	}
 
