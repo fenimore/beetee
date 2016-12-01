@@ -300,6 +300,25 @@ func TestServeHandShake(t *testing.T) {
 
 }
 
+func TestUnchokeLeecher(t *testing.T) {
+	_ = Serve(6886, make(chan bool)) // NOTE: diff port than prod
+	peer := Peer{                    // This is my "Server"
+		addr: ":6886",
+		info: d.Torrent,
+	}
+	peer.Connect()
+	err := peer.HandShake()
+	if err != nil {
+		t.Error(err)
+	}
+
+	// TODO: Set up listening for message
+	// from server
+
+	msg := StatusMessage(InterestedMsg)
+	peer.conn.Write(msg)
+}
+
 func ExampleStatusMessage() {
 	msg := StatusMessage(UnchokeMsg)
 	fmt.Println(msg)
