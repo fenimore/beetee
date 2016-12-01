@@ -59,11 +59,11 @@ func main() {
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		<-c
-		// for _, p := range d.Pieces {
-		//	if !p.verified {
-		//		debugger.Println("Piece Not found:", p.index)
-		//	}
-		// }
+		for _, p := range d.Pieces {
+			if !p.verified {
+				debugger.Println("Piece Not found:", p.index)
+			}
+		}
 		curSize, err := checkFileSize(d.Torrent.Info.Name)
 		if err != nil {
 			debugger.Println(err)

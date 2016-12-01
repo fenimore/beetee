@@ -74,7 +74,26 @@ func checkFileSize(filename string) (int64, error) {
 	}
 	defer file.Close()
 	fi, _ := file.Stat()
-	return fi.Size(), nil
+	switch mode := fi.Mode(); {
+	case mode.IsDir():
+		var size int64
+		err = filepath.Walk(
+			filename,
+			func(
+				_ string,
+				info os.FileInfo,
+				err error) error {
+				if !info.IsDir() {
+					size += info.Size()
+				}
+				return err
+			})
+		return size, nil
+	case mode.IsRegular():
+		return fi.Size(), nil
+	default:
+		return fi.Size(), nil
+	}
 }
 
 func createFiles(name string, files []*TorrentFile) {
