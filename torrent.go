@@ -33,17 +33,27 @@ func (t *TorrentMeta) String() string {
 // TorrentInfo for single file torrent
 // TODO: add support for multiple files
 type TorrentInfo struct {
-	Length      int64         `bencode:"length"`
-	Name        string        `bencode:"name"`
+	SingleFile  bool
 	PieceLength int64         `bencode:"piece length"`
 	Pieces      bencode.Bytes `bencode:"pieces"` // The concatnated Bytes
 	Private     int64         `bencode:"private"`
+	// Single File
+	Length int64  `bencode:"length"`
+	Name   string `bencode:"name"`
+	// Multiple Files
+	FilesBytes bencode.Bytes `bencode:"files"`
+	Files      []TorrentFile //string        `bencode:"file"`
 	//PieceList      []*Piece
 	// md5sum for single files
 	// files for multiple files
 	// path for multiple files
-	//Files       string `bencode:"file"`
+
 	// Concatenation of all 20 byte SHA1
+}
+
+type TorrentFile struct {
+	Length int64    `bencode:"length"`
+	Path   []string `bencode:"[]string"`
 }
 
 // ParseTorrent parses a torrent file.
@@ -69,9 +79,26 @@ func ParseTorrent(file string) (*TorrentMeta, error) {
 	// Compute the info_hash
 	data.InfoHash = sha1.Sum(data.InfoBytes)
 	data.InfoHashEnc = UrlEncode(data.InfoHash)
-	data.Info.parsePieces()
 	data.PeerId = GenPeerId()
+	// If Multiple Files
+	if data.Info.Length == 0 {
+		reader = bytes.NewReader(data.Info.FilesBytes)
+		dec = bencode.NewDecoder(reader)
+		dec.Decode(&data.Info.Files)
+		data.Info.Length = data.Info.getTotalLength()
+	} else {
+		data.Info.SingleFile = true
+	}
+	data.Info.parsePieces()
 	return &data, nil
+}
+
+func (info *TorrentInfo) getTotalLength() int64 {
+	var total int64
+	for _, file := range info.Files {
+		total += file.Length
+	}
+	return total
 }
 
 // cleanPieces because the encoder includes the lenght of the

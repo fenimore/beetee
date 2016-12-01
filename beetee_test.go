@@ -56,6 +56,23 @@ func TestTorrentParse(t *testing.T) {
 	}
 }
 
+func TestTorrentParseMultiple(t *testing.T) {
+	meta, err := ParseTorrent("torrents/20000leagues.torrent")
+	if err != nil {
+		t.Error(err)
+	}
+	if meta.Info.SingleFile {
+		t.Error("Multiple files")
+	}
+	if len(meta.Info.Pieces)/20 != len(d.Pieces) {
+		t.Error("Error parsing pieces")
+	}
+	lastSize := meta.Info.Length % meta.Info.PieceLength
+	if d.Pieces[len(d.Pieces)-1].size != lastSize {
+		t.Error("Last piece size is off")
+	}
+}
+
 // Handshake Tests
 func TestHandShakeInfoHash(t *testing.T) {
 	info, _ := ParseTorrent("torrents/tom.torrent")
