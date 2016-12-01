@@ -21,10 +21,14 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 		if err != nil {
 			debugger.Println("Unable to create file")
 		}
-		defer f.Close()
+		f.Close()
 
 		go func() {
 			for {
+				f, err = os.OpenFile(name, os.O_APPEND|os.O_WRONLY, 0777)
+				if err != nil {
+					debugger.Println("ERror opening file: ", err)
+				}
 				select {
 				case piece := <-in:
 					logger.Printf("Writing Data to Disk, Piece: %d", piece.index)
