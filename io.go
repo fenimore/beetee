@@ -78,15 +78,37 @@ func checkFileSize(filename string) (int64, error) {
 }
 
 func createFiles(name string, files []*TorrentFile) {
+	// TODO: Create when there are sub directories
 	for _, file := range files {
 		if len(file.Path) < 2 {
-			f, err := os.Create(filepath.Join(name, file.Path[0]))
-			if err != nil {
-				debugger.Println("Error creation file", file.Path)
+			if _, err := os.Stat(filepath.Join(name, file.Path[0])); err != nil {
+				// if file doesn't exist
+				f, err := os.Create(filepath.Join(name, file.Path[0]))
+				if err != nil {
+					debugger.Println("Error creating file", file.Path)
+				}
+				defer f.Close()
 			}
-			defer f.Close()
 		} else {
-			// TODO: when there are sub directory
+			var path string
+			filename := file.Path[len(file.Path)-1]
+			path = filepath.Join(name)
+			for _, val := range file.Path[:len(file.Path)-1] { // leave out the file name
+				path = filepath.Join(path, val)
+			}
+
+			if _, err := os.Stat(path); err != nil {
+				os.MkdirAll(path, os.ModePerm)
+			}
+
+			if _, err := os.Stat(filepath.Join(path, filename)); err != nil {
+				// if file doesn't exist
+				f, err := os.Create(filepath.Join(path, filename))
+				if err != nil {
+					debugger.Println("Error creating file", file.Path)
+				}
+				defer f.Close()
+			}
 		}
 	}
 }
@@ -103,7 +125,13 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 		if pieceLower > fileUpper {
 			continue // Wrong File
 		}
-		f, err := os.OpenFile(filepath.Join(name, file.Path[0]),
+
+		path := filepath.Join(name)
+		for _, val := range file.Path {
+			path = filepath.Join(path, val)
+		}
+
+		f, err := os.OpenFile(path,
 			os.O_APPEND|os.O_WRONLY, 0777)
 		if err != nil {
 			debugger.Println("Error Opening/Writing Piece %d to file %s",
@@ -125,7 +153,11 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 			data := piece.data[:carrySize]
 			carry := piece.data[carrySize:]
 			fileOffset := int64(piece.index)*piece.size - file.PreceedingTotal
-			f.WriteAt(data, fileOffset)
+
+			n, err := f.WriteAt(data, fileOffset)
+			if err != nil {
+				debugger.Println("err %s || writing amount: %d", err, n)
+			}
 			fi, err := f.Stat()
 			if err != nil {
 				debugger.Println("Err Getting file stats", err)
@@ -136,12 +168,17 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 					fi.Size(), file.Length)
 			}
 
-			nxtFile, err := os.Open(filepath.Join(name, files[idx+1].Path[0]))
+			path = filepath.Join(name)
+			for _, val := range files[idx+1].Path {
+				path = filepath.Join(path, val)
+			}
+
+			nxtFile, err := os.Open(path)
 			if err != nil {
 				debugger.Println("Error opening Next file")
 			}
 
-			n, err := nxtFile.WriteAt(carry, 0)
+			n, err = nxtFile.WriteAt(carry, 0)
 			if err != nil {
 				debugger.Println("Write Error", n, err)
 			}
