@@ -13,6 +13,7 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 
 	in := make(chan *Piece, FILE_WRITER_BUFSIZE)
 	close := make(chan struct{})
+
 	if single {
 		f, err := os.Create(name)
 		if err != nil {
@@ -34,9 +35,11 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 		}()
 	} else {
 		// write multiple files
-		err := os.Mkdir(name, os.ModeDir|os.ModePerm)
-		if err != nil {
-			debugger.Println("Unable to make directory")
+		if _, err := os.Stat(name); err != nil {
+			err = os.Mkdir(name, os.ModeDir|os.ModePerm)
+			if err != nil {
+				debugger.Println("Unable to make directory")
+			}
 		}
 
 		go func() {
@@ -50,6 +53,7 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 			}
 		}()
 	}
+
 	return in, close
 }
 
