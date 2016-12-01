@@ -47,6 +47,7 @@ func main() {
 
 	/* Get Arguments */
 	torrentFile := flag.String("file", "torrents/tom.torrent", "path to torrent file")
+	seedTorrent := flag.Bool("seed", false, "keep running after download completes")
 	flag.Usage = func() {
 		fmt.Println("beetee, commandline torrent application. Usage:")
 		flag.PrintDefaults()
@@ -193,7 +194,9 @@ func main() {
 			}(peer)
 		}
 	}()
-	writeSync.Add(1)
+	if *seedTorrent {
+		writeSync.Add(1)
+	}
 	writeSync.Wait()
 	close(closeIO)
 	for _, p := range d.Pieces {

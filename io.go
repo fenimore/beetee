@@ -9,7 +9,6 @@ import "os"
 func spawnFileWriter(name string, single bool) (chan *Piece, chan struct{}) {
 	in := make(chan *Piece, FILE_WRITER_BUFSIZE)
 	close := make(chan struct{})
-
 	if single {
 		f, err := os.Create(name)
 		if err != nil {
@@ -30,6 +29,8 @@ func spawnFileWriter(name string, single bool) (chan *Piece, chan struct{}) {
 				}
 			}
 		}()
+	} else {
+		// write multiple files
 	}
 	return in, close
 }
