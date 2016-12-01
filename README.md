@@ -38,7 +38,7 @@ Thanks @kracekumar and @alex-segura, fellow Recursers, for all your help :)
 - [x] manage blocks
 - [x] write to disk
 - [x] write to disk gradually
-- [ ] write and read when incomplete
+- [ ] read when incomplete
 
 ## Uploading
 
