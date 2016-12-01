@@ -104,7 +104,6 @@ func main() {
 
 	// Get Peers
 	d.Peers = ParsePeers(tr)
-	mess
 	file, err := os.Create(d.Torrent.Info.Name)
 	if err != nil {
 		debugger.Println("Unable to create file")

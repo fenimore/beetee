@@ -184,6 +184,18 @@ func TestDecodePieceMessage(t *testing.T) {
 	}
 }
 
+func TestDecodeRequestMessage(t *testing.T) {
+	msg := RequestMessage(24, BLOCKSIZE*3)
+	idx, offset, _ := DecodeRequestMessage(msg[4:])
+
+	if idx != 24 {
+		t.Error("Wrong index")
+	}
+	if offset/BLOCKSIZE != 3 {
+		t.Error("Wrong offset")
+	}
+}
+
 func TestConnect(t *testing.T) {
 	peer := Peer{
 		addr: ":6882",
