@@ -26,7 +26,10 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 				select {
 				case piece := <-in:
 					logger.Printf("Writing Data to Disk, Piece: %d", piece.index)
-					f.WriteAt(piece.data, int64(piece.index)*piece.size)
+					n, err := f.WriteAt(piece.data, int64(piece.index)*piece.size)
+					if err != nil {
+						debugger.Printf("Error Writing %d bytes: %s", n, err)
+					}
 					writeSync.Done()
 				case <-close:
 					f.Close()
@@ -46,11 +49,10 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 			createFiles(name, files)
 			for {
 				piece := <-in
-				writeSync.Done()
 				logger.Printf("Writing Data to Disk, Piece: %d", piece.index)
 				// TODO: WriteToDisk
 				writeMultipleFiles(piece, name, d.Torrent.Info.Files)
-
+				writeSync.Done()
 			}
 		}()
 	}
@@ -100,10 +102,21 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 			debugger.Println("Error Opening/Writing Piece %d to file %s",
 				piece.index, file.Path)
 		}
+
 		defer f.Close()
 		if pieceUpper <= fileUpper {
 			fileOffset := int64(piece.index)*piece.size - file.PreceedingTotal
-			f.WriteAt(piece.data, fileOffset)
+			n, err := f.WriteAt(piece.data, fileOffset)
+			debugger.Println(n, err)
+
+			fi, err := f.Stat()
+			if err != nil {
+				debugger.Println("Err Getting file stats", err)
+			}
+			debugger.Println(fi.Name(), fi.Size())
+
+			f.Close()
+			debugger.Println("WRITING?", piece.data[:4], fileOffset)
 			break
 		} else { // Piece Extends to multple files
 			carrySize := pieceUpper - fileUpper // How much of the piece overflows
