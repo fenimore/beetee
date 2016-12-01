@@ -104,7 +104,7 @@ func main() {
 
 	// Get Peers
 	d.Peers = ParsePeers(tr)
-
+	mess
 	file, err := os.Create(d.Torrent.Info.Name)
 	if err != nil {
 		debugger.Println("Unable to create file")
@@ -114,6 +114,7 @@ func main() {
 	waiting := make(chan *Peer)
 	ready := make(chan *Peer) // Unchoked
 	choked := make(chan *Peer)
+	leeching := make(chan *Peer)
 	disconnected := make(chan *Peer)
 
 	pieceNext := FillPieceOrder()
@@ -153,6 +154,14 @@ func main() {
 			// leechers have already been handshaken
 			peer.spawnPeerReader()
 			peer.spawnPeerHandler(waiting, choked, ready, disconnected)
+			leeching <- peer
+		}
+	}()
+
+	go func() {
+		for {
+			//peer := <-leeching
+
 		}
 	}()
 

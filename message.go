@@ -74,7 +74,22 @@ func DecodeBitfieldMessage(msg []byte) []bool {
 	return result
 }
 
-func DecodeRequestMessage(msg []byte) {
+// DecodeRequestMessage returns the desired block if the block
+// is had by the user, otherwise it returns an empty block
+func DecodeRequestMessage(msg []byte) *Block { // return the block
+	// <len=0013><id=6><index><begin><length>
+	index := binary.BigEndian.Uint32(msg[1:5]) // NOTE: The piece in question
+	begin := binary.BigEndian.Uint32(msg[5:9])
+	length := binary.BigEndian.Uint32(msg[9:13])
+	if !d.Pieces[index].verified {
+		return new(Block)
+	}
+	return &Block{
+		index:  index,
+		offset: begin,
+		data:   d.Pieces[index].data[begin : begin+length],
+		size:   int(length),
+	}
 }
 
 func DecodeCancelMessage(msg []byte) {
