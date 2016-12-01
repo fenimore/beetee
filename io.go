@@ -118,8 +118,8 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 	// NOTE: Won't work if piece extends past two files
 	for idx, file := range files {
 		// These bounds are relative to the total Piece list
-		pieceLower := int64(piece.index)*piece.size - piece.size // 0    or 16
-		pieceUpper := int64(piece.index) * piece.size            // 16 kb   32
+		pieceLower := int64(piece.index) * piece.size            // 0    or 16
+		pieceUpper := int64(piece.index)*piece.size + piece.size // 16 kb   32
 		// fileLower := file.PreceedingTotal
 		fileUpper := file.PreceedingTotal + file.Length
 		if pieceLower > fileUpper {
@@ -139,6 +139,11 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 		}
 
 		defer f.Close()
+		fi, err := f.Stat()
+		if err != nil {
+			debugger.Println("Err Getting file stats", err)
+		}
+
 		if pieceUpper <= fileUpper {
 			fileOffset := int64(piece.index)*piece.size - file.PreceedingTotal
 			n, err := f.WriteAt(piece.data, fileOffset)
@@ -149,10 +154,23 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 			f.Close()
 			break
 		} else { // Piece Extends to multple files
-			carrySize := pieceUpper - fileUpper // How much of the piece overflows
-			data := piece.data[:carrySize]
-			carry := piece.data[carrySize:]
-			fileOffset := int64(piece.index)*piece.size - file.PreceedingTotal
+
+			//carrySize := pieceUpper - fi.Size()
+			//fileUpper // How much of the piece overflows
+			carrySize := pieceUpper - fileUpper
+			carry := piece.data[:carrySize]
+			data := piece.data[carrySize:]
+			fileOffset := file.Length - int64(len(data))
+			debugger.Println("")
+			debugger.Println("Upper Bounds", fileUpper, "<", pieceUpper)
+			debugger.Println("Lower Bounds", file.PreceedingTotal, "<", pieceLower)
+			debugger.Println("offset     :", fileOffset)
+			debugger.Println("Add it toget", fileOffset+carrySize, file.Length)
+			debugger.Println("Sizes:     :", fi.Size(), file.Length)
+			debugger.Println("Add size   :", fi.Size()+int64(len(data)))
+			//debugger.Println("Other stats:", file.PreceedingTotal -
+			debugger.Printf("Data size: %d, Carry size: %d", len(data), len(carry))
+			debugger.Println("")
 
 			n, err := f.WriteAt(data, fileOffset)
 			if err != nil {
@@ -162,21 +180,23 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 			if err != nil {
 				debugger.Println("Err Getting file stats", err)
 			}
-
 			if fi.Size() != file.Length {
 				debugger.Printf("File is not the write size: Got %d, Expected %d",
 					fi.Size(), file.Length)
+				debugger.Printf("Data size: %d, Carry size: %d", len(data), len(carry))
 			}
 
+			// The next file
 			path = filepath.Join(name)
 			for _, val := range files[idx+1].Path {
 				path = filepath.Join(path, val)
 			}
 
-			nxtFile, err := os.Open(path)
+			nxtFile, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0777)
 			if err != nil {
 				debugger.Println("Error opening Next file")
 			}
+			defer nxtFile.Close()
 
 			n, err = nxtFile.WriteAt(carry, 0)
 			if err != nil {

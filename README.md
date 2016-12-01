@@ -17,7 +17,7 @@ Thanks @kracekumar and @alex-segura, fellow Recursers, for all your help :)
 # TODO:
 
 - [x] allow multiple file-torrents
-- [ ] allow multiple dir-torrents
+- [x] allow multiple dir-torrents
 - [ ] control peer flow/ask for more peers
 - [x] parse pieces
 - [x] put into pieces struct
