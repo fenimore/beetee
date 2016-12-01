@@ -131,99 +131,74 @@ func createFiles(name string, files []*TorrentFile) {
 		}
 	}
 }
+func min(a, b int64) int64 {
+	if a < b {
+		return a
+	}
+	return b
+}
+func max(a, b int64) int64 {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func abs(a int64) int64 {
+	if a > 0 {
+		return a
+	}
+	return -a
+}
 
 func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 	// NOTE: Not fully supported:
 	// NOTE: Won't work if piece extends past two files
-	for idx, file := range files {
+	for _, file := range files {
 		// These bounds are relative to the total Piece list
-		pieceLower := int64(piece.index) * piece.size            // 0    or 16
-		pieceUpper := int64(piece.index)*piece.size + piece.size // 16 kb   32
+		pieceLower := int64(piece.index) * piece.size // 0    or 16
+		pieceUpper := int64(piece.index+1) * piece.size
 		// fileLower := file.PreceedingTotal
 		fileUpper := file.PreceedingTotal + file.Length
-		if pieceLower > fileUpper {
+		if pieceLower > fileUpper || pieceUpper < file.PreceedingTotal {
 			continue // Wrong File
 		}
-
+		// Get file path
 		path := filepath.Join(name)
 		for _, val := range file.Path {
 			path = filepath.Join(path, val)
 		}
-
 		f, err := os.OpenFile(path,
 			os.O_APPEND|os.O_WRONLY, 0777)
 		if err != nil {
 			debugger.Println("Error Opening/Writing Piece %d to file %s",
 				piece.index, file.Path)
 		}
-
 		defer f.Close()
-		fi, err := f.Stat()
+
+		offset := max(0, pieceLower-file.PreceedingTotal)
+		//offset := pieceLower % file.PreceedingTotal
+		lower := abs(min(0, pieceLower-file.PreceedingTotal))
+		upper := min(piece.size, pieceUpper-file.PreceedingTotal+file.Length)
+
+		n, err := f.WriteAt(piece.data[lower:upper], offset)
 		if err != nil {
-			debugger.Println("Err Getting file stats", err)
+			debugger.Println("Write Error", n, err)
 		}
 
-		if pieceUpper <= fileUpper {
-			fileOffset := int64(piece.index)*piece.size - file.PreceedingTotal
-			n, err := f.WriteAt(piece.data, fileOffset)
-			if err != nil {
-				debugger.Println("Write Error", n, err)
-			}
-
-			f.Close()
-			break
-		} else { // Piece Extends to multple files
-
-			//carrySize := pieceUpper - fi.Size()
-			//fileUpper // How much of the piece overflows
-			carrySize := pieceUpper - fileUpper
-			carry := piece.data[:carrySize]
-			data := piece.data[carrySize:]
-			fileOffset := file.Length - int64(len(data))
-			debugger.Println("")
-			debugger.Println("Upper Bounds", fileUpper, "<", pieceUpper)
-			debugger.Println("Lower Bounds", file.PreceedingTotal, "<", pieceLower)
-			debugger.Println("offset     :", fileOffset)
-			debugger.Println("Add it toget", fileOffset+carrySize, file.Length)
-			debugger.Println("Sizes:     :", fi.Size(), file.Length)
-			debugger.Println("Add size   :", fi.Size()+int64(len(data)))
-			//debugger.Println("Other stats:", file.PreceedingTotal -
-			debugger.Printf("Data size: %d, Carry size: %d", len(data), len(carry))
-			debugger.Println("")
-
-			n, err := f.WriteAt(data, fileOffset)
-			if err != nil {
-				debugger.Println("err %s || writing amount: %d", err, n)
-			}
-			fi, err := f.Stat()
-			if err != nil {
-				debugger.Println("Err Getting file stats", err)
-			}
-			if fi.Size() != file.Length {
-				debugger.Printf("File is not the write size: Got %d, Expected %d",
-					fi.Size(), file.Length)
-				debugger.Printf("Data size: %d, Carry size: %d", len(data), len(carry))
-			}
-
-			// The next file
-			path = filepath.Join(name)
-			for _, val := range files[idx+1].Path {
-				path = filepath.Join(path, val)
-			}
-
-			nxtFile, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0777)
-			if err != nil {
-				debugger.Println("Error opening Next file")
-			}
-			defer nxtFile.Close()
-
-			n, err = nxtFile.WriteAt(carry, 0)
-			if err != nil {
-				debugger.Println("Write Error", n, err)
-			}
-		}
 	}
 
+}
+
+func pieceTriage(piece *Piece, file *TorrentFile) ([]byte, int64) { //return data and offset
+	pieceLower := int64(piece.index) * piece.size
+	pieceUpper := int64(piece.index+1) * piece.size
+	offset := max(0, pieceLower-file.PreceedingTotal)
+	//offset := pieceLower % file.PreceedingTotal
+	lower := abs(min(0, pieceLower-file.PreceedingTotal))
+	upper := min(file.PreceedingTotal+file.Length, pieceUpper-file.PreceedingTotal+file.Length)
+
+	return piece.data[lower:upper], offset
 }
 
 func multipleWrite() {

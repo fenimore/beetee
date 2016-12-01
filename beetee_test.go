@@ -336,6 +336,54 @@ func TestUnchokeLeecher(t *testing.T) {
 	peer.conn.Write(msg)
 }
 
+func TestIOMultipleFiles(t *testing.T) {
+	firstPayload := []byte("This is the payload")
+	//secondPayload := []byte("This is the yapload")
+	piece := &Piece{
+		data:  firstPayload,
+		index: 0,
+		size:  int64(len(firstPayload)),
+	}
+	// p1 := &Piece{
+	//	data:  secondPayload,
+	//	index: 1,
+	//	size:  int64(len(firstPayload)),
+	// }
+	files := []*TorrentFile{
+		&TorrentFile{
+			Length:          2,
+			PreceedingTotal: 0,
+		},
+		&TorrentFile{
+			Length:          4,
+			PreceedingTotal: 2,
+		},
+		&TorrentFile{
+			Length:          1,
+			PreceedingTotal: 6,
+		},
+		&TorrentFile{
+			Length:          5,
+			PreceedingTotal: 7,
+		},
+	}
+	outputSlice := make([]byte, 0)
+	pieceLower := int64(piece.index) * piece.size // 0    or 16
+	pieceUpper := int64(piece.index+1) * piece.size
+
+	for _, file := range files {
+		fileUpper := file.PreceedingTotal + file.Length
+		if pieceLower > fileUpper || pieceUpper < file.PreceedingTotal {
+			continue // Wrong File
+		}
+		data, _ := pieceTriage(piece, file)
+		//fmt.Println(string(data), offset))
+		outputSlice = append(outputSlice, data...)
+	}
+	fmt.Println(string(outputSlice))
+
+}
+
 func ExampleStatusMessage() {
 	msg := StatusMessage(UnchokeMsg)
 	fmt.Println(msg)
