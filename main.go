@@ -107,7 +107,8 @@ func main() {
 	d.Peers = ParsePeers(tr)
 
 	// Start writing to disk
-	diskIO, closeIO := spawnFileWriter(d.Torrent.Info.Name, d.Torrent.Info.SingleFile)
+	diskIO, closeIO := spawnFileWriter(d.Torrent.Info.Name,
+		d.Torrent.Info.SingleFile, d.Torrent.Info.Files)
 
 	waiting := make(chan *Peer)
 	ready := make(chan *Peer) // Unchoked

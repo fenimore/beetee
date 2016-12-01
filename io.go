@@ -1,12 +1,16 @@
 package main
 
 import "os"
+import "path/filepath"
 
-/*
+// spawnFileWriter will spawn the goroutine which writes the file/files to disk. files might be empty.
+func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piece, chan struct{}) {
+	// TODO: Check if file/ Directories exist:
+	//if _, err := os.Stat("/path/to/whatever"); err == nil {
+	//        path/to/whatever exists
+	//}
+	writeSync.Add(len(d.Pieces))
 
- */
-
-func spawnFileWriter(name string, single bool) (chan *Piece, chan struct{}) {
 	in := make(chan *Piece, FILE_WRITER_BUFSIZE)
 	close := make(chan struct{})
 	if single {
@@ -14,8 +18,7 @@ func spawnFileWriter(name string, single bool) (chan *Piece, chan struct{}) {
 		if err != nil {
 			debugger.Println("Unable to create file")
 		}
-
-		writeSync.Add(len(d.Pieces))
+		defer f.Close()
 
 		go func() {
 			for {
@@ -31,6 +34,21 @@ func spawnFileWriter(name string, single bool) (chan *Piece, chan struct{}) {
 		}()
 	} else {
 		// write multiple files
+		err := os.Mkdir(name, os.ModeDir|os.ModePerm)
+		if err != nil {
+			debugger.Println("Unable to make directory")
+		}
+
+		go func() {
+			createFiles(name, files)
+			for {
+				piece := <-in
+				logger.Printf("Writing Data to Disk, Piece: %d", piece.index)
+				// TODO: WriteToDisk
+				writeMultipleFiles(piece, d.Torrent.Info.Files)
+				writeSync.Done()
+			}
+		}()
 	}
 	return in, close
 }
@@ -44,6 +62,24 @@ func checkFileSize(filename string) (int64, error) {
 	defer file.Close()
 	fi, _ := file.Stat()
 	return fi.Size(), nil
+}
+
+func createFiles(name string, files []*TorrentFile) {
+	for _, file := range files {
+		if len(file.Path) < 2 {
+			f, err := os.Create(filepath.Join(name, file.Path[0]))
+			if err != nil {
+				debugger.Println("Error creation file", file.Path)
+			}
+			defer f.Close()
+		} else {
+			// TODO: when there are sub directory
+		}
+	}
+}
+
+func writeMultipleFiles(piece *Piece, files []*TorrentFile) {
+
 }
 
 func multipleWrite() {

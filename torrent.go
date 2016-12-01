@@ -41,8 +41,8 @@ type TorrentInfo struct {
 	Length int64  `bencode:"length"`
 	Name   string `bencode:"name"`
 	// Multiple Files
-	FilesBytes bencode.Bytes `bencode:"files"`
-	Files      []TorrentFile //string        `bencode:"file"`
+	FilesBytes bencode.Bytes  `bencode:"files"`
+	Files      []*TorrentFile //string        `bencode:"file"`
 	//PieceList      []*Piece
 	// md5sum for single files
 	// files for multiple files
