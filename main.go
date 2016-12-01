@@ -104,11 +104,9 @@ func main() {
 
 	// Get Peers
 	d.Peers = ParsePeers(tr)
-	file, err := os.Create(d.Torrent.Info.Name)
-	if err != nil {
-		debugger.Println("Unable to create file")
-	}
-	diskIO, closeIO := spawnFileWriter(file)
+
+	// Start writing to disk
+	diskIO, closeIO := spawnFileWriter(d.Torrent.Info.Name, d.Torrent.Info.SingleFile)
 
 	waiting := make(chan *Peer)
 	ready := make(chan *Peer) // Unchoked
