@@ -166,6 +166,7 @@ func (p *Peer) spawnPeerReader() {
 			case <-halt:
 				//disconnected <- p
 				p.conn.Close()
+				//close(p.halt)
 				debugger.Println("Halt closes Peer", p.id)
 				return
 			default:
@@ -227,5 +228,6 @@ func (p *Peer) spawnPieceRequest(piece int, info *TorrentInfo) chan *Piece {
 		}
 
 	}()
+
 	return out
 }

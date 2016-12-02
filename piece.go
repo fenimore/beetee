@@ -46,6 +46,7 @@ func (info *TorrentInfo) parsePieces() {
 			piece.chanBlocks = make(chan *Block, info.lastPieceBlockCount())
 			piece.size = info.lastPieceSize()
 			piece.data = make([]byte, piece.size)
+			//logger.Println(piece.size, cap(piece.chanBlocks), BLOCKSIZE)
 		} else {
 			piece.chanBlocks = make(chan *Block, numberOfBlocks)
 			piece.data = make([]byte, info.PieceLength)

@@ -117,6 +117,7 @@ func main() {
 	disconnected := make(chan *Peer)
 
 	pieceNext := FillPieceOrder()
+	// NOTE: Backwards for testing last piece.
 	//pieceNext := Backwards()
 
 	go func() {
@@ -218,7 +219,7 @@ func FillPieceOrder() chan *Piece {
 
 func Backwards() chan *Piece {
 	out := make(chan *Piece, len(d.Pieces))
-	for i := len(d.Pieces) - 1; i >= 0; i-- {
+	for i := len(d.Pieces) - 1; i >= len(d.Pieces)-2; i-- {
 		out <- d.Pieces[i]
 	}
 	return out

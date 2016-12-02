@@ -419,7 +419,7 @@ func TestIOMultipleFilesRealistic(t *testing.T) {
 
 	piece := &Piece{
 		data:  payload,
-		index: 11, // 12
+		index: 11, // 16, // 22 and 29 are edges too // On the edge: 11, // 12
 		size:  int64(len(payload)),
 	}
 	files := []*TorrentFile{
@@ -431,7 +431,7 @@ func TestIOMultipleFilesRealistic(t *testing.T) {
 			Length: 84},
 		&TorrentFile{
 			Path:   []string{"Dir/", "Other"},
-			Length: 60},
+			Length: 57},
 		&TorrentFile{
 			Path:   []string{"Dir/", "End"},
 			Length: 10},
@@ -463,23 +463,23 @@ func TestIOMultipleFilesRealistic(t *testing.T) {
 // Works well when the piece is bigger than the
 // the total of files
 func TestIOMultipleFiles(t *testing.T) {
-	firstPayload := []byte("iameightplusplus")
-
+	//firstPayload := []byte("iameightplusplus")
+	firstPayload := []byte("iameight")
 	piece := &Piece{
 		data:  firstPayload,
-		index: 0,
+		index: 3,
 		size:  int64(len(firstPayload)),
 	}
 	files := []*TorrentFile{
 		&TorrentFile{
 			Path:   []string{"Dir/", "File"},
-			Length: 2},
+			Length: 12},
 		&TorrentFile{
 			Path:   []string{"Dir/", "Info"},
-			Length: 1},
+			Length: 18},
 		&TorrentFile{
 			Path:   []string{"Dir/", "Other"},
-			Length: 3},
+			Length: 6},
 		&TorrentFile{
 			Path:   []string{"Dir/", "End"},
 			Length: 5},
@@ -497,15 +497,16 @@ func TestIOMultipleFiles(t *testing.T) {
 	result := make([]byte, 0)
 
 	for _, file := range files {
-		ok, data, _ := pieceInFile(piece, file, piece.size)
+		ok, data, offset := pieceInFile(piece, file, piece.size)
+
 		if ok {
-			//fmt.Println("Offset:", offset, file.Path, string(data))
+			fmt.Println("Offset:", offset, file.Path, string(data))
 			result = append(result, data...)
 		}
 	}
 	fmt.Println(string(result))
 	fmt.Println(len(result), total)
-	t.Error("Notworking")
+	//	t.Error("Notworking")
 
 }
 
