@@ -32,6 +32,7 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 				select {
 				case piece := <-in:
 					logger.Printf("Writing Data to Disk, Piece: %d", piece.index)
+					// TODO: doesn't work for last piece duhh!
 					n, err := f.WriteAt(piece.data, int64(piece.index)*piece.size)
 					if err != nil {
 						debugger.Printf("Error Writing %d bytes: %s", n, err)
@@ -172,7 +173,7 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 		}
 		defer f.Close()
 
-		data, offset := pieceInFile(piece, file)
+		_, data, offset := pieceInFile(piece, file)
 
 		n, err := f.WriteAt(data, offset)
 		if err != nil {
@@ -182,16 +183,36 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 }
 
 // pieceInFile returns the data to be written on a file, and it's offset
-func pieceInFile(piece *Piece, file *TorrentFile) ([]byte, int64) {
+func oldPieceInFile(piece *Piece, file *TorrentFile) (bool, []byte, int64) {
 	pieceLower := int64(piece.index) * piece.size
 	pieceUpper := int64(piece.index+1) * piece.size
+	fileUpper := file.PreceedingTotal + file.Length
+	if pieceLower > fileUpper || pieceUpper < file.PreceedingTotal {
+		return false, nil, 0
+	}
+
 	offset := max(0, pieceLower-file.PreceedingTotal)
 	lower := abs(min(0, pieceLower-file.PreceedingTotal))
-	//lower := min(0, abs(pieceLower-file.PreceedingTotal))
+
 	upper := min(file.PreceedingTotal+file.Length, pieceUpper-file.PreceedingTotal+file.Length)
-	//logger.Println(file.PreceedingTotal+file.Length, pieceUpper-file.PreceedingTotal+file.Length)
-	//upper := min(file.PreceedingTotal+file.Length, pieceUpper-file.PreceedingTotal+file.Length)
-	//upper = max(upper, piece.size)
-	logger.Println(lower, upper)
-	return piece.data[lower:upper], offset
+
+	return true, piece.data[lower:upper], offset
+}
+
+// pieceInFile returns the data to be written on a file, and it's offset
+func pieceInFile(piece *Piece, file *TorrentFile) (bool, []byte, int64) {
+	pieceLower := int64(piece.index) * piece.size
+	pieceUpper := int64(piece.index+1) * piece.size
+	fileUpper := file.PreceedingTotal + file.Length
+	if pieceLower > fileUpper || pieceUpper < file.PreceedingTotal {
+		// NOTE: Some files aren't in the 'write' space
+		return false, nil, 0
+	}
+
+	offset := max(0, pieceLower-file.PreceedingTotal)
+	lower := abs(min(0, pieceLower-file.PreceedingTotal))
+	upper := min(file.Length-offset+lower, piece.size)
+
+	//logger.Println(lower, upper)
+	return true, piece.data[lower:upper], offset
 }

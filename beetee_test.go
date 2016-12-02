@@ -360,7 +360,7 @@ func TestIOMultipleFile(t *testing.T) {
 	}
 
 	file := files[1]
-	data, _ := pieceInFile(piece, file)
+	_, data, _ := oldPieceInFile(piece, file)
 
 	fmt.Println(string(data))
 	if string(data) != "What" {
@@ -369,69 +369,78 @@ func TestIOMultipleFile(t *testing.T) {
 
 }
 
-func TestIOMultipleFiles(t *testing.T) {
-	firstPayload := []byte("I am P")
+func TestIOMultipleFilesNew(t *testing.T) {
+	payload := []byte("iameight")
 
 	piece := &Piece{
-		data:  firstPayload,
+		data:  payload,
 		index: 1,
-		size:  int64(len(firstPayload)),
+		size:  int64(len(payload)),
 	}
-
 	files := []*TorrentFile{
 		&TorrentFile{
+			Path:   []string{"Dir/", "File"},
+			Length: 12},
+		&TorrentFile{
+			Path:   []string{"Dir/", "Info"},
+			Length: 18},
+		&TorrentFile{
+			Path:   []string{"Dir/", "Other"},
 			Length: 6},
 		&TorrentFile{
-			Length: 3},
-		&TorrentFile{
-			Length: 5},
+			Path:   []string{"Dir/", "End"},
+			Length: 10},
 	}
+	// Get Preceeding Total of Files
 	var total int64 // length of files
 	for _, file := range files {
 		file.PreceedingTotal = total
 		total += file.Length
 	}
+
 	result := make([]byte, 0)
-	pieceLower := int64(piece.index) * piece.size // 0    or 16
-	pieceUpper := int64(piece.index+1) * piece.size
+
 	for _, file := range files {
-		fileUpper := file.PreceedingTotal + file.Length
-		if pieceLower > fileUpper || // OR
-			pieceUpper < file.PreceedingTotal {
-			continue
+		ok, data, _ := pieceInFile(piece, file)
+		if ok {
+			//fmt.Println(len(data), offset, file.Path)
+			//fmt.Println(string(data))
+			result = append(result, data...)
 		}
-		data, _ := pieceInFile(piece, file)
-		fmt.Println(string(result), "|", string(data))
-		//fmt.Println("Data", len(data))
-		//fmt.Println("Resu", len(result))
-		result = append(result, data...)
 	}
-	fmt.Println(string(result))
-	if len(result) != int(total) {
-		fmt.Println(string(result))
-		t.Error("The Space hasn't been filled")
+	if !bytes.Equal(result, payload) {
+		t.Error("Payload wasn't 'written' to 'file'")
 	}
 }
 
-func TestIOMultipleFilesBig(t *testing.T) {
-	firstPayload := []byte("iameight")
+// Works well when the piece is bigger than the
+// the total of files
+func TestIOMultipleFiles(t *testing.T) {
+	firstPayload := []byte("iameightplusplus")
 
 	piece := &Piece{
 		data:  firstPayload,
 		index: 0,
 		size:  int64(len(firstPayload)),
 	}
-
 	files := []*TorrentFile{
 		&TorrentFile{
-			Length: 12},
+			Path:   []string{"Dir/", "File"},
+			Length: 2},
 		&TorrentFile{
-			Length: 14},
+			Path:   []string{"Dir/", "Info"},
+			Length: 1},
 		&TorrentFile{
-			Length: 32},
+			Path:   []string{"Dir/", "Other"},
+			Length: 3},
 		&TorrentFile{
-			Length: 80},
+			Path:   []string{"Dir/", "End"},
+			Length: 5},
+		&TorrentFile{
+			Path:   []string{"Dir/", "Appendix"},
+			Length: 5},
 	}
+	// Get Preceeding Total of Files
 	var total int64 // length of files
 	for _, file := range files {
 		file.PreceedingTotal = total
@@ -439,27 +448,18 @@ func TestIOMultipleFilesBig(t *testing.T) {
 	}
 
 	result := make([]byte, 0)
-	pieceLower := int64(piece.index) * piece.size // 0    or 16
-	pieceUpper := int64(piece.index+1) * piece.size
+
 	for _, file := range files {
-		fileUpper := file.PreceedingTotal + file.Length
-		if pieceLower > fileUpper || pieceUpper < file.PreceedingTotal {
-			fmt.Println("Continue")
-			continue // Wrong File
+		ok, data, offset := pieceInFile(piece, file)
+		if ok {
+			fmt.Println("Offset:", offset, file.Path, string(data))
+			result = append(result, data...)
 		}
-		//fmt.Println(file.Length)
-		data, _ := pieceInFile(piece, file)
-		//fmt.Println(string(data), "|", string(result))
-		//fmt.Println("Data", len(data))
-		//fmt.Println("Resu", len(result))
-		result = append(result, data...)
 	}
-	fmt.Println()
-	if len(result) != int(total) {
-		fmt.Println(string(result))
-		fmt.Println(len(result), total)
-		t.Error("The Space hasn't been filled")
-	}
+	fmt.Println(string(result))
+	fmt.Println(len(result), total)
+	t.Error("Notworking")
+
 }
 
 func ExampleStatusMessage() {
