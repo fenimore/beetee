@@ -98,6 +98,7 @@ func checkFileSize(filename string) (int64, error) {
 }
 
 func createFiles(name string, files []*TorrentFile) {
+	logger.Println("Creating Files:", files)
 	// TODO: Create when there are sub directories
 	for _, file := range files {
 		if len(file.Path) < 2 {
@@ -153,12 +154,10 @@ func abs(a int64) int64 {
 }
 
 func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
-	pieceLower := int64(piece.index) * piece.size
-	pieceUpper := int64(piece.index+1) * piece.size
 	for _, file := range files {
-		fileUpper := file.PreceedingTotal + file.Length
-		if pieceLower > fileUpper || pieceUpper < file.PreceedingTotal {
-			continue // Wrong File
+		ok, data, offset := pieceInFile(piece, file)
+		if !ok {
+			continue
 		}
 		// Get file path
 		path := filepath.Join(name)
@@ -172,8 +171,6 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 				piece.index, file.Path)
 		}
 		defer f.Close()
-
-		_, data, offset := pieceInFile(piece, file)
 
 		n, err := f.WriteAt(data, offset)
 		if err != nil {
