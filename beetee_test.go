@@ -336,8 +336,85 @@ func TestUnchokeLeecher(t *testing.T) {
 	peer.conn.Write(msg)
 }
 
-func TestIOMultipleFiles(t *testing.T) {
+func TestIOMultipleFile(t *testing.T) {
 	firstPayload := []byte("I am Payload")
+
+	piece := &Piece{
+		data:  firstPayload,
+		index: 1,
+		size:  int64(len(firstPayload)),
+	}
+
+	files := []*TorrentFile{
+		&TorrentFile{
+			Length: 6},
+		&TorrentFile{
+			Length: 3},
+		&TorrentFile{
+			Length: 5},
+	}
+	var total int64 // length of files
+	for _, file := range files {
+		file.PreceedingTotal = total
+		total += file.Length
+	}
+
+	file := files[1]
+	data, _ := pieceInFile(piece, file)
+
+	fmt.Println(string(data))
+	if string(data) != "What" {
+		t.Error("The Space hasn't been filled")
+	}
+
+}
+
+func TestIOMultipleFiles(t *testing.T) {
+	firstPayload := []byte("I am P")
+
+	piece := &Piece{
+		data:  firstPayload,
+		index: 1,
+		size:  int64(len(firstPayload)),
+	}
+
+	files := []*TorrentFile{
+		&TorrentFile{
+			Length: 6},
+		&TorrentFile{
+			Length: 3},
+		&TorrentFile{
+			Length: 5},
+	}
+	var total int64 // length of files
+	for _, file := range files {
+		file.PreceedingTotal = total
+		total += file.Length
+	}
+	result := make([]byte, 0)
+	pieceLower := int64(piece.index) * piece.size // 0    or 16
+	pieceUpper := int64(piece.index+1) * piece.size
+	for _, file := range files {
+		fileUpper := file.PreceedingTotal + file.Length
+		if pieceLower > fileUpper || // OR
+			pieceUpper < file.PreceedingTotal {
+			continue
+		}
+		data, _ := pieceInFile(piece, file)
+		fmt.Println(string(result), "|", string(data))
+		//fmt.Println("Data", len(data))
+		//fmt.Println("Resu", len(result))
+		result = append(result, data...)
+	}
+	fmt.Println(string(result))
+	if len(result) != int(total) {
+		fmt.Println(string(result))
+		t.Error("The Space hasn't been filled")
+	}
+}
+
+func TestIOMultipleFilesBig(t *testing.T) {
+	firstPayload := []byte("iameight")
 
 	piece := &Piece{
 		data:  firstPayload,
@@ -347,40 +424,40 @@ func TestIOMultipleFiles(t *testing.T) {
 
 	files := []*TorrentFile{
 		&TorrentFile{
-			Length:          2,
-			PreceedingTotal: 0,
-		},
+			Length: 12},
 		&TorrentFile{
-			Length:          4,
-			PreceedingTotal: 2,
-		},
+			Length: 14},
 		&TorrentFile{
-			Length:          1,
-			PreceedingTotal: 6,
-		},
+			Length: 32},
 		&TorrentFile{
-			Length:          5,
-			PreceedingTotal: 7,
-		},
+			Length: 80},
 	}
+	var total int64 // length of files
+	for _, file := range files {
+		file.PreceedingTotal = total
+		total += file.Length
+	}
+
 	result := make([]byte, 0)
 	pieceLower := int64(piece.index) * piece.size // 0    or 16
 	pieceUpper := int64(piece.index+1) * piece.size
-
 	for _, file := range files {
 		fileUpper := file.PreceedingTotal + file.Length
 		if pieceLower > fileUpper || pieceUpper < file.PreceedingTotal {
+			fmt.Println("Continue")
 			continue // Wrong File
 		}
+		//fmt.Println(file.Length)
 		data, _ := pieceInFile(piece, file)
-
+		//fmt.Println(string(data), "|", string(result))
+		//fmt.Println("Data", len(data))
+		//fmt.Println("Resu", len(result))
 		result = append(result, data...)
 	}
-	fileSpace := files[len(files)-1].PreceedingTotal
-	fileSpace += files[len(files)-1].Length
-	if len(result) != int(fileSpace) {
+	fmt.Println()
+	if len(result) != int(total) {
 		fmt.Println(string(result))
-		fmt.Println(len(result), fileSpace)
+		fmt.Println(len(result), total)
 		t.Error("The Space hasn't been filled")
 	}
 }

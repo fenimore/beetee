@@ -187,19 +187,11 @@ func pieceInFile(piece *Piece, file *TorrentFile) ([]byte, int64) {
 	pieceUpper := int64(piece.index+1) * piece.size
 	offset := max(0, pieceLower-file.PreceedingTotal)
 	lower := abs(min(0, pieceLower-file.PreceedingTotal))
-	upper := min(file.PreceedingTotal+file.Length,
-		pieceUpper-file.PreceedingTotal+file.Length)
-
+	//lower := min(0, abs(pieceLower-file.PreceedingTotal))
+	upper := min(file.PreceedingTotal+file.Length, pieceUpper-file.PreceedingTotal+file.Length)
+	//logger.Println(file.PreceedingTotal+file.Length, pieceUpper-file.PreceedingTotal+file.Length)
+	//upper := min(file.PreceedingTotal+file.Length, pieceUpper-file.PreceedingTotal+file.Length)
+	//upper = max(upper, piece.size)
+	logger.Println(lower, upper)
 	return piece.data[lower:upper], offset
-}
-
-func multipleWrite() {
-	/// single file lenght
-	// lowerBound := index*size -size
-	// upperBound := index*size
-	// for file in files:
-	// if file.size is > lowerBound and < upperBound:
-	// perform spliting check
-	// len%piecesize if not zero, then the remainder goes to the next file
-	//
 }
