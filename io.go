@@ -101,36 +101,27 @@ func createFiles(name string, files []*TorrentFile) {
 	logger.Println("Creating Files:", files)
 	// TODO: Create when there are sub directories
 	for _, file := range files {
-		if len(file.Path) < 2 {
-			if _, err := os.Stat(filepath.Join(name, file.Path[0])); err != nil {
-				// if file doesn't exist
-				f, err := os.Create(filepath.Join(name, file.Path[0]))
-				if err != nil {
-					debugger.Println("Error creating file", file.Path)
-				}
-				defer f.Close()
-			}
-		} else {
-			var path string
-			filename := file.Path[len(file.Path)-1]
-			path = filepath.Join(name)
-			for _, val := range file.Path[:len(file.Path)-1] { // leave out the file name
-				path = filepath.Join(path, val)
-			}
-
-			if _, err := os.Stat(path); err != nil {
-				os.MkdirAll(path, os.ModePerm)
-			}
-
-			if _, err := os.Stat(filepath.Join(path, filename)); err != nil {
-				// if file doesn't exist
-				f, err := os.Create(filepath.Join(path, filename))
-				if err != nil {
-					debugger.Println("Error creating file", file.Path)
-				}
-				defer f.Close()
-			}
+		// construct path
+		var path string
+		filename := file.Path[len(file.Path)-1]
+		path = filepath.Join(name)
+		for _, val := range file.Path[:len(file.Path)-1] { // leave out the file name
+			path = filepath.Join(path, val)
 		}
+		// Create directory
+		if _, err := os.Stat(path); err != nil {
+			os.MkdirAll(path, os.ModePerm)
+		}
+
+		if _, err := os.Stat(filepath.Join(path, filename)); err != nil {
+			// if file doesn't exist
+			f, err := os.Create(filepath.Join(path, filename))
+			if err != nil {
+				debugger.Println("Error creating file", file.Path)
+			}
+			defer f.Close()
+		}
+
 	}
 }
 func min(a, b int64) int64 {
