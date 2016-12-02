@@ -337,18 +337,14 @@ func TestUnchokeLeecher(t *testing.T) {
 }
 
 func TestIOMultipleFiles(t *testing.T) {
-	firstPayload := []byte("This is the payload")
-	//secondPayload := []byte("This is the yapload")
+	firstPayload := []byte("I am Payload")
+
 	piece := &Piece{
 		data:  firstPayload,
 		index: 0,
 		size:  int64(len(firstPayload)),
 	}
-	// p1 := &Piece{
-	//	data:  secondPayload,
-	//	index: 1,
-	//	size:  int64(len(firstPayload)),
-	// }
+
 	files := []*TorrentFile{
 		&TorrentFile{
 			Length:          2,
@@ -367,7 +363,7 @@ func TestIOMultipleFiles(t *testing.T) {
 			PreceedingTotal: 7,
 		},
 	}
-	outputSlice := make([]byte, 0)
+	result := make([]byte, 0)
 	pieceLower := int64(piece.index) * piece.size // 0    or 16
 	pieceUpper := int64(piece.index+1) * piece.size
 
@@ -376,12 +372,17 @@ func TestIOMultipleFiles(t *testing.T) {
 		if pieceLower > fileUpper || pieceUpper < file.PreceedingTotal {
 			continue // Wrong File
 		}
-		data, _ := pieceTriage(piece, file)
-		//fmt.Println(string(data), offset))
-		outputSlice = append(outputSlice, data...)
-	}
-	fmt.Println(string(outputSlice))
+		data, _ := pieceInFile(piece, file)
 
+		result = append(result, data...)
+	}
+	fileSpace := files[len(files)-1].PreceedingTotal
+	fileSpace += files[len(files)-1].Length
+	if len(result) != int(fileSpace) {
+		fmt.Println(string(result))
+		fmt.Println(len(result), fileSpace)
+		t.Error("The Space hasn't been filled")
+	}
 }
 
 func ExampleStatusMessage() {

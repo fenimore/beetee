@@ -152,13 +152,9 @@ func abs(a int64) int64 {
 }
 
 func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
-	// NOTE: Not fully supported:
-	// NOTE: Won't work if piece extends past two files
+	pieceLower := int64(piece.index) * piece.size
+	pieceUpper := int64(piece.index+1) * piece.size
 	for _, file := range files {
-		// These bounds are relative to the total Piece list
-		pieceLower := int64(piece.index) * piece.size // 0    or 16
-		pieceUpper := int64(piece.index+1) * piece.size
-		// fileLower := file.PreceedingTotal
 		fileUpper := file.PreceedingTotal + file.Length
 		if pieceLower > fileUpper || pieceUpper < file.PreceedingTotal {
 			continue // Wrong File
@@ -171,32 +167,28 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 		f, err := os.OpenFile(path,
 			os.O_APPEND|os.O_WRONLY, 0777)
 		if err != nil {
-			debugger.Println("Error Opening/Writing Piece %d to file %s",
+			debugger.Println("Error Write %d to file %s",
 				piece.index, file.Path)
 		}
 		defer f.Close()
 
-		offset := max(0, pieceLower-file.PreceedingTotal)
-		//offset := pieceLower % file.PreceedingTotal
-		lower := abs(min(0, pieceLower-file.PreceedingTotal))
-		upper := min(piece.size, pieceUpper-file.PreceedingTotal+file.Length)
+		data, offset := pieceInFile(piece, file)
 
-		n, err := f.WriteAt(piece.data[lower:upper], offset)
+		n, err := f.WriteAt(data, offset)
 		if err != nil {
 			debugger.Println("Write Error", n, err)
 		}
-
 	}
-
 }
 
-func pieceTriage(piece *Piece, file *TorrentFile) ([]byte, int64) { //return data and offset
+// pieceInFile returns the data to be written on a file, and it's offset
+func pieceInFile(piece *Piece, file *TorrentFile) ([]byte, int64) {
 	pieceLower := int64(piece.index) * piece.size
 	pieceUpper := int64(piece.index+1) * piece.size
 	offset := max(0, pieceLower-file.PreceedingTotal)
-	//offset := pieceLower % file.PreceedingTotal
 	lower := abs(min(0, pieceLower-file.PreceedingTotal))
-	upper := min(file.PreceedingTotal+file.Length, pieceUpper-file.PreceedingTotal+file.Length)
+	upper := min(file.PreceedingTotal+file.Length,
+		pieceUpper-file.PreceedingTotal+file.Length)
 
 	return piece.data[lower:upper], offset
 }
