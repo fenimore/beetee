@@ -56,7 +56,8 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 			createFiles(name, files)
 			for {
 				piece := <-in
-				logger.Printf("Writing Data to Disk, Piece: %d", piece.index)
+				logger.Printf("Writing Data to Disk, Piece: %d out of: %d", piece.index,
+					len(d.Pieces))
 				// TODO: WriteToDisk
 				writeMultipleFiles(piece, name, d.Torrent.Info.Files)
 				writeSync.Done()
@@ -98,9 +99,9 @@ func checkFileSize(filename string) (int64, error) {
 }
 
 func createFiles(name string, files []*TorrentFile) {
-	logger.Println("Creating Files:", files)
 	// TODO: Create when there are sub directories
 	for _, file := range files {
+		logger.Println("Creating:", file.Path, file.Length)
 		// construct path
 		var path string
 		filename := file.Path[len(file.Path)-1]
@@ -146,7 +147,8 @@ func abs(a int64) int64 {
 
 func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 	for _, file := range files {
-		ok, data, offset := pieceInFile(piece, file)
+		// TODO: pass in TorrentInf
+		ok, data, offset := pieceInFile(piece, file, d.Torrent.Info.PieceLength)
 		if !ok {
 			continue
 		}
@@ -172,6 +174,7 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 
 // pieceInFile returns the data to be written on a file, and it's offset
 func oldPieceInFile(piece *Piece, file *TorrentFile) (bool, []byte, int64) {
+	// TODO: Piece size for last piece?
 	pieceLower := int64(piece.index) * piece.size
 	pieceUpper := int64(piece.index+1) * piece.size
 	fileUpper := file.PreceedingTotal + file.Length
@@ -188,9 +191,9 @@ func oldPieceInFile(piece *Piece, file *TorrentFile) (bool, []byte, int64) {
 }
 
 // pieceInFile returns the data to be written on a file, and it's offset
-func pieceInFile(piece *Piece, file *TorrentFile) (bool, []byte, int64) {
-	pieceLower := int64(piece.index) * piece.size
-	pieceUpper := int64(piece.index+1) * piece.size
+func pieceInFile(piece *Piece, file *TorrentFile, pieceSize int64) (bool, []byte, int64) {
+	pieceLower := int64(piece.index) * pieceSize
+	pieceUpper := int64(piece.index+1) * pieceSize
 	fileUpper := file.PreceedingTotal + file.Length
 	if pieceLower > fileUpper || pieceUpper < file.PreceedingTotal {
 		// NOTE: Some files aren't in the 'write' space
@@ -200,7 +203,9 @@ func pieceInFile(piece *Piece, file *TorrentFile) (bool, []byte, int64) {
 	offset := max(0, pieceLower-file.PreceedingTotal)
 	lower := abs(min(0, pieceLower-file.PreceedingTotal))
 	upper := min(file.Length-offset+lower, piece.size)
-
+	if upper == lower {
+		return false, nil, 0
+	}
 	//logger.Println(lower, upper)
 	return true, piece.data[lower:upper], offset
 }
