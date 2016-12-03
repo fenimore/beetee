@@ -23,6 +23,9 @@ func TestMain(m *testing.M) {
 func TestPeerIdSize(t *testing.T) {
 	peerid := GenPeerId()
 
+	if !bytes.Equal(peerid[:8], []byte("-FL1001-")) {
+		t.Error("Wrong Id")
+	}
 	if len(peerid) != 20 {
 		t.Error("Peer Id should be 20 bytes")
 	}

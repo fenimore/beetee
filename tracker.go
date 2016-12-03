@@ -5,6 +5,8 @@ import "strconv"
 import "net/http"
 import "net"
 import "fmt"
+import "math/rand"
+import "time"
 
 type TrackerRequest struct {
 	InfoHash,
@@ -78,10 +80,18 @@ func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string
 	return response, err
 }
 
+const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+
 func GenPeerId() [20]byte {
-	// TODO: Make random
-	b := [20]byte{'-', 'F', 'L', '1', '0', '0', '1', '-',
-		'9', '1', 'a', '2', '4', 'W', '5', '7', '7', '4', '6', '1'}
+	rand.Seed(time.Now().UnixNano())
+	var b [20]byte
+	copy(b[:8], []byte("-FL1001-"))
+	for i := range b {
+		if i == 12 {
+			break
+		}
+		b[i+8] = letters[rand.Intn(len(letters))]
+	}
 	return b
 }
 
