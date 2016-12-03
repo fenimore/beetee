@@ -549,6 +549,54 @@ func TestIOMultipleFiles(t *testing.T) {
 	}
 }
 
+func TestIOMultipleFilesBigger(t *testing.T) {
+	//firstPayload := []byte("iameightplusplus")
+	dummy_data := make([]byte, 131072)
+	for i, _ := range dummy_data {
+		dummy_data[i] = 1
+	}
+
+	pieces := make([]*Piece, 0)
+	for i := 0; i < 128; i++ {
+		pieces = append(pieces, &Piece{
+			data:  dummy_data,
+			index: i,
+			size:  131072,
+		})
+	}
+
+	files := []*TorrentFile{
+		&TorrentFile{
+			Path:   []string{"Dir/", "File"},
+			Length: 804},
+		&TorrentFile{
+			Path:   []string{"Dir/", "Info"},
+			Length: 7942424},
+		&TorrentFile{
+			Path:   []string{"Dir/", "Other"},
+			Length: 8945491},
+	}
+	// Get Preceeding Total of Files
+	var total int64 // length of files
+	for _, file := range files {
+		file.PreceedingTotal = total
+		total += file.Length
+	}
+
+	result := make([]byte, 0)
+	for _, piece := range pieces {
+		for _, file := range files {
+			ok, data, offset := pieceInFile(piece, file, piece.size)
+
+			if ok {
+				fmt.Println("Offset:", offset, file.Path, len(data))
+				result = append(result, data...)
+			}
+		}
+	}
+
+}
+
 func ExampleStatusMessage() {
 	msg := StatusMessage(UnchokeMsg)
 	fmt.Println(msg)

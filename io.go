@@ -173,7 +173,7 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 			path = filepath.Join(path, val)
 		}
 		f, err := os.OpenFile(path,
-			os.O_APPEND|os.O_WRONLY, 0777)
+			os.O_WRONLY, 0777)
 		if err != nil {
 			debugger.Println("Error Write %d to file %s",
 				piece.index, file.Path)
@@ -218,15 +218,10 @@ func pieceInFile(piece *Piece, file *TorrentFile, pieceSize int64) (bool, []byte
 
 	offset := max(0, pieceLower-file.PreceedingTotal)
 	lower := abs(min(0, pieceLower-file.PreceedingTotal))
-	upper := min(max(file.Length-offset, piece.size-offset), piece.size)
-	//upper := min(max(piece.size-offset, file.Length-offset), piece.size) //min(piece.size, file.Length))
-	//upper := min(min(piece.size, file.Length), abs(min(file.Length, piece.size)-offset))
-	//upper := min(max(piece.size-offset, file.Length-offset), min(piece.size, file.Length))
+	//upper := min(file.Length-offset, piece.size)
+	upper := min((fileUpper - pieceLower), pieceSize)
 
-	//upper := min(max(piece.size, file.Length)-offset, min(piece.size, file.Length))
-	//n(int64(len(piece.data[lower:])), file.Length))
-	//min(piece.size, file.Length))
-
+	logger.Println(offset, upper)
 	if piece.index == len(d.Pieces)-1 {
 		debugger.Println("This is the last piece")
 		debugger.Println(pieceLower, pieceUpper, fileUpper, offset, lower, upper)

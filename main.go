@@ -201,6 +201,9 @@ func main() {
 			go func(p *Peer) {
 
 				for {
+					if string(peer.id) == "-LT1200-YpsXDHDalf2z" {
+						return
+					}
 					piece := <-pieceNext
 					logger.Printf("Requesting Piece %d From %s",
 						piece.index, peer.id)
