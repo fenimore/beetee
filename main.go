@@ -48,6 +48,7 @@ func main() {
 	/* Get Arguments */
 	torrentFile := flag.String("file", "torrents/tom.torrent", "path to torrent file")
 	seedTorrent := flag.Bool("seed", false, "keep running after download completes")
+	maxPeers := flag.Int("peers", 30, "max peer connections")
 	flag.Usage = func() {
 		fmt.Println("beetee, commandline torrent application. Usage:")
 		flag.PrintDefaults()
@@ -122,7 +123,11 @@ func main() {
 	//pieceNext := Backwards()
 
 	go func() {
-		for _, peer := range d.Peers[:] {
+		peerLimit := *maxPeers
+		if len(d.Peers) < *maxPeers {
+			peerLimit = len(d.Peers)
+		}
+		for _, peer := range d.Peers[:peerLimit] {
 			//debugger.Println(peer)
 			waiting <- peer
 		}
