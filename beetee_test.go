@@ -336,220 +336,71 @@ func TestUnchokeLeecher(t *testing.T) {
 	peer.conn.Write(msg)
 }
 
-// func TestIOMultipleFile(t *testing.T) {
-//	firstPayload := []byte("I am Payload")
-
-//	piece := &Piece{
-//		data:  firstPayload,
-//		index: 1,
-//		size:  int64(len(firstPayload)),
-//	}
-
-//	files := []*TorrentFile{
-//		&TorrentFile{
-//			Length: 6},
-//		&TorrentFile{
-//			Length: 3},
-//		&TorrentFile{
-//			Length: 5},
-//	}
-//	var total int64 // length of files
-//	for _, file := range files {
-//		file.PreceedingTotal = total
-//		total += file.Length
-//	}
-
-//	file := files[1]
-//	_, data, _ := oldPieceInFile(piece, file)
-
-//	fmt.Println(string(data))
-//	if string(data) != "What" {
-//		t.Error("The Space hasn't been filled")
-//	}
-
-// }
-
-func TestIOMultipleFilesNew(t *testing.T) {
-	payload := []byte("iameight")
-
-	piece := &Piece{
-		data:  payload,
-		index: 1,
-		size:  int64(len(payload)),
-	}
-	files := []*TorrentFile{
-		&TorrentFile{
-			Path:   []string{"Dir/", "File"},
-			Length: 12},
-		&TorrentFile{
-			Path:   []string{"Dir/", "Info"},
-			Length: 18},
-		&TorrentFile{
-			Path:   []string{"Dir/", "Other"},
-			Length: 6},
-		&TorrentFile{
-			Path:   []string{"Dir/", "End"},
-			Length: 10},
-	}
-	// Get Preceeding Total of Files
-	var total int64 // length of files
-	for _, file := range files {
-		file.PreceedingTotal = total
-		total += file.Length
-	}
-
-	result := make([]byte, 0)
-
-	for _, file := range files {
-		ok, data, offset := pieceInFile(piece, file, piece.size)
-		if ok {
-			//fmt.Println(len(data), offset, file.Path)
-			//fmt.Println(string(data))
-			fmt.Println("Offset:", offset, file.Path, string(data), len(data))
-			result = append(result, data...)
-		}
-	}
-	if !bytes.Equal(result, payload) {
-		t.Error("Payload wasn't 'written' to 'file'")
-	}
+var ioTests = []struct {
+	idx   int
+	first int64
+}{
+	{idx: 1, first: 12},
+	{idx: 2, first: 12},
+	{idx: 3, first: 12},
+	{idx: 0, first: 2},
 }
 
-func TestIOMultipleFilesRealistic(t *testing.T) {
-	payload := []byte("iameight")
-
-	piece := &Piece{
-		data:  payload,
-		index: 29, // 16, // 22 and 29 are edges too // On the edge: 11, // 12
-		size:  int64(len(payload)),
-	}
-	files := []*TorrentFile{
-		&TorrentFile{
-			Path:   []string{"Dir/", "File"},
-			Length: 96},
-		&TorrentFile{
-			Path:   []string{"Dir/", "Info"},
-			Length: 84},
-		&TorrentFile{
-			Path:   []string{"Dir/", "Other"},
-			Length: 57},
-		&TorrentFile{
-			Path:   []string{"Dir/", "End"},
-			Length: 10},
-	}
-	// Get Preceeding Total of Files
-	var total int64 // length of files
-	for _, file := range files {
-		file.PreceedingTotal = total
-		total += file.Length
-	}
-
-	result := make([]byte, 0)
-
-	for _, file := range files {
-		ok, data, offset := pieceInFile(piece, file, piece.size)
-		if ok {
-			//fmt.Println(len(data), offset, file.Path)
-			//fmt.Println(string(data))
-			fmt.Println("Offset:", offset, file.Path, string(data), len(data))
-			result = append(result, data...)
-		}
-	}
-	if !bytes.Equal(result, payload) {
-		t.Error("Payload wasn't 'written' to 'file'")
-	}
-}
-
-func TestIOSmallFirstFile(t *testing.T) {
-	payload := []byte("iameight")
-	piece := &Piece{
-		data:  payload,
-		index: 0,
-		size:  int64(len(payload)),
-	}
-	files := []*TorrentFile{
-		&TorrentFile{
-			Path:   []string{"Dir/", "File"},
-			Length: 2},
-		&TorrentFile{
-			Path:   []string{"Dir/", "Info"},
-			Length: 18},
-	}
-	// Get Preceeding Total of Files
-	var total int64 // length of files
-	for _, file := range files {
-		file.PreceedingTotal = total
-		total += file.Length
-	}
-
-	result := make([]byte, 0)
-
-	for _, file := range files {
-		ok, data, offset := pieceInFile(piece, file, piece.size)
-
-		if ok {
-			fmt.Println("Offset:", offset, file.Path, string(data), len(data))
-			result = append(result, data...)
-		}
-	}
-	if !bytes.Equal(result, payload) {
-		fmt.Println(string(result))
-		t.Error("Payload wasn't 'written' to 'file'")
-	}
-}
-
-// Works well when the piece is bigger than the
-// the total of files
+// Tests some different cases such as:
+// When first piece is bigger than first file size
+// when piece overlaps files, when piece is within file
 func TestIOMultipleFiles(t *testing.T) {
-	//firstPayload := []byte("iameightplusplus")
-	firstPayload := []byte("iameight")
-	piece := &Piece{
-		data:  firstPayload,
-		index: 3,
-		size:  int64(len(firstPayload)),
-	}
-	files := []*TorrentFile{
-		&TorrentFile{
-			Path:   []string{"Dir/", "File"},
-			Length: 12},
-		&TorrentFile{
-			Path:   []string{"Dir/", "Info"},
-			Length: 18},
-		&TorrentFile{
-			Path:   []string{"Dir/", "Other"},
-			Length: 6},
-		&TorrentFile{
-			Path:   []string{"Dir/", "End"},
-			Length: 5},
-		&TorrentFile{
-			Path:   []string{"Dir/", "Appendix"},
-			Length: 5},
-	}
-	// Get Preceeding Total of Files
-	var total int64 // length of files
-	for _, file := range files {
-		file.PreceedingTotal = total
-		total += file.Length
-	}
-
-	result := make([]byte, 0)
-
-	for _, file := range files {
-		ok, data, offset := pieceInFile(piece, file, piece.size)
-
-		if ok {
-			fmt.Println("Offset:", offset, file.Path, string(data), len(data))
-			result = append(result, data...)
+	for _, tt := range ioTests {
+		//firstPayload := []byte("iameightplusplus")
+		firstPayload := []byte("iameight")
+		piece := &Piece{
+			data:  firstPayload,
+			index: tt.idx,
+			size:  int64(len(firstPayload)),
 		}
-	}
+		files := []*TorrentFile{
+			&TorrentFile{
+				Path:   []string{"Dir/", "File"},
+				Length: tt.first},
+			&TorrentFile{
+				Path:   []string{"Dir/", "Info"},
+				Length: 18},
+			&TorrentFile{
+				Path:   []string{"Dir/", "Other"},
+				Length: 6},
+			&TorrentFile{
+				Path:   []string{"Dir/", "End"},
+				Length: 5},
+			&TorrentFile{
+				Path:   []string{"Dir/", "Appendix"},
+				Length: 5},
+		}
+		// Set Preceeding Total of Files
+		var total int64
+		for _, file := range files {
+			file.PreceedingTotal = total
+			total += file.Length
+		}
 
-	if !bytes.Equal(result, firstPayload) {
-		fmt.Println(string(result))
-		fmt.Println(len(result), total)
-		t.Error("Payload wasn't 'written' to 'file'")
+		result := make([]byte, 0)
+
+		for _, file := range files {
+			ok, data, _ := pieceInFile(piece, file, piece.size)
+
+			if ok {
+				result = append(result, data...)
+			}
+		}
+
+		if !bytes.Equal(result, firstPayload) {
+			fmt.Println(string(result))
+			fmt.Println(len(result), total)
+			t.Error("Payload wasn't 'written' to 'file'")
+		}
 	}
 }
 
-func TestIOMultipleFilesBigger(t *testing.T) {
+func TestIOMultipleFilesRealSizes(t *testing.T) {
 	//firstPayload := []byte("iameightplusplus")
 	dummy_data := make([]byte, 131072)
 	for i, _ := range dummy_data {
@@ -586,10 +437,9 @@ func TestIOMultipleFilesBigger(t *testing.T) {
 	result := make([]byte, 0)
 	for _, piece := range pieces {
 		for _, file := range files {
-			ok, data, offset := pieceInFile(piece, file, piece.size)
+			ok, data, _ := pieceInFile(piece, file, piece.size)
 
 			if ok {
-				fmt.Println("Offset:", offset, file.Path, len(data))
 				result = append(result, data...)
 			}
 		}

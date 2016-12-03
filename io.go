@@ -125,6 +125,7 @@ func createFiles(name string, files []*TorrentFile) {
 
 	}
 }
+
 func min(a, b int64) int64 {
 	if a < b {
 		return a
@@ -188,10 +189,10 @@ func pieceInFile(piece *Piece, file *TorrentFile, pieceSize int64) (bool, []byte
 	lower := abs(min(0, pieceLower-file.PreceedingTotal))
 	upper := min((fileUpper - pieceLower), pieceSize)
 
-	if piece.index == len(d.Pieces)-1 {
-		debugger.Println("This is the last piece")
-		debugger.Println(pieceLower, pieceUpper, fileUpper, offset, lower, upper)
-	}
+	// if piece.index == len(d.Pieces)-1 {
+	//	debugger.Println("This is the last piece")
+	//	debugger.Println(pieceLower, pieceUpper, fileUpper, offset, lower, upper)
+	// }
 
 	return true, piece.data[lower:upper], offset
 }

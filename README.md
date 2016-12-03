@@ -22,13 +22,12 @@ Thanks @kracekumar and @alex-segura, fellow Recursers, for all your help :)
 - [x] parse pieces
 - [x] put into pieces struct
 - [x] Parse Have and BitField
-- [ ] use unsigned ints
 - [x] Begin Unit and Integration Tests
 
 ## Downloading
 
 - [x] ask peer for index
-- [ ] find rarest blocks
+- [ ] ask for rarest blocks first
 - [x] only ask peer if they have it
 
 ### blocks
@@ -48,8 +47,8 @@ Thanks @kracekumar and @alex-segura, fellow Recursers, for all your help :)
 - [x] run server
 - [ ] construct bitfield
 - [x] allow handshake
-- [ ] parse request
-- [ ] send blocks
+- [x] parse request
+- [x] send blocks
 
 ====
 
