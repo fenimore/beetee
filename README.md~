@@ -2,7 +2,7 @@
 
 Bittorrent Client implemented in Go **Work in Progress**. I have a blog post outlining the protocol in dialog format [here](http://another.workingagenda.com/blog/post/d1alog/).
 
-> $ ./beetee -file=linux.torrent
+> run $ ./beetee -file=linux.torrent
 
     beetee, commandline torrent application. Usage:
       -file string
@@ -10,26 +10,25 @@ Bittorrent Client implemented in Go **Work in Progress**. I have a blog post out
       -seed
             keep running after download completes
 
-Thanks @kracekumar, @alex-segura, and @nschuc, fellow Recursers, for all your help :)
+Thanks @kracekumar and @alex-segura, fellow Recursers, for all your help :)
 
 ====
 
-# Functionality:
+# TODO:
 
 - [x] allow multiple file-torrents
 - [x] allow multiple dir-torrents
+- [ ] control peer flow/ask for more peers
 - [x] parse pieces
 - [x] put into pieces struct
-- [x] barse Have and BitField
-- [x] begin Unit and Integration Tests
-- [ ] control peer flow/ask for more peers
+- [x] Parse Have and BitField
+- [x] Begin Unit and Integration Tests
 
 ## Downloading
 
 - [x] ask peer for index
-- [x] only ask peer if they have it
-- [ ] write test for last piece download
 - [ ] ask for rarest blocks first
+- [x] only ask peer if they have it
 
 ### blocks
 
@@ -41,15 +40,15 @@ Thanks @kracekumar, @alex-segura, and @nschuc, fellow Recursers, for all your he
 - [x] manage blocks
 - [x] write to disk
 - [x] write to disk gradually
-- [ ] read when incomplete and put into pieces
+- [ ] read when incomplete
 
 ## Uploading
 
 - [x] run server
+- [ ] construct bitfield
 - [x] allow handshake
 - [x] parse request
 - [x] send blocks
-- [ ] construct bitfield from pieces
 
 ====
 
@@ -57,19 +56,20 @@ Package Organisation:
 
 `torrent`
 
-> Torrent/meta/info structs and parse method. The torrent file provides the list of pieces.
+> Torrent/meta/info structs and parse method.
+
 
 `tracker`
 
-> Tracker struct and Response method. The tracker provides a list of peers.
+> Tracker struct and Response method.
 
 `message`
 
-> Handshake, individual message decoder and message constructor. 
+> Handshake, individual message decoder and message constructor.
 
 `peer`
 
-> Peer struct, connect and Listen method. Also, the message decode switch for payloads is here. This file is mostly IO for the peer sockets.
+> Peer struct, connect and Listen method. Also, the message decode switch for payloads is here. The peer constructor comes from parsing a TrackerResponse. This file is mostly IO for peer sockets.
 
 `server`
 
