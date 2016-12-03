@@ -64,6 +64,43 @@ func main() {
 				debugger.Println("Piece Not found:", p.index)
 			}
 		}
+
+		for key, b := range overwrite {
+			streaks := make(map[int]int)
+			locos := make(map[int][]int)
+			var count int
+			var lastEmpty int
+			longestStreak := 0
+			var streak int
+			var streakEnds int
+			//indexes := make([]int, 0)
+			for idx, indiv := range b {
+				if indiv == 0 {
+					if idx-1 == lastEmpty {
+						streak++
+					}
+					lastEmpty = idx
+					count++
+					continue
+				}
+				streaks[streak]++
+				locos[streak] = append(locos[streak], idx)
+				if streak > longestStreak {
+					longestStreak = streak
+					streakEnds = idx
+				}
+				streak = 0
+			}
+			debugger.Println("Blanks at file", key, ":", count)
+			debugger.Println("Longest Streak", longestStreak, "at", streakEnds)
+			for k, val := range streaks {
+				debugger.Println("How many:", val)
+				debugger.Println("What is :", k)
+				debugger.Println("Ends at :", locos[k][0])
+			}
+
+		}
+
 		curSize, err := checkFileSize(d.Torrent.Info.Name)
 		if err != nil {
 			debugger.Println(err)

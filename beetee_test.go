@@ -405,7 +405,7 @@ func TestIOMultipleFilesNew(t *testing.T) {
 		if ok {
 			//fmt.Println(len(data), offset, file.Path)
 			//fmt.Println(string(data))
-			fmt.Println("Offset:", offset, file.Path, string(data))
+			fmt.Println("Offset:", offset, file.Path, string(data), len(data))
 			result = append(result, data...)
 		}
 	}
@@ -419,7 +419,7 @@ func TestIOMultipleFilesRealistic(t *testing.T) {
 
 	piece := &Piece{
 		data:  payload,
-		index: 11, // 16, // 22 and 29 are edges too // On the edge: 11, // 12
+		index: 29, // 16, // 22 and 29 are edges too // On the edge: 11, // 12
 		size:  int64(len(payload)),
 	}
 	files := []*TorrentFile{
@@ -450,12 +450,49 @@ func TestIOMultipleFilesRealistic(t *testing.T) {
 		if ok {
 			//fmt.Println(len(data), offset, file.Path)
 			//fmt.Println(string(data))
-			fmt.Println("Offset:", offset, file.Path, string(data))
-			fmt.Println(string(data))
+			fmt.Println("Offset:", offset, file.Path, string(data), len(data))
 			result = append(result, data...)
 		}
 	}
 	if !bytes.Equal(result, payload) {
+		t.Error("Payload wasn't 'written' to 'file'")
+	}
+}
+
+func TestIOSmallFirstFile(t *testing.T) {
+	payload := []byte("iameight")
+	piece := &Piece{
+		data:  payload,
+		index: 0,
+		size:  int64(len(payload)),
+	}
+	files := []*TorrentFile{
+		&TorrentFile{
+			Path:   []string{"Dir/", "File"},
+			Length: 2},
+		&TorrentFile{
+			Path:   []string{"Dir/", "Info"},
+			Length: 18},
+	}
+	// Get Preceeding Total of Files
+	var total int64 // length of files
+	for _, file := range files {
+		file.PreceedingTotal = total
+		total += file.Length
+	}
+
+	result := make([]byte, 0)
+
+	for _, file := range files {
+		ok, data, offset := pieceInFile(piece, file, piece.size)
+
+		if ok {
+			fmt.Println("Offset:", offset, file.Path, string(data), len(data))
+			result = append(result, data...)
+		}
+	}
+	if !bytes.Equal(result, payload) {
+		fmt.Println(string(result))
 		t.Error("Payload wasn't 'written' to 'file'")
 	}
 }
@@ -500,14 +537,16 @@ func TestIOMultipleFiles(t *testing.T) {
 		ok, data, offset := pieceInFile(piece, file, piece.size)
 
 		if ok {
-			fmt.Println("Offset:", offset, file.Path, string(data))
+			fmt.Println("Offset:", offset, file.Path, string(data), len(data))
 			result = append(result, data...)
 		}
 	}
-	fmt.Println(string(result))
-	fmt.Println(len(result), total)
-	//	t.Error("Notworking")
 
+	if !bytes.Equal(result, firstPayload) {
+		fmt.Println(string(result))
+		fmt.Println(len(result), total)
+		t.Error("Payload wasn't 'written' to 'file'")
+	}
 }
 
 func ExampleStatusMessage() {
