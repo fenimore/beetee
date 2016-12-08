@@ -25,7 +25,7 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 
 		go func() {
 			for {
-				f, err = os.OpenFile(name, os.O_APPEND|os.O_WRONLY, 0777)
+				f, err = os.OpenFile(name, os.O_WRONLY, 0777)
 				if err != nil {
 					debugger.Println("ERror opening file: ", err)
 				}
