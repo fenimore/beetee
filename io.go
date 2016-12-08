@@ -15,19 +15,24 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 	close := make(chan struct{})
 
 	if single {
+		if _, err := os.Stat(name); err != nil {
+			// if file doesn't exist
+			f, err := os.Create(filepath.Join(name))
+			if err != nil {
+				debugger.Println("Error creating file")
+			}
+			defer f.Close()
+		}
 		f, err := os.Create(name)
-		// NOTE: Because it's created
-		// No need for perm flags?
+
 		if err != nil {
 			debugger.Println("Unable to create file")
 		}
-		f.Close()
-
 		go func() {
 			for {
 				f, err = os.OpenFile(name, os.O_WRONLY, 0777)
 				if err != nil {
-					debugger.Println("ERror opening file: ", err)
+					debugger.Println("Error opening file: ", err)
 				}
 				select {
 				case piece := <-in:
@@ -36,6 +41,7 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 					n, err := f.WriteAt(piece.data, int64(piece.index)*piece.size)
 					if err != nil {
 						debugger.Printf("Error Writing %d bytes: %s", n, err)
+						continue
 					}
 					writeSync.Done()
 				case <-close:
