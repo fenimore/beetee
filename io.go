@@ -4,7 +4,7 @@ import "os"
 import "path/filepath"
 
 // spawnFileWriter will spawn the goroutine which writes the file/files to disk. files might be empty.
-func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piece, chan struct{}) {
+func spawnFileWriter(name string, single bool, files []*TorrentFile, recycle chan<- *Piece) (chan *Piece, chan struct{}) {
 	// TODO: Check if file/ Directories exist:
 	//if _, err := os.Stat("/path/to/whatever"); err == nil {
 	//        path/to/whatever exists
@@ -29,11 +29,12 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 			debugger.Println("Unable to create file")
 		}
 		go func() {
+			f, err = os.OpenFile(name, os.O_WRONLY, 0777)
+			if err != nil {
+				debugger.Println("Error opening file: ", err)
+			}
+			defer f.Close()
 			for {
-				f, err = os.OpenFile(name, os.O_WRONLY, 0777)
-				if err != nil {
-					debugger.Println("Error opening file: ", err)
-				}
 				select {
 				case piece := <-in:
 					logger.Printf("Writing Data to Disk, Piece: %d", piece.index)
@@ -41,6 +42,7 @@ func spawnFileWriter(name string, single bool, files []*TorrentFile) (chan *Piec
 					n, err := f.WriteAt(piece.data, int64(piece.index)*piece.size)
 					if err != nil {
 						debugger.Printf("Error Writing %d bytes: %s", n, err)
+						recycle <- piece
 						continue
 					}
 					writeSync.Done()

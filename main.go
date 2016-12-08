@@ -108,10 +108,6 @@ func main() {
 	// Get Peers
 	d.Peers = ParsePeers(tr)
 
-	// Start writing to disk
-	diskIO, closeIO := spawnFileWriter(d.Torrent.Info.Name,
-		d.Torrent.Info.SingleFile, d.Torrent.Info.Files)
-
 	waiting := make(chan *Peer)
 	ready := make(chan *Peer) // Unchoked
 	choked := make(chan *Peer)
@@ -121,6 +117,10 @@ func main() {
 	pieceNext := FillPieceOrder()
 	// NOTE: Backwards for testing last piece.
 	//pieceNext := Backwards()
+
+	// Start writing to disk
+	diskIO, closeIO := spawnFileWriter(d.Torrent.Info.Name,
+		d.Torrent.Info.SingleFile, d.Torrent.Info.Files, pieceNext)
 
 	go func() {
 		peerLimit := *maxPeers
