@@ -108,7 +108,7 @@ func (p *Piece) VerifyPiece() {
 			p.size, p.hash, sha1.Sum(p.data))
 		p.data = nil
 		p.data = make([]byte, p.size)
-		logger.Printf("Unable to Write Blocks to Piece %d", p.index)
+		logger.Printf("Unable to Validate Blocks to Piece %d", p.index)
 		return
 	}
 	p.verified = true
