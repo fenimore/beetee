@@ -46,7 +46,7 @@ func main() {
 	}
 
 	/* Get Arguments */
-	torrentFile := flag.String("file", "torrents/tom.torrent", "path to torrent file")
+	torrentFile := flag.String("path", "torrents/tom.torrent", "path to torrent file")
 	seedTorrent := flag.Bool("seed", false, "keep running after download completes")
 	maxPeers := flag.Int("peers", 30, "max peer connections")
 	flag.Usage = func() {
