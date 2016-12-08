@@ -83,7 +83,7 @@ func main() {
 
 	/* Start Listening */
 	// TODO: use leechers
-	//leechers := Serve(PORT, make(chan bool))
+	leechers := Serve(PORT, make(chan bool))
 
 	/* Parse Torrent*/
 	// NOTE: Sets Piece
@@ -115,7 +115,7 @@ func main() {
 	waiting := make(chan *Peer)
 	ready := make(chan *Peer) // Unchoked
 	choked := make(chan *Peer)
-	//leeching := make(chan *Peer)
+	leeching := make(chan *Peer)
 	disconnected := make(chan *Peer)
 
 	pieceNext := FillPieceOrder()
@@ -153,16 +153,16 @@ func main() {
 		}
 	}()
 
-	// go func() {
-	//	for {
-	//		peer := <-leechers
-	//		debugger.Println("New Leecher", peer.id)
-	//		// leechers have already been handshaken
-	//		peer.spawnPeerReader()
-	//		peer.spawnPeerHandler(waiting, choked, ready, disconnected)
-	//		leeching <- peer
-	//	}
-	// }()
+	go func() {
+		for {
+			peer := <-leechers
+			debugger.Println("New Leecher", peer.id)
+			// leechers have already been handshaken
+			peer.spawnPeerReader()
+			peer.spawnPeerHandler(waiting, choked, ready, disconnected)
+			leeching <- peer
+		}
+	}()
 
 	go func() {
 		for {
