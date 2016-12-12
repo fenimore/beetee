@@ -166,14 +166,12 @@ func (p *Peer) spawnPeerReader() {
 			case <-halt:
 				//disconnected <- p
 				p.conn.Close()
-				//close(p.halt)
 				debugger.Println("Halt closes Peer", p.id)
 				return
 			default:
 				msg, err := p.readMessage()
 				if err != nil {
 					logger.Println(err)
-					close(halt)
 					break
 				}
 				p.in <- msg
