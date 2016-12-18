@@ -32,6 +32,7 @@ type Peer struct {
 	halt chan struct{}
 }
 
+// Connect will Dial a new net.Conn, socket with a peer.
 func (p *Peer) Connect() error {
 	// Connect to address
 	conn, err := net.DialTimeout("tcp", p.addr, time.Second*10)
@@ -44,6 +45,8 @@ func (p *Peer) Connect() error {
 	return err
 }
 
+// Handshake writes a handshake to a peer and
+// waits for the proper handshake response.
 func (p *Peer) HandShake() error {
 	// The response handshake
 	shake := make([]byte, 68)

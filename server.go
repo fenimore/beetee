@@ -7,12 +7,14 @@ import (
 	"net"
 )
 
+// Server is a server for listening and seeding.
 type Server struct {
 	listener net.Listener
 	laddr    string
 }
 
-// Serve, TODO: this is for seeding not leeching
+// Serve opens up a port and begins accepting new
+// peers which it then passes into it's result chan.
 func Serve(port int, shutdown <-chan bool) <-chan *Peer {
 	leechers := make(chan *Peer)
 	incoming := make(chan net.Conn)

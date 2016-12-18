@@ -92,6 +92,9 @@ func (info *TorrentInfo) lastPieceSize() int64 {
 
 }
 
+// VerifyPiece is called after piece.chanBlocks fills up.
+// It checks the hash of all the blocks together (of the piece)
+// and if valid will send a message to the piece.success chan.
 func (p *Piece) VerifyPiece() {
 	for {
 		b := <-p.chanBlocks
@@ -118,6 +121,8 @@ func (p *Piece) VerifyPiece() {
 	p.success <- true // FIXME: Keep?
 }
 
+// UpdateBitfield is not yet written.
+// TODO: Convert parse bitfield for update.
 func UpdateBitfield() []byte {
 	// result := make([]bool, len(d.Pieces)/8)
 	// bitfield := msg[1:]

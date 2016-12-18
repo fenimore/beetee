@@ -218,6 +218,9 @@ func main() {
 
 }
 
+// FillPieceOrder is a placeholder for rarest first
+// algorithm. It simply puts all desired pieces into
+// a channel for request.
 func FillPieceOrder() chan *Piece {
 	out := make(chan *Piece, len(d.Pieces))
 	for i := 0; i < len(d.Pieces); i++ {
@@ -226,6 +229,8 @@ func FillPieceOrder() chan *Piece {
 	return out
 }
 
+// Backwards will ask for pieces in reverse order.
+// useful for debugging the last piece problem.
 func Backwards() chan *Piece {
 	out := make(chan *Piece, len(d.Pieces))
 	for i := len(d.Pieces) - 1; i >= len(d.Pieces)-2; i-- {

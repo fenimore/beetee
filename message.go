@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/binary"
-	//"time"
 )
 
 const (
@@ -23,7 +22,8 @@ Recieving Messages
 ######################################################*/
 
 // DecodePieceMessage takes the message without the
-// length prefix
+// length prefix. It returns a *Block with the data
+// of the piece indicated in the msg.
 func DecodePieceMessage(msg []byte) *Block {
 	if len(msg[9:]) < 1 {
 		return nil
@@ -45,7 +45,8 @@ func DecodePieceMessage(msg []byte) *Block {
 		size:   blocksize}
 }
 
-// 19 bytes
+// DecodeHaveMessage returns the index of the pieces
+// peer properts to have. Will always be 19 bytes.
 func DecodeHaveMessage(msg []byte) uint32 {
 	return binary.BigEndian.Uint32(msg[1:])
 }
@@ -53,7 +54,7 @@ func DecodeHaveMessage(msg []byte) uint32 {
 // DecodeBitfieldMessage returns a bool slice.
 // NOTE: The bitfield will be sent with padding if the size is
 // not divisible by eight.
-// Thank you Tulva RC bittorent client for this algorithm
+// Thank you Tulva (fellow RC) bittorent client for this algorithm
 // github.com/jtakkala/tulva/
 func DecodeBitfieldMessage(msg []byte) []bool {
 	result := make([]bool, len(d.Pieces))
