@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/polypmer/beetee)](https://goreportcard.com/report/github.com/polypmer/beetee)
+
 # beetee
 
 Bittorrent Client implemented in Go **Work in Progress**. I have a blog post outlining the protocol in dialog format [here](http://another.workingagenda.com/blog/post/d1alog/).
