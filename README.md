@@ -7,8 +7,11 @@ Bittorrent Client implemented in Go **Work in Progress**. I have a blog post out
     beetee, commandline torrent application. Usage:
       -file string
             path to torrent file
+      -peers int
+            max peer connections (default 30)
       -seed
             keep running after download completes
+
 
 Thanks @kracekumar, @alex-segura, and @nschuc, fellow Recursers, for all your help :)
 
@@ -65,7 +68,7 @@ Package Organisation:
 
 `message`
 
-> Handshake, individual message decoder and message constructor. 
+> Handshake, individual message decoder and message constructor.
 
 `peer`
 
@@ -84,7 +87,7 @@ Package Organisation:
 > Writing and reading to disk.
 
 
-For testing, here are the checksums for the torrent files provided in `torrents/`:
+For testing, here are the checksums for the torrent files provided in `torrents/` <small>Note: this Torrent file is for an older version of Arch; go to their website and get the newer torrent file/md5sum if you plan to use for installing onto your computer.</small>:
 
     17643c29e3c4609818f26becf76d29a3 > Ubuntu
     47672450bcda8acf0c8512bd5b543cc0 > Arch
