@@ -154,9 +154,10 @@ func abs(a int64) int64 {
 	return -a
 }
 
+// writeMultipleFiles takes a list of all torrented Pieces (verified)
+// the directory name and a list of all Files to write to
 func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 	for _, file := range files {
-		// TODO: pass in TorrentInf
 		ok, data, offset := pieceInFile(piece, file, d.Torrent.Info.PieceLength)
 		if !ok {
 			continue
@@ -182,25 +183,51 @@ func writeMultipleFiles(piece *Piece, name string, files []*TorrentFile) {
 	}
 }
 
-// pieceInFile returns the data to be written on a file, and it's offset
+// pieceInFile is called for each Piece every File.
+//
+// BitTorrent Protocol specificies:
+//   an ordered list of Same-Length Pieces which have data.
+// and
+//   an ordered list of Variable-Length Files
+//
+// Possible problems writing data: (see tests for coverage)
+//   Pieces are bigger than files (span 2+ Files)
+//   Pieces overlap 2 but are smaller than Files
+//   Pieces fit neatly within a File at x offset
+//   Pieces are same size as Files
+//
+// This algorithm takes a File, Piece, and Piece Size
+//   the "normal" pieceSize must be passed because
+//   the last piecesize will be smaller than the other pieces
+//
+// Returns 3 things
+// (1) bool, Whether to write a Piece to a File
+// (2) bytes, Data from a Piece to be written on a file
+// (3) int, the offset of the data within the File
+//
+// This algorithm was designed in order to be *easily testable*
+// and *account for all edge cases* *without* a bunch of if statements
 func pieceInFile(piece *Piece, file *TorrentFile, pieceSize int64) (bool, []byte, int64) {
+	// There are 2 coordinate spaces:
+	// (1) Relative to ALL Pieces or ALL Files
+	// (2) Relative to the CURRENT File to be written
+
+	// Calculate: Lower and Upper bounds for (1) coordinate space
 	pieceLower := int64(piece.index) * pieceSize
-	pieceUpper := int64(piece.index+1) * pieceSize // NOTE: Doesn't work for last piece
+	pieceUpper := int64(piece.index+1) * pieceSize
 	fileUpper := file.PreceedingTotal + file.Length
 	fileLower := file.PreceedingTotal
+	// Some File/Piece combinations aren't in the 'write' space
 	if pieceLower >= fileUpper || pieceUpper <= fileLower {
-		// NOTE: Some files aren't in the 'write' space
 		return false, nil, 0
 	}
 
+	// Calculate: Lower and Upper bounds for (2) coordinate space
 	offset := max(0, pieceLower-file.PreceedingTotal)
 	lower := abs(min(0, pieceLower-file.PreceedingTotal))
 	upper := min((fileUpper - pieceLower), pieceSize)
 
-	// if piece.index == len(d.Pieces)-1 {
-	//	debugger.Println("This is the last piece")
-	//	debugger.Println(pieceLower, pieceUpper, fileUpper, offset, lower, upper)
-	// }
-
+	// Return the data from the piece to be written
+	// and the offset withint the file to write to
 	return true, piece.data[lower:upper], offset
 }
