@@ -1,4 +1,4 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/polypmer/beetee)](https://goreportcard.com/report/github.com/polypmer/beetee)
+[![Go Report Card](https://goreportcard.com/badge/github.com/polypmer/beetee)](https://goreportcard.com/report/github.com/polypmer/beetee) [![CircleCI](https://circleci.com/gh/polypmer/beetee.svg?style=shield)](https://circleci.com/gh/polypmer/beetee)
 
 # beetee
 
