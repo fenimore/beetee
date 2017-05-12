@@ -47,13 +47,9 @@ type TrackerResponseDict struct {
 	Interval int64  `bencode:"interval"`
 }
 
-// GetTrackerResponse TODO: pass in TrackerRequest instead
-func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string]interface{}, error) {
-	var response = TrackerResponse{} //make(map[string]interface{})
-
+func HTTPTracker(m *TorrentMeta) (TrackerResponse, error) {
+	var response = TrackerResponse{}
 	// TODO: Use scrape conventions
-	//url := strings.Replace(m.Announce, "announce", "scrape", 1)
-	//request := url + "?info_hash=" + m.InfoHashEnc + "&peer_id=" + GenPeerId() +
 	request := m.Announce +
 		"?info_hash=" +
 		m.InfoHashEnc +
@@ -70,35 +66,6 @@ func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string
 
 	// TODO: conStruct
 	logger.Println("TRACKER REQUEST:", request)
-
-	if m.Announce[:3] == "udp" {
-		fmt.Println("UDP New", m.Announce[6:len(m.Announce)-9])
-		//TODO: Connect udp
-		conn, err := net.Dial("udp", m.Announce[6:len(m.Announce)-9])
-
-		fmt.Println(conn, err)
-		tranId := GenTransactionId()
-		fmt.Println("Transaction ID: ", tranId)
-		_, err = conn.Write(UDPTrackerRequest(tranId))
-		if err != nil {
-			// Continue?
-			fmt.Println(err)
-		}
-		trackerResponse := make([]byte, 16)
-		_, err = conn.Read(trackerResponse)
-		if err != nil {
-			// Continue?
-			fmt.Println(err)
-		}
-		connId, ok := UDPValidateResponse(trackerResponse, tranId)
-		if !ok {
-			// wait some time
-			// and ask again
-			fmt.Println("No tracker connection made")
-		}
-		fmt.Println(connId)
-		return response, errors.New("UDP not implemented yet")
-	}
 
 	resp, err := http.Get(request)
 	if err != nil {
@@ -117,6 +84,62 @@ func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string
 	}
 
 	return response, err
+}
+
+func UDPTracker(m *TorrentMeta) (TrackerResponse, error) {
+	var response = TrackerResponse{}
+	fmt.Println("Tracker Uses UDP", m.Announce[6:len(m.Announce)-9])
+	//TODO: Connect udp
+	conn, err := net.Dial("udp", m.Announce[6:len(m.Announce)-9])
+
+	fmt.Println(conn, err)
+	tranId := GenTransactionId()
+
+	// Connection
+	_, err = conn.Write(UDPTrackerRequest(tranId))
+	if err != nil {
+		// Continue?
+		fmt.Println(err)
+	}
+	trackerResponse := make([]byte, 16)
+	_, err = conn.Read(trackerResponse)
+	if err != nil {
+		// Continue?
+		fmt.Println(err)
+	}
+	connId, ok := UDPValidateResponse(trackerResponse, tranId)
+	// connId valid for 2 minutes
+	if !ok {
+		// wait some time and ask again
+		fmt.Println("No tracker connection made")
+	}
+
+	// Announce
+	_, err = conn.Write(UDPAnnounceClient(connId, *m))
+	if err != nil {
+		// Continue?
+		fmt.Println(err)
+	}
+	// TODO: set size dynamically?
+	trackerResponse = make([]byte, 256)
+	n, err := conn.Read(trackerResponse)
+	fmt.Println(n, "Bytes read")
+	if err != nil {
+		// Continue?
+		fmt.Println(err)
+	}
+
+	UDPParseAnnounce(trackerResponse, conn)
+
+	return response, errors.New("UDP not implemented yet")
+}
+
+// GetTrackerResponse TODO: pass in TrackerRequest instead
+func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) {
+	if m.Announce[:3] == "udp" {
+		return UDPTracker(m)
+	}
+	return HTTPTracker(m)
 }
 
 const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
@@ -158,6 +181,46 @@ func UDPValidateResponse(response []byte, transactionId uint32) (uint64, bool) {
 	return connId, true
 }
 
+//UDPAnnounceClient constructs announce message for UDP packet
+// Should I be passing TorrentMeta pointer?
+func UDPAnnounceClient(connId uint64, m TorrentMeta) []byte {
+	announce := make([]byte, 98)
+	binary.BigEndian.PutUint64(announce[:8], connId)
+	binary.BigEndian.PutUint32(announce[8:12], ANNREQ)
+	binary.BigEndian.PutUint32(announce[12:16], GenTransactionId())
+	copy(announce[16:36], m.InfoHash[:])
+	copy(announce[36:56], m.PeerId[:])
+	binary.BigEndian.PutUint64(announce[56:64], 0)    // Downloaded
+	binary.BigEndian.PutUint64(announce[64:72], 0)    // Compeleted
+	binary.BigEndian.PutUint64(announce[72:80], 0)    // Uploaded
+	binary.BigEndian.PutUint32(announce[80:84], 0)    // Event None
+	binary.BigEndian.PutUint32(announce[84:88], 0)    // IP (def=source)
+	binary.BigEndian.PutUint32(announce[88:92], 0)    // key ?
+	binary.BigEndian.PutUint32(announce[92:96], 80)   // num want peers
+	binary.BigEndian.PutUint16(announce[96:98], PORT) // port
+
+	return announce
+}
+
+// TODO: return interval for next announce
+func UDPParseAnnounce(resp []byte, conn net.Conn) []*Peer {
+	// https://github.com/naim94a/udpt/wiki/The-BitTorrent-UDP-tracker-protocol
+	// The first 20 bytes are mandatory
+	// 4 - action = 1
+	// 4 - transaction id
+	// 4 - interval
+	// 4 - leechers amount
+	// 4 - seeders amount
+
+	// Keep reading from conn accordingly
+	// n = leechers + seeders amounts
+	// for every peer there will be:
+	// 4 - IPv4
+	// 2 - Port
+
+	return nil
+}
+
 // parsePeers is a http response gotten from
 // the tracker; parse the peers byte message
 // and put to global Peers slice.
@@ -189,9 +252,6 @@ func ParsePeers(r TrackerResponse) []*Peer {
 			bitfield: make([]byte, bitCap),
 			bitmap:   make([]bool, len(d.Pieces)),
 			info:     d.Torrent,
-			//in:       make(chan []byte),
-			//out:      make(chan []byte),
-			//halt:     make(chan struct{}),
 		}
 		peers = append(peers, &peer)
 	}
