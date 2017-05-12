@@ -8,6 +8,14 @@ import "fmt"
 import "math/rand"
 import "time"
 import "errors"
+import "encoding/binary"
+
+const ( // UDP actions
+	CONREQ = iota
+	ANNREQ
+)
+
+const CONNID = 0x41727101980
 
 type TrackerRequest struct {
 	InfoHash,
@@ -64,8 +72,31 @@ func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string
 	logger.Println("TRACKER REQUEST:", request)
 
 	if m.Announce[:3] == "udp" {
-		fmt.Println("UDP New", m.Announce[6:])
+		fmt.Println("UDP New", m.Announce[6:len(m.Announce)-9])
 		//TODO: Connect udp
+		conn, err := net.Dial("udp", m.Announce[6:len(m.Announce)-9])
+
+		fmt.Println(conn, err)
+		tranId := GenTransactionId()
+		fmt.Println("Transaction ID: ", tranId)
+		_, err = conn.Write(UDPTrackerRequest(tranId))
+		if err != nil {
+			// Continue?
+			fmt.Println(err)
+		}
+		trackerResponse := make([]byte, 16)
+		_, err = conn.Read(trackerResponse)
+		if err != nil {
+			// Continue?
+			fmt.Println(err)
+		}
+		connId, ok := UDPValidateResponse(trackerResponse, tranId)
+		if !ok {
+			// wait some time
+			// and ask again
+			fmt.Println("No tracker connection made")
+		}
+		fmt.Println(connId)
 		return response, errors.New("UDP not implemented yet")
 	}
 
@@ -101,6 +132,30 @@ func GenPeerId() [20]byte {
 		b[i+8] = letters[rand.Intn(len(letters))]
 	}
 	return b
+}
+
+// GenTransactionId creates random number for UDP tracker
+func GenTransactionId() uint32 {
+	rand.Seed(time.Now().UnixNano())
+	return rand.Uint32()
+}
+
+func UDPTrackerRequest(transactionId uint32) []byte {
+	connReq := make([]byte, 16)
+	binary.BigEndian.PutUint64(connReq[:8], CONNID)
+	binary.BigEndian.PutUint32(connReq[8:12], CONREQ)
+	binary.BigEndian.PutUint32(connReq[12:], transactionId)
+	return connReq
+}
+
+func UDPValidateResponse(response []byte, transactionId uint32) (uint64, bool) {
+	action := binary.BigEndian.Uint32(response[:4])
+	tranId := binary.BigEndian.Uint32(response[4:8])
+	connId := binary.BigEndian.Uint64(response[8:16])
+	if action != 0 || tranId != transactionId {
+		return connId, false
+	}
+	return connId, true
 }
 
 // parsePeers is a http response gotten from
