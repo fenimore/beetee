@@ -115,7 +115,8 @@ func UDPTracker(m *TorrentMeta) error {
 	}
 	logger.Println("Connection ID valid 2 Minutes:", connId)
 	// FIXME: Read remaining bytes in ParseAnnounce
-	trackerResponse = make([]byte, 4096)
+	// 4096 is a big number, but 80 peers = 480 bytes
+	trackerResponse = make([]byte, 512)
 	_, err = conn.Read(trackerResponse)
 	if err != nil {
 		return err
@@ -228,8 +229,13 @@ func UDPParseAnnounce(resp []byte, conn net.Conn) ([]*Peer, error) {
 		bitCap += 1
 	}
 
+	debugger.Println("Peer Amnt", amount, int(amount)*6, p)
 	var peers []*Peer
 	for i := 0; i < (int(amount) * 6); i = i + 6 {
+		if len(p) < i+6 || i == 480 {
+			break
+		}
+		//debugger.Println("Index", i, i+6, len(p), len(peers))
 		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
 		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
 		peer := Peer{
@@ -243,6 +249,8 @@ func UDPParseAnnounce(resp []byte, conn net.Conn) ([]*Peer, error) {
 		}
 		peers = append(peers, &peer)
 	}
+
+	debugger.Println("Peer Cnt: ", len(peers))
 
 	return peers, nil
 }
