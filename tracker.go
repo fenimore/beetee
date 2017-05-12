@@ -65,7 +65,7 @@ func HTTPTracker(m *TorrentMeta) (TrackerResponse, error) {
 		"&event=started"
 
 	// TODO: conStruct
-	logger.Println("TRACKER REQUEST:", request)
+	logger.Println("HTTP Tracker request:", request)
 
 	resp, err := http.Get(request)
 	if err != nil {
@@ -74,7 +74,6 @@ func HTTPTracker(m *TorrentMeta) (TrackerResponse, error) {
 	}
 	defer resp.Body.Close() // Body is a ReadCloser
 
-	//fmt.Println(resp.Body)
 	// Decode bencoded Response
 	dec := bencode.NewDecoder(resp.Body)
 	err = dec.Decode(&response)
@@ -87,7 +86,7 @@ func HTTPTracker(m *TorrentMeta) (TrackerResponse, error) {
 }
 
 func UDPTracker(m *TorrentMeta) error {
-	fmt.Println("Tracker Uses UDP", m.Announce[6:len(m.Announce)-9])
+	logger.Println("Tracker Uses UDP", m.Announce[6:len(m.Announce)-9])
 
 	tranId := GenTransactionId()
 	conn, err := net.Dial("udp", m.Announce[6:len(m.Announce)-9])
@@ -95,13 +94,13 @@ func UDPTracker(m *TorrentMeta) error {
 	_, err = conn.Write(UDPTrackerRequest(tranId))
 	if err != nil {
 		// Continue?
-		fmt.Println(err)
+		return err
 	}
 	trackerResponse := make([]byte, 16)
 	_, err = conn.Read(trackerResponse)
 	if err != nil {
 		// Continue?
-		fmt.Println(err)
+		return err
 	}
 	connId, ok := UDPValidateResponse(trackerResponse, tranId)
 	if !ok {
@@ -112,14 +111,14 @@ func UDPTracker(m *TorrentMeta) error {
 	_, err = conn.Write(UDPAnnounceClient(connId, *m))
 	if err != nil {
 		// Continue?
-		fmt.Println(err)
+		return err
 	}
-	fmt.Println("Connection ID valid 2 Minutes:", connId)
+	logger.Println("Connection ID valid 2 Minutes:", connId)
 	// FIXME: Read remaining bytes in ParseAnnounce
 	trackerResponse = make([]byte, 4096)
 	_, err = conn.Read(trackerResponse)
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
 
 	// Parse Announce
@@ -242,16 +241,15 @@ func UDPParseAnnounce(resp []byte, conn net.Conn) ([]*Peer, error) {
 			bitmap:   make([]bool, len(d.Pieces)),
 			info:     d.Torrent,
 		}
-		fmt.Println(peer.ip, peer.port)
 		peers = append(peers, &peer)
 	}
 
 	return peers, nil
 }
 
-// parsePeers is a http response gotten from
-// the tracker; parse the peers byte message
-// and put to global Peers slice.
+// ParsePeers parses a bencoded response from tracker.
+// Only used with HTTP tracker, though code is repeated
+// in UDP parsing.
 func ParsePeers(r TrackerResponse) []*Peer {
 	var start int
 	for idx, val := range r.Peers {

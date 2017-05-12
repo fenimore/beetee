@@ -94,3 +94,7 @@ For testing, here are the checksums for the torrent files provided in `torrents/
 
     17643c29e3c4609818f26becf76d29a3 > Ubuntu
     47672450bcda8acf0c8512bd5b543cc0 > Arch
+
+## Untested Functionality:
+
+- UDP tracker
