@@ -27,6 +27,7 @@ Thanks @kracekumar, @alex-segura, and @nschuc, fellow Recursers, for all your he
 - [x] put into pieces struct
 - [x] barse Have and BitField
 - [x] begin Unit and Integration Tests
+- [x] implement UDP and HTTP tracker
 - [ ] control peer flow/ask for more peers
 
 ## Downloading
