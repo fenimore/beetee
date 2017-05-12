@@ -7,6 +7,7 @@ import "net"
 import "fmt"
 import "math/rand"
 import "time"
+import "errors"
 
 type TrackerRequest struct {
 	InfoHash,
@@ -61,6 +62,13 @@ func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) { //(map[string
 
 	// TODO: conStruct
 	logger.Println("TRACKER REQUEST:", request)
+
+	if m.Announce[:3] == "udp" {
+		fmt.Println("UDP New", m.Announce[6:])
+		//TODO: Connect udp
+		return response, errors.New("UDP not implemented yet")
+	}
+
 	resp, err := http.Get(request)
 	if err != nil {
 		debugger.Println("Request Didn't Go through")
