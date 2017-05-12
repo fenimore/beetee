@@ -86,15 +86,11 @@ func HTTPTracker(m *TorrentMeta) (TrackerResponse, error) {
 	return response, err
 }
 
-func UDPTracker(m *TorrentMeta) (TrackerResponse, error) {
-	var response = TrackerResponse{}
+func UDPTracker(m *TorrentMeta) error {
 	fmt.Println("Tracker Uses UDP", m.Announce[6:len(m.Announce)-9])
-	//TODO: Connect udp
-	conn, err := net.Dial("udp", m.Announce[6:len(m.Announce)-9])
 
-	fmt.Println(conn, err)
 	tranId := GenTransactionId()
-
+	conn, err := net.Dial("udp", m.Announce[6:len(m.Announce)-9])
 	// Connection
 	_, err = conn.Write(UDPTrackerRequest(tranId))
 	if err != nil {
@@ -108,10 +104,8 @@ func UDPTracker(m *TorrentMeta) (TrackerResponse, error) {
 		fmt.Println(err)
 	}
 	connId, ok := UDPValidateResponse(trackerResponse, tranId)
-	// connId valid for 2 minutes
 	if !ok {
-		// wait some time and ask again
-		fmt.Println("No tracker connection made")
+		return errors.New("No Connection Made to UDP")
 	}
 
 	// Announce
@@ -120,26 +114,35 @@ func UDPTracker(m *TorrentMeta) (TrackerResponse, error) {
 		// Continue?
 		fmt.Println(err)
 	}
-	// TODO: set size dynamically?
-	trackerResponse = make([]byte, 256)
-	n, err := conn.Read(trackerResponse)
-	fmt.Println(n, "Bytes read")
+	fmt.Println("Connection ID valid 2 Minutes:", connId)
+	// FIXME: Read remaining bytes in ParseAnnounce
+	trackerResponse = make([]byte, 4096)
+	_, err = conn.Read(trackerResponse)
 	if err != nil {
-		// Continue?
 		fmt.Println(err)
 	}
 
-	UDPParseAnnounce(trackerResponse, conn)
+	// Parse Announce
+	peers, err := UDPParseAnnounce(trackerResponse, conn)
+	if err != nil {
+		return err
+	}
+	d.Peers = peers
 
-	return response, errors.New("UDP not implemented yet")
+	return nil
 }
 
 // GetTrackerResponse TODO: pass in TrackerRequest instead
-func GetTrackerResponse(m *TorrentMeta) (TrackerResponse, error) {
+func GetTrackerResponse(m *TorrentMeta) error {
 	if m.Announce[:3] == "udp" {
 		return UDPTracker(m)
 	}
-	return HTTPTracker(m)
+	tr, err := HTTPTracker(m)
+	if err != nil {
+		return err
+	}
+	d.Peers = ParsePeers(tr)
+	return nil
 }
 
 const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
@@ -202,23 +205,48 @@ func UDPAnnounceClient(connId uint64, m TorrentMeta) []byte {
 	return announce
 }
 
-// TODO: return interval for next announce
-func UDPParseAnnounce(resp []byte, conn net.Conn) []*Peer {
-	// https://github.com/naim94a/udpt/wiki/The-BitTorrent-UDP-tracker-protocol
+// UDPParseAnnounce parses a announce response and reads
+// the remaining bytes from connection according to how
+// many peers are designated.
+func UDPParseAnnounce(resp []byte, conn net.Conn) ([]*Peer, error) {
 	// The first 20 bytes are mandatory
-	// 4 - action = 1
-	// 4 - transaction id
-	// 4 - interval
-	// 4 - leechers amount
-	// 4 - seeders amount
-
+	action := binary.BigEndian.Uint32(resp[:4])
+	if action != 1 {
+		return nil, errors.New("Wrong UDP tracker action")
+	}
+	_ = binary.BigEndian.Uint32(resp[4:8])         // transaction ID
+	_ = binary.BigEndian.Uint32(resp[8:12])        // interval
+	amount := binary.BigEndian.Uint32(resp[12:16]) // leechers
+	amount += binary.BigEndian.Uint32(resp[16:20]) // seeders
+	p := resp[20:]                                 // remaining bytes are Peer addresses
 	// Keep reading from conn accordingly
-	// n = leechers + seeders amounts
 	// for every peer there will be:
 	// 4 - IPv4
 	// 2 - Port
+	// 6 * amount = bytes with relevant data
+	bitCap := len(d.Pieces) / 8 // for peers
+	if len(d.Pieces)%8 != 0 {
+		bitCap += 1
+	}
 
-	return nil
+	var peers []*Peer
+	for i := 0; i < (int(amount) * 6); i = i + 6 {
+		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
+		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])
+		peer := Peer{
+			ip:       ip.String(),
+			port:     port,
+			addr:     fmt.Sprintf("%s:%d", ip.String(), port),
+			choke:    true,
+			bitfield: make([]byte, bitCap),
+			bitmap:   make([]bool, len(d.Pieces)),
+			info:     d.Torrent,
+		}
+		fmt.Println(peer.ip, peer.port)
+		peers = append(peers, &peer)
+	}
+
+	return peers, nil
 }
 
 // parsePeers is a http response gotten from
@@ -226,7 +254,6 @@ func UDPParseAnnounce(resp []byte, conn net.Conn) []*Peer {
 // and put to global Peers slice.
 func ParsePeers(r TrackerResponse) []*Peer {
 	var start int
-	var peers []*Peer
 	for idx, val := range r.Peers {
 		if val == ':' {
 			start = idx + 1
@@ -234,13 +261,16 @@ func ParsePeers(r TrackerResponse) []*Peer {
 		}
 	}
 	p := r.Peers[start:]
-	// A peer is represented in six bytes
-	// four for ip and two for port
+
+	// Peer bitfields are rounded up
 	bitCap := len(d.Pieces) / 8
 	if len(d.Pieces)%8 != 0 {
 		bitCap += 1
 	}
 
+	// A peer is represented in six bytes
+	// four for ip and two for port
+	var peers []*Peer
 	for i := 0; i < len(p); i = i + 6 {
 		ip := net.IPv4(p[i], p[i+1], p[i+2], p[i+3])
 		port := (uint16(p[i+4]) << 8) | uint16(p[i+5])

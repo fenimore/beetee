@@ -100,13 +100,10 @@ func main() {
 	debugger.Println("Port listening on", PORT)
 
 	/*Parse Tracker Response*/
-	tr, err := GetTrackerResponse(d.Torrent)
+	err = GetTrackerResponse(d.Torrent)
 	if err != nil {
 		debugger.Println(err)
 	}
-
-	// Get Peers
-	d.Peers = ParsePeers(tr)
 
 	waiting := make(chan *Peer)
 	ready := make(chan *Peer) // Unchoked
