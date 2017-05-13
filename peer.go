@@ -176,7 +176,7 @@ func (p *Peer) spawnPeerReader() {
 			default:
 				msg, err := p.readMessage()
 				if err != nil {
-					logger.Println(err)
+					debugger.Println(p.id, err)
 					break PeerReader
 				}
 				p.in <- msg
@@ -220,6 +220,11 @@ func (p *Peer) spawnPeerHandShake(waiting, choked, ready chan<- *Peer) {
 	err = p.HandShake()
 	if err != nil {
 		debugger.Println("Handshake Fails", err)
+		if p.retry < 1 {
+			return
+		}
+		p.retry--
+		waiting <- p
 		return
 	}
 

@@ -49,7 +49,7 @@ func main() {
 	/* Get Arguments */
 	torrentFile := flag.String("path", "torrents/tom.torrent", "path to torrent file")
 	seedTorrent := flag.Bool("seed", false, "keep running after download completes")
-	maxPeers := flag.Int("peers", 80, "max peer connections")
+	maxPeers := flag.Int("peers", 40, "max peer connections")
 	flag.Usage = func() {
 		fmt.Println("beetee, commandline torrent application. Usage:")
 		flag.PrintDefaults()
@@ -88,6 +88,7 @@ func main() {
 
 	/* Parse Torrent*/
 	// NOTE: Sets Piece
+	// NOTE: Sets Peer list
 	d.Torrent, err = ParseTorrent(*torrentFile)
 	if err != nil {
 		debugger.Println(err)
@@ -98,6 +99,7 @@ func main() {
 	debugger.Println(d.Torrent.Info.lastPieceSize())
 	debugger.Println("len(info.Pieces) // bytes: ", len(d.Torrent.Info.Pieces))
 	debugger.Println("len(Pieces) // pieces: ", len(d.Pieces))
+	debugger.Println("len(Peers) // peers: ", len(d.Peers))
 	debugger.Println("Port listening on", PORT)
 
 	/*Parse Tracker Response*/
@@ -120,27 +122,21 @@ func main() {
 	diskIO, closeIO := spawnFileWriter(d.Torrent.Info.Name,
 		d.Torrent.Info.SingleFile, d.Torrent.Info.Files, pieceNext)
 	go func() {
-		//peerLimit := *maxPeers
-		//if len(d.Peers) < *maxPeers {
-		peerLimit := len(d.Peers)
-		//}
-		for _, peer := range d.Peers[:peerLimit] {
+		for _, peer := range d.Peers {
 			waiting <- peer
 		}
 	}()
 
 	// Peers not yet connected/handshaken
 	go func() {
-		for {
-			peer := <-waiting
+		for peer := range waiting {
 			go peer.spawnPeerHandShake(waiting, choked, ready)
 		}
 	}()
 
 	// Peers having been handshaked
 	go func() {
-		for {
-			peer := <-choked
+		for peer := range choked {
 			peer.spawnPeerHandler(waiting, choked, ready, disconnected)
 			peer.spawnPeerReader()
 			// if peer has what I want TODO:
@@ -150,8 +146,7 @@ func main() {
 	}()
 
 	go func() {
-		for {
-			peer := <-leechers
+		for peer := range leechers {
 			debugger.Println("New Leecher", peer.id)
 			// leechers have already been handshaken
 			peer.spawnPeerReader()
@@ -161,24 +156,23 @@ func main() {
 	}()
 
 	go func() {
-		for {
-			peer := <-ready
+		for peer := range ready {
 			go func(p *Peer) {
 
 				for {
-					if string(peer.id) == "-LT1200-YpsXDHDalf2z" {
+					if string(p.id) == "-LT1200-YpsXDHDalf2z" {
 						return
 					}
 					piece := <-pieceNext
 					logger.Printf("Requesting Piece %d From %s",
-						piece.index, peer.id)
+						piece.index, p.id)
 					if !p.bitmap[piece.index] {
 						pieceNext <- piece
 						continue
 					}
 					msgs := requestPiece(piece.index)
 					for _, msg := range msgs {
-						peer.out <- msg
+						p.out <- msg
 					}
 					select {
 					// TODO: stop when peer closes
@@ -187,17 +181,19 @@ func main() {
 					case <-time.After(30 * time.Second):
 						logger.Println("TimeOut Pieces", piece.index)
 						pieceNext <- piece
-						close(peer.halt)
-						// resetPeerList.Done()
+						close(p.halt)
 						return
 					}
 				}
 			}(peer)
 		}
 	}()
+
 	if *seedTorrent {
 		writeSync.Add(1)
 	}
+
+	/* Finish or Cancel downloading */
 	writeSync.Wait()
 	close(closeIO)
 	for _, p := range d.Pieces {
