@@ -31,7 +31,8 @@ var ( // NOTE Global Important Variables
 	debugger *log.Logger
 	logger   *log.Logger
 	// WaitGroup
-	writeSync sync.WaitGroup
+	writeSync     sync.WaitGroup
+	resetPeerList *sync.WaitGroup
 	// Protocol Values
 	pstr    = []byte("BitTorrent protocol")
 	pstrlen = byte(19)
@@ -48,7 +49,7 @@ func main() {
 	/* Get Arguments */
 	torrentFile := flag.String("path", "torrents/tom.torrent", "path to torrent file")
 	seedTorrent := flag.Bool("seed", false, "keep running after download completes")
-	maxPeers := flag.Int("peers", 30, "max peer connections")
+	maxPeers := flag.Int("peers", 80, "max peer connections")
 	flag.Usage = func() {
 		fmt.Println("beetee, commandline torrent application. Usage:")
 		flag.PrintDefaults()
@@ -105,7 +106,7 @@ func main() {
 		debugger.Println(err)
 	}
 
-	waiting := make(chan *Peer)
+	waiting := make(chan *Peer, *maxPeers)
 	ready := make(chan *Peer) // Unchoked
 	choked := make(chan *Peer)
 	leeching := make(chan *Peer)
@@ -118,14 +119,12 @@ func main() {
 	// Start writing to disk
 	diskIO, closeIO := spawnFileWriter(d.Torrent.Info.Name,
 		d.Torrent.Info.SingleFile, d.Torrent.Info.Files, pieceNext)
-
 	go func() {
-		peerLimit := *maxPeers
-		if len(d.Peers) < *maxPeers {
-			peerLimit = len(d.Peers)
-		}
+		//peerLimit := *maxPeers
+		//if len(d.Peers) < *maxPeers {
+		peerLimit := len(d.Peers)
+		//}
 		for _, peer := range d.Peers[:peerLimit] {
-			//debugger.Println(peer)
 			waiting <- peer
 		}
 	}()
@@ -189,6 +188,7 @@ func main() {
 						logger.Println("TimeOut Pieces", piece.index)
 						pieceNext <- piece
 						close(peer.halt)
+						// resetPeerList.Done()
 						return
 					}
 				}

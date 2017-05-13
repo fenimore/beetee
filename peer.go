@@ -26,6 +26,7 @@ type Peer struct {
 	alive      bool
 	bitfield   []byte
 	bitmap     []bool
+	retry      int
 	// Chan
 	in   chan []byte
 	out  chan []byte
@@ -164,6 +165,7 @@ func (p *Peer) handleMessage(payload []byte, waiting, choked, ready chan<- *Peer
 func (p *Peer) spawnPeerReader() {
 	halt := make(chan struct{})
 	go func() {
+	PeerReader:
 		for {
 			select {
 			case <-halt:
@@ -175,7 +177,7 @@ func (p *Peer) spawnPeerReader() {
 				msg, err := p.readMessage()
 				if err != nil {
 					logger.Println(err)
-					break
+					break PeerReader
 				}
 				p.in <- msg
 			}
@@ -206,6 +208,11 @@ func (p *Peer) spawnPeerHandShake(waiting, choked, ready chan<- *Peer) {
 	err := p.Connect()
 	if err != nil {
 		debugger.Println("Connection Fails", err)
+		if p.retry < 1 {
+			return
+		}
+		p.retry--
+		waiting <- p
 		return
 	}
 	logger.Printf("Connected to %s at %s", p.id, p.addr)

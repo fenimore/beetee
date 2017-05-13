@@ -246,6 +246,7 @@ func UDPParseAnnounce(resp []byte, conn net.Conn) ([]*Peer, error) {
 			bitfield: make([]byte, bitCap),
 			bitmap:   make([]bool, len(d.Pieces)),
 			info:     d.Torrent,
+			retry:    4,
 		}
 		peers = append(peers, &peer)
 	}
@@ -288,6 +289,7 @@ func ParsePeers(r TrackerResponse) []*Peer {
 			bitfield: make([]byte, bitCap),
 			bitmap:   make([]bool, len(d.Pieces)),
 			info:     d.Torrent,
+			retry:    4,
 		}
 		peers = append(peers, &peer)
 	}
